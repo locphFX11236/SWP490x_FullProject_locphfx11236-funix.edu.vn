@@ -1,8 +1,15 @@
 const express = require('express');
 
+const Database = require('./config/database');
+
+const MONGODB_URI = 'mongodb://localhost:27017/charity_app_dev';
 const PORT = 3000;
 const app = express();
 
-app.get('/', (req, res, next) => res.send('HELLO WORLD!'));
+app.get('/', (req, res, next) => res.send('Hello world!!'));
 
-app.listen(PORT);
+// Handle to database
+Database(
+    () => app.listen(PORT),
+    MONGODB_URI
+);
