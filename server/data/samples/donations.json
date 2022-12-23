@@ -1,0 +1,27 @@
+[
+    {
+        "donationMoney": 1000000,
+        "donationTime": "15/12/2022",
+        "message": "AAAA"
+    },
+    {
+        "donationMoney": 2000000,
+        "donationTime": "15/12/2022",
+        "message": "BBBB"
+    },
+    {
+        "donationMoney": 500000,
+        "donationTime": "15/12/2022",
+        "message": "CCCC"
+    },
+    {
+        "donationMoney": 100000,
+        "donationTime": "15/12/2022",
+        "message": "DDDD"
+    },
+    {
+        "donationMoney": 50000,
+        "donationTime": "15/12/2022",
+        "message": "EEEE"
+    }
+]

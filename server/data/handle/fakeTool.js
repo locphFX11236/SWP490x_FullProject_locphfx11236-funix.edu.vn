@@ -2,7 +2,7 @@ const fs = require('fs')
 
 const fakeData = () => {
     let s = '\
-[Some text...]\
+[ Some text... ]\
 ';
     
     const json = JSON.stringify(s); console.log(json);

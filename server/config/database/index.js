@@ -1,5 +1,3 @@
-// const Tool = require('.//fakeTool');
-// const CloneData = require('./cloneData');
 const Connect = require('./mongoose');
 
 const HandleDatabase = (listen, MONGODB_URI) => {
@@ -11,12 +9,6 @@ const HandleDatabase = (listen, MONGODB_URI) => {
             console.log(err);
         })
     ;
-
-    // Clone data
-    // CloneData('All');
-
-    // Fake data
-    // Tool();
 };
 
 module.exports = HandleDatabase;

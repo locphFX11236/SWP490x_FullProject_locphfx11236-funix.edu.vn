@@ -1,7 +1,7 @@
 const Users = require('../../models/users');
 const Organizations = require('../../models/organizations');
-const UserSamples = require('../../data/samples/users.json');
-const OrganizationSamples = require('../../data/samples/organizations.json');
+const UserSamples = require('../samples/users.json');
+const OrganizationSamples = require('../samples/organizations.json');
 
 const newUser = () => UserSamples.forEach(u => {
     const newUser = new Users({ ...u })
