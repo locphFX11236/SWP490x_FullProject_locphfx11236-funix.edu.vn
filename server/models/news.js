@@ -16,6 +16,7 @@ const newsSchema = new Schema({
     newsName: {
         type: String,
         required: true,
+        unique: true
     },
     imgNews: {
         type: String,

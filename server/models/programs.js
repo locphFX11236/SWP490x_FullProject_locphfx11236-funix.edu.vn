@@ -11,6 +11,7 @@ const programSchema = new Schema({
     programName: {
         type: String,
         required: true,
+        unique: true
     },
     descriptionStory: {
         type: String,
@@ -61,6 +62,27 @@ const programSchema = new Schema({
             },
         },
     ],
+    donations: [
+        {
+            user_id: {
+                type: Schema.Types.ObjectId,
+                ref: 'Users',
+                required: true,
+            },
+            donationMoney: {
+                type: Number,
+                required: true,
+            },
+            donationTime: {
+                type: String,
+                required: true,
+            },
+            message: {
+                type: String,
+                required: true,
+            },
+        }
+    ]
 });
 
 module.exports = mongoose.model('Programs', programSchema);

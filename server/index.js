@@ -14,5 +14,5 @@ Database(
     () => app.listen(PORT),
     MONGODB_URI
 );
-// CloneSamples.CloneData();
+// CloneSamples.CloneData('All');
 // CloneSamples.Tool();

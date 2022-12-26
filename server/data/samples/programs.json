@@ -7,8 +7,8 @@
         "moneyCurrent": 31364887,
         "moneyRate": 36.03,
         "times": 5315,
-        "startTime": "15/12/2022",
-        "endTime": "15/01/2023"
+        "startTime": "2022-12-14T17:00:00.000Z",
+        "endTime": "2023-01-14T17:00:00.000Z"
     },
     {
         "programName": "Áo Ấm Cho Em",
@@ -18,8 +18,8 @@
         "moneyCurrent": 6443594,
         "moneyRate": 2.58,
         "times": 936,
-        "startTime": "15/12/2022",
-        "endTime": "15/01/2023"
+        "startTime": "2022-12-14T17:00:00.000Z",
+        "endTime": "2023-01-14T17:00:00.000Z"
     },
     {
         "programName": "Xây mới nhà vệ sinh cho các em học sinh huyện Mường Nhé, tỉnh Điện Biên",
@@ -29,8 +29,8 @@
         "moneyCurrent": 4318317,
         "moneyRate": 2.88,
         "times": 91132,
-        "startTime": "15/12/2022",
-        "endTime": "15/01/2023"
+        "startTime": "2022-12-14T17:00:00.000Z",
+        "endTime": "2023-01-14T17:00:00.000Z"
     },
     {
         "programName": "Chung tay giúp mang nước sạch về Xóm Sèo và trường mầm non xã Cao Sơn, tỉnh Hòa Bình",
@@ -40,8 +40,8 @@
         "moneyCurrent": 220000000,
         "moneyRate": 100,
         "times": 88.867,
-        "startTime": "15/11/2022",
-        "endTime": "15/12/2022"
+        "startTime": "2022-11-14T17:00:00.000Z",
+        "endTime": "2022-12-14T17:00:00.000Z"
     },
     {
         "programName": "Chung tay tổ chức tập huấn kỹ năng truyền thông về phòng chống xâm hại tình dục trẻ em",
@@ -51,7 +51,7 @@
         "moneyCurrent": 10000000,
         "moneyRate": 100,
         "times": 4.538,
-        "startTime": "15/11/2022",
-        "endTime": "15/12/2022"
+        "startTime": "2022-11-14T17:00:00.000Z",
+        "endTime": "2022-12-14T17:00:00.000Z"
     }
 ]

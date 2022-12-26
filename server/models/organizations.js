@@ -30,9 +30,7 @@ const organizationSchema = new Schema(
             required: true,
         },
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model('Organizations', organizationSchema);

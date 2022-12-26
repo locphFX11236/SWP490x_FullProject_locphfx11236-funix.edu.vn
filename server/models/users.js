@@ -31,14 +31,11 @@ const userSchema = new Schema(
             required: true
         },
         history: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Programs',
+            type: String,
             required: true
         }],
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model('Users', userSchema);
