@@ -1,14 +1,18 @@
-import Navigation from "./navBar";
+import { Outlet } from 'react-router-dom';
+
 import HeaderLayout from "./header";
+import Navigation from "./navBar";
+import BreadcrumbLayout from "./breadcrumb";
 import FooterLayout from "./footer";
 
-const MainLayout = ({children}) => {
+const MainLayout = () => {
     return (
         <div>
-            <Navigation />
             <HeaderLayout/>
-            {children}
-            <FooterLayout/>
+            <Navigation />
+            <BreadcrumbLayout />
+            <Outlet />
+            <FooterLayout />
         </div>
     );
 };

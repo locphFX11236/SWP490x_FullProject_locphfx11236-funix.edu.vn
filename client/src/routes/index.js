@@ -1,13 +1,6 @@
-import AllPage from "../views/pages";
+import PrivateRouter from "./private";
+import PublicRouter from "./public";
 
-const MainRoute = () => {
-    return (
-        <div>
-            <h3>Main Route</h3>
-            <AllPage />
-            <h3>Main Route</h3>
-        </div>
-    );
-};
+const MainRouter = ({isLogin, layout}) => isLogin ? <PrivateRouter layout={ layout } /> : <PublicRouter layout={ layout } />;
 
-export default MainRoute;
+export default MainRouter;

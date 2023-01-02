@@ -1,3 +1,4 @@
-const AllPage = () => <p>Page</p>;
-
-export default AllPage;
+export * from './home';
+export * from './programs';
+export * from './organizations';
+export * from './news';

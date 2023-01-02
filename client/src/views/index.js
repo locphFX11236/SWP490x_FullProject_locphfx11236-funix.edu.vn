@@ -1,13 +1,6 @@
+import MainRouter from "../routes";
 import MainLayout from "./layout";
 
-const MainView = ({children}) => {
-    return (
-        <div>
-            <h1>Main View</h1>
-            <MainLayout>{children}</MainLayout>
-            <h1>Main View</h1>
-        </div>
-    );
-};
+const MainView = () => <MainRouter isLogin={true} layout={<MainLayout />} />;
 
 export default MainView;
