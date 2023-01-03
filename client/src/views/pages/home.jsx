@@ -9,21 +9,19 @@ import news from '../../data/news.json';
 
 const Item = (key, name, img) => {
     return (
-        <div key={key} className='col col-12 col-md-5 m-2'>
-            <Card>
-                <CardImg width='100%' src={img} alt={name}/>
-                <CardBody>
-                    <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
-                </CardBody>
-            </Card>
-        </div>
+        <Card key={key} className='col col-12 col-md-5 m-2'>
+            <CardImg width='100%' src={img} alt={name}/>
+            <CardBody>
+                <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
+            </CardBody>
+        </Card>
     );
 }; 
 
 const RenderItems = ({data, type}) => {
     switch (type) {
         case 'program': return data.map(d => Item(d._id.$oid, d.programName, Handle(d.imgProgram)));
-        case 'organization': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.imgOrganization)));
+        case 'organization': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.logo)));
         case 'news': return data.map(d => Item(d._id.$oid, d.newsName, Handle(d.imgNews)));
         default: return;
     }
@@ -33,7 +31,7 @@ export const HomePage = () => {
     return (
         <Card>
             <CardTitle>
-                <div className='container'>
+                <div className='container text-center'>
                     <h1 className='text-center'>Nền tảng quyên góp từ thiện Trái tim MoMo</h1>
                     <p>Trái Tim MoMo là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.</p>
                     <div className='row'>
@@ -54,7 +52,7 @@ export const HomePage = () => {
                     </div>
                 </div>
                 <div className='container'>
-                    <Link to='/organizations'><h3 className='text-center'>Các đối tác</h3></Link>
+                    <Link to='/organizations'><h3 className='text-center'>Các đối tác đồng hành</h3></Link>
                     <div className='row'>
                         <RenderItems
                             data={organizations}

@@ -1,10 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
 
-import { HomePage, NewsPage, OrganizationPage, ProgramPage } from "../views/pages";
-
-const PublicRouter = ({layout}) => (
+const PublicRouter = ({
+    MainLayout,
+    HomePage,
+    ProgramPage,
+    OrganizationPage,
+    NewsPage
+}) => (
     <Routes>
-        <Route path='/' element={ layout } >
+        <Route path='/' element={ MainLayout } >
             <Route index element={ <HomePage /> } />
             <Route path='/programs' element={ <ProgramPage /> } />
             <Route path='/organizations' element={ <OrganizationPage /> } />
