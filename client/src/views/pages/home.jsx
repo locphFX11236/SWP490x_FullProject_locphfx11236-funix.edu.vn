@@ -7,22 +7,24 @@ import programs from '../../data/programs.json';
 import organizations from '../../data/organizations.json';
 import news from '../../data/news.json';
 
-const Item = (key, name, img) => {
+const Item = (key, name, img, type, data) => {
     return (
         <Card key={key} className='col col-12 col-md-5 m-2'>
-            <CardImg width='100%' src={img} alt={name}/>
-            <CardBody>
-                <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
-            </CardBody>
+            <Link to={ `/${type}/${data._id.$oid}` } state={data}>
+                <CardImg width='100%' src={img} alt={name}/>
+                <CardBody>
+                    <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
+                </CardBody>
+            </Link>
         </Card>
     );
 }; 
 
 const RenderItems = ({data, type}) => {
     switch (type) {
-        case 'program': return data.map(d => Item(d._id.$oid, d.programName, Handle(d.imgProgram)));
-        case 'organization': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.logo)));
-        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, Handle(d.imgNews)));
+        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, Handle(d.imgProgram), 'programs', d));
+        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.logo), 'organizations', d));
+        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, Handle(d.imgNews), 'news', d));
         default: return;
     }
 };
@@ -32,7 +34,7 @@ export const HomePage = () => {
         <Card>
             <CardTitle>
                 <div className='container text-center'>
-                    <h1 className='text-center'>Nền tảng quyên góp từ thiện Trái tim MoMo</h1>
+                    <h1 className='text-center'><strong style={{color: "rgb(165, 0, 100)"}}>Nền tảng quyên góp từ thiện Trái tim MoMo</strong></h1>
                     <p>Trái Tim MoMo là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.</p>
                     <div className='row'>
                         <div className='col'>389 dự án<br />đã được gây quỹ thành công</div>
@@ -42,24 +44,27 @@ export const HomePage = () => {
                 </div>
             </CardTitle>
             <CardBody>
+                <hr />
                 <div className='container'>
                     <Link to='/programs'><h3 className='text-center'>Các hoàn cảnh quyên góp</h3></Link>
                     <div className='row'>
                         <RenderItems
                             data={programs}
-                            type='program'
+                            type='programs'
                         />
                     </div>
                 </div>
+                <hr />
                 <div className='container'>
                     <Link to='/organizations'><h3 className='text-center'>Các đối tác đồng hành</h3></Link>
                     <div className='row'>
                         <RenderItems
                             data={organizations}
-                            type='organization'
+                            type='organizations'
                         />
                     </div>
                 </div>
+                <hr />
                 <div className='container'>
                     <Link to='/news'><h3 className='text-center'>Tin tức cộng đồng</h3></Link>
                     <div className='row'>
@@ -70,7 +75,7 @@ export const HomePage = () => {
                     </div>
                 </div>
             </CardBody>
-            <CardImg width='100%' src='asset/img/banner3.jpg' alt='Banner'/>
+            <CardImg width='100%' src={`${process.env.PUBLIC_URL}/asset/img/banner3.jpg`} alt='Banner'/>
         </Card>
     );
 };

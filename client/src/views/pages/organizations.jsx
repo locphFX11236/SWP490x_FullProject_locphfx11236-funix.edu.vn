@@ -19,7 +19,7 @@ const RenderItems = ({data}) => (
 
 export const OrganizationPage = () => {
     return (
-        <Card>
+        <Card className='m-2'>
             <CardTitle>
                 <h1 className='text-center'>Các đối tác đồng hành</h1>
             </CardTitle>
