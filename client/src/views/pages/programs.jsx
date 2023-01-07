@@ -2,8 +2,7 @@ import { Card, CardBody, CardTitle, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 
 import { Handle } from '../../shared/helper/handleUrlImg';
-
-import programs from '../../data/programs.json'
+import { SelectDataState } from "../../core/slice/showData";
 
 const RenderItems = ({data}) => (
     <Card className='col col-12 col-md-5 m-2'>
@@ -16,7 +15,7 @@ const RenderItems = ({data}) => (
     </Card>
 );
 
-export const ProgramPage = ({datas = programs}) => {
+export const ProgramPage = ({ datas = SelectDataState().programs }) => {
     return (datas.length !== 0) ? (
         <Card className='m-2'>
             <CardTitle>

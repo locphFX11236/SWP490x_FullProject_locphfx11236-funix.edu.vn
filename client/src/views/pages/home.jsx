@@ -2,10 +2,7 @@ import { Link } from "react-router-dom";
 import { Card, CardImg, CardTitle, CardBody } from 'reactstrap';
 
 import { Handle } from '../../shared/helper/handleUrlImg';
-
-import programs from '../../data/programs.json';
-import organizations from '../../data/organizations.json';
-import news from '../../data/news.json';
+import { SelectDataState } from "../../core/slice/showData";
 
 const Item = (key, name, img, type, data) => {
     return (
@@ -26,10 +23,12 @@ const RenderItems = ({data, type}) => {
         case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.logo), 'organizations', d));
         case 'news': return data.map(d => Item(d._id.$oid, d.newsName, Handle(d.imgNews), 'news', d));
         default: return;
-    }
+    };
 };
 
 export const HomePage = () => {
+    const { programs, organizations, news } = SelectDataState(); console.log('AA')
+
     return (
         <Card>
             <CardTitle>
@@ -37,9 +36,9 @@ export const HomePage = () => {
                     <h1 className='text-center'><strong style={{color: "rgb(165, 0, 100)"}}>Nền tảng quyên góp từ thiện Trái tim MoMo</strong></h1>
                     <p>Trái Tim MoMo là nền tảng giúp bạn dễ dàng chung tay quyên góp tiền cùng hàng triệu người, giúp đỡ các hoàn cảnh khó khăn trên khắp cả nước.</p>
                     <div className='row'>
-                        <div className='col'>389 dự án<br />đã được gây quỹ thành công</div>
-                        <div className='col'>53+ tỷ đồng<br />được quyên góp</div>
-                        <div className='col'>13+ triệu<br />lượt quyên góp</div>
+                        <div className='col'><strong>389 dự án</strong><br />đã được gây quỹ thành công</div>
+                        <div className='col'><strong>53+ tỷ đồng</strong><br />được quyên góp</div>
+                        <div className='col'><strong>13+ triệu</strong><br />lượt quyên góp</div>
                     </div>
                 </div>
             </CardTitle>

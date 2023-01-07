@@ -2,17 +2,16 @@ import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 
 import { Handle } from "../../shared/helper/handleUrlImg";
+import { SelectDataState } from "../../core/slice/showData";
+
 import { ProgramPage } from "./programs";
 import { NewsPage } from "./news";
-
-import programs from '../../data/programs.json'
-import news from '../../data/news.json'
 
 export const OrganDetail = () => {
     const location = useLocation();
     const organ = location.state;
-    const progs = programs.filter(p => p.organization_id.$oid === organ._id.$oid);
-    const ns = news.filter(n => n.organization_id.$oid === organ._id.$oid);
+    const progs = SelectDataState().programs.filter(p => p.organization_id.$oid === organ._id.$oid);
+    const ns = SelectDataState().news.filter(n => n.organization_id.$oid === organ._id.$oid);
 
     return (
         <Card>
