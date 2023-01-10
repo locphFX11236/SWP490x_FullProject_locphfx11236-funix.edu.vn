@@ -5,3 +5,4 @@ export * from './programs';
 export * from './progDetail';
 export * from './news';
 export * from './newsDetail';
+export * from './adminManage';

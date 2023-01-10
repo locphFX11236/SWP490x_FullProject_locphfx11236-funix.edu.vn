@@ -9,6 +9,7 @@ const Items = (string, location, i) => {
         case 'programs': return <Link to='/programs' className="m-2" key={i}>Hoàn cảnh</Link>;
         case 'organizations': return <Link to='/organizations' className="m-2" key={i}>Đối tác</Link>;
         case 'news': return <Link to='/news' className="m-2" key={i}>Tin tức</Link>;
+        case 'admin': return <Link to='/admin' className="m-2" key={i}>Admin</Link>;
         default: return <Link to='/#' className="m-2" key={i}>{nameItem}</Link>;
     };
 }

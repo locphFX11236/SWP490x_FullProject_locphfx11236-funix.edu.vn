@@ -8,17 +8,19 @@ const PrivateRouter = ({
     ProgramPage,
     ProgDetail,
     NewsPage,
-    NewsDetail
+    NewsDetail,
+    Manage
 }) => (
     <Routes>
         <Route path='/' element={ <MainLayout/> } >
             <Route index element={ <HomePage /> } />
-            <Route path='/organizations' element={ <OrganizationPage /> } />
-            <Route path='/organizations/:id' element={ <OrganDetail /> } />
-            <Route path='/programs' element={ <ProgramPage /> } />
-            <Route path='/programs/:id' element={ <ProgDetail /> } />
-            <Route path='/news' element={ <NewsPage /> } />
-            <Route path='/news/:id' element={ <NewsDetail /> } />
+            <Route path='organizations' element={ <OrganizationPage /> } />
+            <Route path='organizations/:id' element={ <OrganDetail /> } />
+            <Route path='programs' element={ <ProgramPage /> } />
+            <Route path='programs/:id' element={ <ProgDetail /> } />
+            <Route path='news' element={ <NewsPage /> } />
+            <Route path='news/:id' element={ <NewsDetail /> } />
+            <Route path='admin' element={ <Manage /> } />
         </Route>
 
         {/* Error path v6 */}

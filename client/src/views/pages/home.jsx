@@ -27,7 +27,7 @@ const RenderItems = ({data, type}) => {
 };
 
 export const HomePage = () => {
-    const { programs, organizations, news } = SelectDataState(); console.log('AA')
+    const { programs, organizations, news } = SelectDataState();
 
     return (
         <Card>

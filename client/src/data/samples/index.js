@@ -39,7 +39,8 @@ export const GetAuthData = async (auth) => new Promise((resolve, rejects) => {
             result.isAdmin = user[0].isAdmin;
             result.isLogin = true;
             result.message = 'Success Login';
-            result.data = user;
+            if (result.isAdmin) result.data = users;
+            else result.data = user;
         } else {
             result.message = 'Password don\'t match';
         };
