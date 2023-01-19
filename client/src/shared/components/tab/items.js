@@ -7,8 +7,8 @@ const getItem = (label, key, children) => ({
 }); // Kết quả: { label: '', key: '', children: <Component />}
 
 const Items = [
-    getItem('Users', 'user-tab', <UsersTable />),
     getItem('Programs', 'program-tab', <ProgramsTable />),
+    getItem('Users', 'user-tab', <UsersTable />),
 ];
 
 export default Items;

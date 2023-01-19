@@ -5,7 +5,7 @@ const TableComponent = ({
     data,
     header
 }) => <Table
-    title={() => header}
+    title={ header ? (() => header) : undefined }
     columns={ columns }
     dataSource={ data }
     pagination={ false }

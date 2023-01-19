@@ -1,16 +1,35 @@
 import TableComponent from './table';
-import HandleData from './data';
 import TitleTable from './title';
-import { ProgramsColumns, UsersColumns } from './columns';
+import { PlusData } from "./functions";
+import { AdminActionsData, DonasActionsData, HandleData } from './data';
+import { AdminActionsColumns, DonasActionsColumns, ProgramsColumns, UsersColumns } from './columns';
 
-export const ProgramsTable = () => <TableComponent
-    columns={ ProgramsColumns }
-    data={ HandleData('programs') }
-    header={ TitleTable('programs') }
-/>;
+export const ProgramsTable = () => (
+    <TableComponent
+        columns={ ProgramsColumns }
+        data={ HandleData('programs') }
+        header={ TitleTable('programs', PlusData) }
+    />
+);
 
-export const UsersTable = () => <TableComponent
-    columns={ UsersColumns }
-    data={ HandleData('users') }
-    header={ TitleTable('users') }
-/>;
+export const UsersTable = () => (
+    <TableComponent
+        columns={ UsersColumns }
+        data={ HandleData('users') }
+        header={ TitleTable('users', PlusData) }
+    />
+);
+
+export const AdminActionsTable = ({ data }) => (
+    <TableComponent
+        columns={ AdminActionsColumns }
+        data={ AdminActionsData(data) }
+    />
+);
+
+export const DonasActionsTable = ({ data }) => (
+    <TableComponent
+        columns={ DonasActionsColumns }
+        data={ DonasActionsData(data) }
+    />
+);

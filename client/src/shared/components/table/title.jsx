@@ -1,20 +1,12 @@
-import { Button } from "antd";
+import { TitleTableBtn } from "../button";
 
-const TitleTable = (key) => {
-    const HandleClick = () => {
-        if (key === 'programs') return console.log(key)
-        else if (key === 'users') return console.log(key)
-        else return console.log('Lỗi key! <TitleTable/>');
-    }
-    
-    return (
-        <Button
-            type="primary"
-            shape="round"
-            onClick={() => HandleClick()}
-        >
-            Thêm mới
-        </Button>
-    )
-}
+const TitleTable = (key, PlusData) => (
+    <TitleTableBtn
+        className="w-100"
+        onClick={ () => PlusData(key) }
+    >
+        Thêm mới
+    </TitleTableBtn>
+)
+
 export default TitleTable;
