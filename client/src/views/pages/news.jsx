@@ -1,13 +1,13 @@
 import { Card, CardBody, CardTitle, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 
-import { Handle } from '../../shared/helper/handleUrlImg';
+import HandleUrl from '../../shared/helper/handleUrlImg';
 import { SelectDataState } from "../../core/slice/showData";
 
 const RenderItems = ({data}) => (
     <Card className='col col-12 col-md-5 m-2'>
         <Link to={ `/news/${data._id.$oid}` } state={data}>
-            <CardImg src={ Handle(data.imgNews) } alt={ data.newsName }/>
+            <CardImg src={ HandleUrl(data.imgNews) } alt={ data.newsName }/>
             <CardBody>
                 <CardTitle tag='h5' className='text-center'>{ data.newsName }</CardTitle>
             </CardBody>

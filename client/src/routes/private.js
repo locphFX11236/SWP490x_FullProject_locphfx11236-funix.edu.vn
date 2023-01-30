@@ -24,7 +24,7 @@ const PrivateRouter = ({
         </Route>
 
         {/* Error path v6 */}
-        <Route path='*' element={ <h1>Error</h1> } />
+        <Route path='*' element={ <h1>Error 404</h1> } />
     </Routes>
 );
 

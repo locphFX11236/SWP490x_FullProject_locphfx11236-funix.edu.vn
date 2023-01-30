@@ -1,14 +1,13 @@
 import TableComponent from './table';
-import TitleTable from './title';
-import { PlusData } from "./functions";
-import { AdminActionsData, DonasActionsData, HandleData } from './data';
-import { AdminActionsColumns, DonasActionsColumns, ProgramsColumns, UsersColumns } from './columns';
+import { AdminActionsData, DonasActionsData, DonasHistoryData, HandleData } from './data';
+import { AdminActionsColumns, DonasActionsColumns, DonasHistoryColumns, ProgramsColumns, UsersColumns } from './columns';
+import { PlusProgram, PlusUser } from '../modal';
 
 export const ProgramsTable = () => (
     <TableComponent
         columns={ ProgramsColumns }
         data={ HandleData('programs') }
-        header={ TitleTable('programs', PlusData) }
+        header={ <PlusProgram /> }
     />
 );
 
@@ -16,7 +15,7 @@ export const UsersTable = () => (
     <TableComponent
         columns={ UsersColumns }
         data={ HandleData('users') }
-        header={ TitleTable('users', PlusData) }
+        header={ <PlusUser /> }
     />
 );
 
@@ -31,5 +30,12 @@ export const DonasActionsTable = ({ data }) => (
     <TableComponent
         columns={ DonasActionsColumns }
         data={ DonasActionsData(data) }
+    />
+);
+
+export const DonasHistoryTable = ({ data }) => (
+    <TableComponent
+        columns={ DonasHistoryColumns }
+        data={ DonasHistoryData(data) }
     />
 );

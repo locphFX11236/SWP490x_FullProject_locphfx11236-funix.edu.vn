@@ -1,41 +1,38 @@
-import { MenuOutlined, FileTextOutlined } from '@ant-design/icons';
+import { ProgramActions, ShowActionHistory, ShowAdminActions, ShowDonasActions, UserActions } from '../modal';
 
-import { ProgramActions, ShowAdminActions, ShowDonasActions } from '../modal';
-
-const Action1 = (value, record, index) => {
-    if (record.isAdmin) return 'Admin'
-    else return <MenuOutlined />
-};
-
-const Action2 = (value, record, index) => {
-    return <FileTextOutlined />
-};
-
-const getColumn = (title, key, cb) => {
-    if (cb) return {
+const getColumn = (title, key, render) => {
+    if (render) return {
         key: key,
         title: title,
         dataIndex: key,
-        render: (value, record, index) => cb(value, record, index),
+        ...render
     }
     else return {
         key: key,
         title: title,
         dataIndex: key,
     };
-}; // Kết quả: { title: '', key: '', dataIndex: '', render: cb }
+}; // Kết quả: { title: '', key: '', dataIndex: '', render: function () }
 
 export const ProgramsColumns = [
     getColumn('STT', 'stt'),
     getColumn('Hoàn cảnh', 'name'),
-    getColumn('Tổ chức', 'organization'),
+    getColumn('Tổ chức', 'organization', {
+        render: (value, record, index) => value.name
+    } ),
     getColumn('Tổng tiền (VND)', 'moneyTotal'),
     getColumn('Tiền hiện tại (VND)', 'moneyCurrent'),
     getColumn('Bắt đầu', 'startTime'),
     getColumn('Kết thúc', 'endTime'),
-    getColumn('Admin', 'management', ShowAdminActions ),
-    getColumn('Quyên góp', 'donations', ShowDonasActions ),
-    getColumn('Action', 'key', ProgramActions )
+    getColumn('Admin', 'management', {
+        render: (value, record, index) => <ShowAdminActions value={value} record={record} />
+    } ),
+    getColumn('Quyên góp', 'donations', {
+        render: (value, record, index) => <ShowDonasActions value={value} record={record} />
+    } ),
+    getColumn('Action', 'key', {
+        render: (value, record, index) => <ProgramActions value={value} record={record} />
+    } ),
 ];
 
 export const UsersColumns = [
@@ -43,8 +40,12 @@ export const UsersColumns = [
     getColumn('Họ tên', 'name'),
     getColumn('Email', 'email'),
     getColumn('Số điện thoại', 'phoneNumber'),
-    getColumn('History', 'history', Action2),
-    getColumn('Action', 'key', Action1)
+    getColumn('History', 'history', {
+        render: (value, record, index) => <ShowActionHistory value={value} record={record} />
+    } ),
+    getColumn('Action', 'key', {
+        render: (value, record, index) => record.isAdmin ? 'Admin' : <UserActions value={value} record={record} />
+    } ),
 ];
 
 export const AdminActionsColumns = [
@@ -60,4 +61,11 @@ export const DonasActionsColumns = [
     getColumn('Số tiền quyên góp', 'donationMoney'),
     getColumn('Thời gian thực hiện', 'donationTime'),
     getColumn('Lời nhắn', 'message'),
+];
+
+export const DonasHistoryColumns = [
+    getColumn('STT', 'stt'),
+    getColumn('Tên chương trình', 'programName'),
+    getColumn('Số tiền quyên góp', 'donationMoney'),
+    getColumn('Thời gian thực hiện', 'donationTime'),
 ];

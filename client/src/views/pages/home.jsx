@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Card, CardImg, CardTitle, CardBody } from 'reactstrap';
 
-import { Handle } from '../../shared/helper/handleUrlImg';
+import HandleUrl from '../../shared/helper/handleUrlImg';
 import { SelectDataState } from "../../core/slice/showData";
 
 const Item = (key, name, img, type, data) => {
@@ -19,9 +19,9 @@ const Item = (key, name, img, type, data) => {
 
 const RenderItems = ({data, type}) => {
     switch (type) {
-        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, Handle(d.imgProgram), 'programs', d));
-        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, Handle(d.logo), 'organizations', d));
-        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, Handle(d.imgNews), 'news', d));
+        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, HandleUrl(d.imgProgram), 'programs', d));
+        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, HandleUrl(d.logo), 'organizations', d));
+        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, HandleUrl(d.imgNews), 'news', d));
         default: return;
     };
 };

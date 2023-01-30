@@ -2,7 +2,8 @@ import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 import moment from "moment";
 
-import { Handle } from "../../shared/helper/handleUrlImg";
+import HandleUrl from "../../shared/helper/handleUrlImg";
+import FormatTime from "../../shared/helper/convertISOtoShowTime";
 import { SelectDataState } from "../../core/slice/showData";
 
 import { NewsPage } from "./news";
@@ -14,7 +15,7 @@ const Render = ({datas}) => (
             <Card key={i} className="px-4 my-2">
                 <div className="d-flex flex-row justify-content-between">
                     <p><strong>{d.user_id.$oid}</strong></p>
-                    <p>{moment(d.donationTime).format('hh:mm DD/MM/YYYY')}</p>
+                    <p>{FormatTime(d.donationTime)}</p>
                     <p>{d.donationMoney} VND</p>
                 </div>
                 <p>Lời nhắn: {d.message}</p>
@@ -37,7 +38,7 @@ export const ProgDetail = () => {
                         <h2 className='text-center'><strong style={{color: "rgb(165, 0, 100)"}}>{ prog.programName }</strong></h2>
                     </div>
                     <div className="col">
-                        <CardImg width='100%' src={ Handle(prog.imgProgram) } alt={ prog.programName } />
+                        <CardImg width='100%' src={ HandleUrl(prog.imgProgram) } alt={ prog.programName } />
                     </div>
                 </div>
                 <div className="row text-center m-3">
@@ -46,8 +47,8 @@ export const ProgDetail = () => {
                     <p>Đã được: <strong>{ prog.moneyCurrent } / { prog.moneyTotal } VNĐ</strong></p>
                     <p className="col">Đạt được:<br /><strong>{ prog.moneyRate }%</strong></p>
                     <p className="col">Đã được:<br /><strong>{ prog.times }<br />Lượt quyên góp</strong></p>
-                    <p className="col">Ngày bắt đầu:<br /><strong>{moment(prog.startTime).format('DD/MM/YYYY')}</strong></p>
-                    <p className="col">Ngày kết thúc:<br /><strong>{moment(prog.endTime).format('DD/MM/YYYY')}<br />({diff > 0 ? `Còn: ${diff} ngày` : 'Đã dừng quyên góp'})</strong></p>
+                    <p className="col">Ngày bắt đầu:<br /><strong>{FormatTime(prog.startTime)}</strong></p>
+                    <p className="col">Ngày kết thúc:<br /><strong>{FormatTime(prog.endTime)}<br />({diff > 0 ? `Còn: ${diff} ngày` : 'Đã dừng quyên góp'})</strong></p>
                     <hr />
                 </div>
                 <div className="text-justify" dangerouslySetInnerHTML={{ __html: prog.descriptionStory }}></div>

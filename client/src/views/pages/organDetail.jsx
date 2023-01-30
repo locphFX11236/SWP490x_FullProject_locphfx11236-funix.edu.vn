@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 
-import { Handle } from "../../shared/helper/handleUrlImg";
+import HandleUrl from "../../shared/helper/handleUrlImg";
 import { SelectDataState } from "../../core/slice/showData";
 
 import { ProgramPage } from "./programs";
@@ -27,7 +27,7 @@ export const OrganDetail = () => {
                         </div>
                     </div>
                     <div className="col">
-                        <CardImg width='100%' src={ Handle(organ.imgOrganization) } alt={ organ.nameOrganization } />
+                        <CardImg width='100%' src={ HandleUrl(organ.imgOrganization) } alt={ organ.nameOrganization } />
                     </div>
                 </div>
                 <div className="row text-justify" dangerouslySetInnerHTML={{ __html: organ.descriptionOrganization }}></div>
