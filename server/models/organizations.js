@@ -17,6 +17,14 @@ const organizationSchema = new Schema(
             type: String,
             required: true
         },
+        logo: {
+            type: String,
+            required: true
+        },
+        title: {
+            type: String,
+            required: true
+        },
         programsTotal: {
             type: String,
             required: true,

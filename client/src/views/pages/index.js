@@ -10,3 +10,5 @@ export * from './news';
 export * from './newsDetail';
 
 export * from './adminManage';
+
+export * from './auth';

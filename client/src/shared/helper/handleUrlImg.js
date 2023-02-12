@@ -1,5 +1,5 @@
 const Handle = (url) => {
-    const newUrl = url.slice(6);
+    const newUrl = url.substring(6);
     return newUrl;
 };
 

@@ -1,7 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { SelectAuthState } from "../../core/slice/authData";
+
 const Navigation = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const { isLogin, isAdmin } = SelectAuthState();
+    const path = location.pathname;
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -13,27 +18,35 @@ const Navigation = () => {
                 <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
                     <ul className="navbar-nav me-auto text-center">
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className={`nav-link${useLocation().pathname === '/' ? ' active' : ''}`} to="/">Trang<br />chủ</Link>
+                            <Link className={`nav-link${path === '/' ? ' active' : ''}`} to="/">Trang<br />chủ</Link>
                         </li>
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className={`nav-link${useLocation().pathname.includes('/programs') ? ' active' : ''}`} to="/programs">Hoàn cảnh<br />quyên góp</Link>
+                            <Link className={`nav-link${path.includes('/programs') ? ' active' : ''}`} to="/programs">Hoàn cảnh<br />quyên góp</Link>
                         </li>
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className={`nav-link${useLocation().pathname.includes('/organizations') ? ' active' : ''}`} to="/organizations">Đối tác<br />đồng hành</Link>
+                            <Link className={`nav-link${path.includes('/organizations') ? ' active' : ''}`} to="/organizations">Đối tác<br />đồng hành</Link>
                         </li>
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className={`nav-link${useLocation().pathname.includes('/news') ? ' active' : ''}`} to="/news">Tin tức<br />cộng đồng</Link>
+                            <Link className={`nav-link${path.includes('/news') ? ' active' : ''}`} to="/news">Tin tức<br />cộng đồng</Link>
                         </li>
-                        <li className="nav-item border border-dark rounded m-1">
-                            <Link className={`nav-link${useLocation().pathname.includes('/admin') ? ' active' : ''}`} to="/admin">Admin's<br />manage</Link>
+                        <li className="nav-item border border-dark rounded m-1" hidden={!isAdmin}>
+                            <Link className={`nav-link${path.includes('/admin') ? ' active' : ''}`} to="/admin">Admin's<br />manage</Link>
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center">
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className="nav-link" to="/#">Login/ Logout</Link>
+                            {
+                                isLogin ? 
+                                <button className="btn btn-warning h-100" onClick={() => console.log('Log Out')} >Log Out</button> :
+                                <Link className="btn btn-success h-100 nav-link" to="/LogIn">Login</Link>
+                            }
                         </li>
                         <li className="nav-item border border-dark rounded m-1">
-                            <Link className="nav-link" to="/#">Signup</Link>
+                            {
+                                isLogin ? 
+                                <button className="btn btn-outline-info h-100" onClick={() => console.log('Information')} >Avtar</button> :
+                                <Link className="btn btn-outline-info h-100 nav-link" to="/SignUp">Signup</Link>
+                            }
                         </li>
                     </ul>
                 </div>

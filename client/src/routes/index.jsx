@@ -4,18 +4,14 @@ import { useEffect } from 'react';
 import PrivateRouter from "./private";
 import PublicRouter from "./public";
 import { RestAPIShow } from "../core/slice/showData";
-import { RestAPIAuth } from "../core/slice/authData";
+import { SelectAuthState } from "../core/slice/authData";
 
 const MainRouter = (views) => {
     const dispatch = useDispatch();
-    const isLogin = true;
+    const { isLogin } = SelectAuthState();
 
     useEffect(() => {
         dispatch( RestAPIShow() );
-        dispatch( RestAPIAuth({
-            phoneNumber: "0987654321",
-            password: "123456",
-        }) );
     }, [ dispatch ]);
 
     return isLogin ? <PrivateRouter { ...views } /> : <PublicRouter { ...views } />;

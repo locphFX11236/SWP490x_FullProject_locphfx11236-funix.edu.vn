@@ -9,10 +9,10 @@ const PrivateRouter = ({
     ProgDetail,
     NewsPage,
     NewsDetail,
-    Manage
+    Manage,
 }) => (
     <Routes>
-        <Route path='/' element={ <MainLayout/> } >
+        <Route path='/' element={ <MainLayout /> } >
             <Route index element={ <HomePage /> } />
             <Route path='organizations' element={ <OrganizationPage /> } />
             <Route path='organizations/:id' element={ <OrganDetail /> } />

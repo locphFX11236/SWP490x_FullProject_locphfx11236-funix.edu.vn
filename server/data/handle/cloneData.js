@@ -23,7 +23,7 @@ const newOrgans = () => OrganizationSamples.forEach(o => {
 });
 
 const newUsers = () => UserSamples.forEach(u => {
-    const newUser = new Users({ ...u })
+    const newUser = new Users({ ...u, history: [] })
     newUser.save();
     return;
 });

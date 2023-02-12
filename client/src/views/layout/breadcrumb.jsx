@@ -10,7 +10,10 @@ const Items = (string, location, i) => {
         case 'organizations': return <Link to='/organizations' className="border border-dark rounded m-2 p-2 mark" key={i}>Đối tác</Link>;
         case 'news': return <Link to='/news' className="border border-dark rounded m-2 p-2 mark" key={i}>Tin tức</Link>;
         case 'admin': return <Link to='/admin' className="border border-dark rounded m-2 p-2 mark" key={i}>Admin</Link>;
-        default: return <Link to='/#' className="border border-dark rounded m-2 p-2 mark" key={i}>{nameItem}</Link>;
+        case 'LogIn': return <Link to='/LogIn' className="border border-dark rounded m-2 p-2 mark" key={i}>Log In</Link>;
+        case 'SignUp': return <Link to='/SignUp' className="border border-dark rounded m-2 p-2 mark" key={i}>Sign Up</Link>;
+        case 'Forget': return <Link to='/Forget' className="border border-dark rounded m-2 p-2 mark" key={i}>Forget</Link>;
+        default: return <Link to='/#' className="border border-dark rounded m-2 p-2 mark" key={i}>{nameItem} - <strong>(Quay lại trang chủ)</strong></Link>;
     };
 }
 
