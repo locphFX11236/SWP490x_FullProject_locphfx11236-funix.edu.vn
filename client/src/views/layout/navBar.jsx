@@ -1,12 +1,16 @@
+import { Avatar } from "antd";
+import { UserOutlined } from '@ant-design/icons';
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import { SelectAuthState } from "../../core/slice/authData";
+import Handle from "../../shared/helper/handleUrlImg";
 
 const Navigation = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const { isLogin, isAdmin } = SelectAuthState();
+    const { isLogin, isAdmin, data, user_id } = SelectAuthState();
     const path = location.pathname;
+    const user = data.find(d => d._id.$oid === user_id);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -34,17 +38,23 @@ const Navigation = () => {
                         </li>
                     </ul>
                     <ul className="navbar-nav text-center">
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item m-1">
                             {
                                 isLogin ? 
-                                <button className="btn btn-warning h-100" onClick={() => console.log('Log Out')} >Log Out</button> :
+                                <button className="btn btn-outline-warning h-100" onClick={() => console.log('Log Out')} >Log Out</button> :
                                 <Link className="btn btn-success h-100 nav-link" to="/LogIn">Login</Link>
                             }
                         </li>
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item m-1">
                             {
-                                isLogin ? 
-                                <button className="btn btn-outline-info h-100" onClick={() => console.log('Information')} >Avtar</button> :
+                                isLogin ?
+                                <Avatar
+                                    size='large'
+                                    className="border border-success"
+                                    src={user.imgAvatar ? Handle(user.imgAvatar) : undefined}
+                                    icon={!user.imgAvatar ? <UserOutlined /> : undefined}
+                                    onClick={() => navigate('/userInfor')}
+                                /> :
                                 <Link className="btn btn-outline-info h-100 nav-link" to="/SignUp">Signup</Link>
                             }
                         </li>

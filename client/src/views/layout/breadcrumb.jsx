@@ -13,6 +13,7 @@ const Items = (string, location, i) => {
         case 'LogIn': return <Link to='/LogIn' className="border border-dark rounded m-2 p-2 mark" key={i}>Log In</Link>;
         case 'SignUp': return <Link to='/SignUp' className="border border-dark rounded m-2 p-2 mark" key={i}>Sign Up</Link>;
         case 'Forget': return <Link to='/Forget' className="border border-dark rounded m-2 p-2 mark" key={i}>Forget</Link>;
+        case 'userInfor': return <Link to='/userInfor' className="border border-dark rounded m-2 p-2 mark" key={i}>Thông tin người dùng</Link>;
         default: return <Link to='/#' className="border border-dark rounded m-2 p-2 mark" key={i}>{nameItem} - <strong>(Quay lại trang chủ)</strong></Link>;
     };
 }

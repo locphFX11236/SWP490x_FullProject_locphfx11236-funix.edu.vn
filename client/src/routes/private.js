@@ -10,6 +10,7 @@ const PrivateRouter = ({
     NewsPage,
     NewsDetail,
     Manage,
+    UserInforPage
 }) => (
     <Routes>
         <Route path='/' element={ <MainLayout /> } >
@@ -21,6 +22,7 @@ const PrivateRouter = ({
             <Route path='news' element={ <NewsPage /> } />
             <Route path='news/:id' element={ <NewsDetail /> } />
             <Route path='admin' element={ <Manage /> } />
+            <Route path='userInfor' element={ <UserInforPage /> } />
         </Route>
 
         {/* Error path v6 */}
