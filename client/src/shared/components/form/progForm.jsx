@@ -1,41 +1,52 @@
-import { Col, Form, Input, InputNumber, Row, Select, Slider, Upload } from 'antd';
+import { Col, Form, Input, InputNumber, message, Row, Select, Slider, } from 'antd';
+import { useDispatch } from 'react-redux';
 
-import { SelectDataState } from '../../../core/slice/showData';
+import { CreateProgram, DeleteProgram, SelectDataState, UpdateProgram } from '../../../core/slice/showData';
+import { programSample } from './sample';
+import { checkFile, DraggerImg, getBase64Encoder } from './uploadImg';
 
 const { TextArea } = Input;
 
 export const ProgramForm = ({data, setOpen}) => {
     const { organizations } = SelectDataState();
+    const dispatch = useDispatch();
     const SelectOrgId = organizations.map(o => <Select.Option key={o._id.$oid} value={o._id.$oid}>{o.nameOrganization}</Select.Option>)
     const [form] = Form.useForm();
     const isAdd = !data ? true : false;
     const handle = (key) => {
         form.validateFields()
         .then(values => {
-            if (key === 'Delete') {console.log('Delete! with record', values)}
-            else if (key === 'Update') {console.log('Update! with record', values)}
-            else if (key === 'Create') {console.log('Create! with record', values)}
-            else {console.log('Cancel!')}
+            if (key === 'Create') dispatch(CreateProgram(values));
+            else if (key === 'Update') dispatch(UpdateProgram({ oldVal: data, newVal: values }));
+            else if (key === 'Delete') dispatch(DeleteProgram(data.key));
+            else console.log('Cancel!');
+            form.resetFields();
             setOpen(false);
+            return;
         })
         .catch((err) => console.log(err))
     };
-    const normFile = (e) => {
-        console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e?.fileList;
+    const handleFile = (e) => {
+        const result = [];
+        if (e.file.status === 'removed') { return result; }
+        else if( checkFile(e.file) ) {
+            getBase64Encoder(e.file, str => result.unshift(str));
+            return result;
+        } else {
+            message.error('File không phù hợp!');
+            return result;
+        };
     };
 
     return (
         <Form
             name="program-form"
             form={form}
+            onFinishFailed={(...e) => console.log(e)}
             labelAlign="left"
             wrapperCol={{ span: 16 }}
             labelCol={{ span: 8 }}
-            initialValues={ isAdd ? undefined : data }
+            initialValues={ isAdd ? programSample : data }
         >
             <Form.Item label="Program ID" hidden={isAdd} >
                 <span className="ant-form-text">{isAdd ? '' : data.key}</span>
@@ -45,11 +56,11 @@ export const ProgramForm = ({data, setOpen}) => {
                 <Input />
             </Form.Item>
 
-            <Form.Item name="imgProgram" label="Url Ảnh" hidden={isAdd} >
-                <Input />
+            <Form.Item name="imgProgram" label="Url Ảnh" hidden={isAdd}>
+                <Input disabled={isAdd} />
             </Form.Item>
 
-            <Form.Item name="moneyRate" label={`Tỷ lệ hoàn thành (${isAdd ? '' : data.moneyRate}%)`} hidden={isAdd} >
+            <Form.Item name="moneyRate" label={`Tỷ lệ hoàn thành (${isAdd ? '' : data.moneyRate}%)`} hidden={isAdd}>
                 <Slider disabled/>
             </Form.Item>
 
@@ -76,15 +87,18 @@ export const ProgramForm = ({data, setOpen}) => {
                         <InputNumber />
                     </Form.Item>
                     <Form.Item name="moneyCurrent" label="Số tiền hiện tại (VNĐ)" hidden={isAdd} >
-                        <InputNumber />
+                        <InputNumber disabled={isAdd} />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item label="Upload file ảnh" name="imgFile" valuePropName="fileList" getValueFromEvent={normFile}>
-                        <Upload.Dragger name="files" action="/upload.do">
-                            <p className="ant-upload-text">Click or drag image file to this area to upload</p>
-                        </Upload.Dragger>
-                    </Form.Item>
+                    <Form.Item
+                        label="Upload file ảnh"
+                        name="imgUpFile"
+                        valuePropName="file"
+                        getValueFromEvent={handleFile}
+                    >
+                        { DraggerImg() }
+                    </Form.Item> {/** Không dùng React component đc ??? */}
                 </Col>
             </Row>
 
@@ -94,10 +108,10 @@ export const ProgramForm = ({data, setOpen}) => {
             </Form.Item>
 
             <Form.Item noStyle>
-                <Row className='d-flex justify-content-between mt-3'>
-                    <button className="btn btn-danger" onClick={() => handle('Delete')} hidden={isAdd}>Delete</button>
-                    <button className="btn btn-warning" onClick={() => handle('Update')} hidden={isAdd}>Update</button>
-                    <button className="btn btn-success" onClick={() => handle('Create')} hidden={!isAdd}>Create</button>
+                <Row className='d-flex justify-content-between mt-3'> {/** Tại sao có type='button' thì không bi lỗi */}
+                    <button className="btn btn-danger" type='button' onClick={() => handle('Delete')} hidden={isAdd}>Delete</button>
+                    <button className="btn btn-warning" type='button' onClick={() => handle('Update')} hidden={isAdd}>Update</button>
+                    <button className="btn btn-success" type='button' onClick={() => handle('Create')} hidden={!isAdd}>Create</button>
                     <button className="btn btn-outline-info" onClick={() => handle('Cancel')} >Cancel</button>
                 </Row>
             </Form.Item>

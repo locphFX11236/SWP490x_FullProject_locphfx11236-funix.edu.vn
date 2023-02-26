@@ -34,11 +34,11 @@ export const ProgDetail = () => {
         <Card>
             <div className='container'>
                 <div className="row text-center">
-                    <div className="col align-self-center">
+                    <div className="col col-md-6 align-self-center">
                         <h2 className='text-center'><strong style={{color: "rgb(165, 0, 100)"}}>{ prog.programName }</strong></h2>
                     </div>
-                    <div className="col">
-                        <CardImg width='100%' src={ HandleUrl(prog.imgProgram) } alt={ prog.programName } />
+                    <div className="col col-md-6">
+                        <CardImg src={ HandleUrl(prog.imgProgram) } alt={ prog.programName } />
                     </div>
                 </div>
                 <div className="row text-center m-3">
@@ -56,7 +56,7 @@ export const ProgDetail = () => {
                     <NewsPage datas={ns}/>
                 </div>
                 <div className='container vh-100 overflow-auto'>
-                    { prog.donations !== 0 ? <Render datas={prog.donations} /> : '' }
+                    { prog.donations.length !== 0 ? <Render datas={prog.donations} /> : '' }
                 </div>
             </div>
         </Card>

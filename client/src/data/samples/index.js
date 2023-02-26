@@ -57,3 +57,11 @@ export const GetAuthData = async (auth) => new Promise((resolve, rejects) => {
 
     return;
 });
+
+export const CreateCollection = (type, data) => console.log(`You created ${type} collection, with data: `, data);
+
+export const UpdateCollection = (type, data) => console.log(`You updated ${type} collection, with _id: ${data._id.$oid}, and data: `, data);
+
+export const DeleteCollection = (type, id) => console.log(`You deleted ${type} collection, with _id: `, id);
+
+export const PostImg = (data) => ({ url: 'public/asset/img/boat.png', file: data });

@@ -42,7 +42,7 @@ const Navigation = () => {
                             {
                                 isLogin ? 
                                 <button className="btn btn-outline-warning h-100" onClick={() => console.log('Log Out')} >Log Out</button> :
-                                <Link className="btn btn-success h-100 nav-link" to="/LogIn">Login</Link>
+                                <Link className="btn btn-outline-success h-100 nav-link" to="/LogIn">Login</Link>
                             }
                         </li>
                         <li className="nav-item m-1">
@@ -50,7 +50,7 @@ const Navigation = () => {
                                 isLogin ?
                                 <Avatar
                                     size='large'
-                                    className="border border-success"
+                                    className="border border-dark"
                                     src={user.imgAvatar ? Handle(user.imgAvatar) : undefined}
                                     icon={!user.imgAvatar ? <UserOutlined /> : undefined}
                                     onClick={() => navigate('/userInfor')}

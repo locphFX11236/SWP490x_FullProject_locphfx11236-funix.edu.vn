@@ -1,4 +1,5 @@
-import { Form, Input, Row, Upload } from 'antd';
+import { Form, Input, message, Row, } from 'antd';
+import { checkFile, DraggerImg, getBase64Encoder } from './uploadImg';
 
 export const UserForm = ({data, setOpen}) => {
     const [form] = Form.useForm();
@@ -15,11 +16,15 @@ export const UserForm = ({data, setOpen}) => {
         .catch((err) => console.log(err))
     };
     const normFile = (e) => {
-        console.log('Upload event:', e);
-        if (Array.isArray(e)) {
-          return e;
-        }
-        return e?.fileList;
+        const result = [];
+        if (e.file.status === 'removed') return result;
+        else if( checkFile(e.file) ) {
+            getBase64Encoder(e.file, str => result.unshift(str))
+            return result;
+        } else {
+            message.error('File không phù hợp!')
+            return result;
+        };
     };
 
     return (
@@ -55,10 +60,13 @@ export const UserForm = ({data, setOpen}) => {
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item label="Upload avatar" name="imgFile" valuePropName="fileList" getValueFromEvent={normFile}>
-                <Upload.Dragger name="files" action="/upload.do">
-                    <p className="ant-upload-text">Click or drag image file to this area to upload</p>
-                </Upload.Dragger>
+            <Form.Item
+                label="Upload avatar"
+                name="imgFile"
+                valuePropName="fileList"
+                getValueFromEvent={normFile}
+            >
+                { DraggerImg() }
             </Form.Item>
 
             <Form.Item noStyle>
