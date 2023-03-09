@@ -12,10 +12,10 @@ export const ProgramForm = ({data, setOpen}) => {
     const { organizations } = SelectDataState();
     const auth = SelectAuthState();
     const dispatch = useDispatch();
-    const SelectOrgId = organizations.map(o => <Select.Option key={o._id.$oid} value={o._id.$oid}>{o.nameOrganization}</Select.Option>)
+    const SelectOrgId = organizations.map(o => <Select.Option key={o._id} value={o._id}>{o.nameOrganization}</Select.Option>)
     const [form] = Form.useForm();
     const isAdd = !(data) ? true : false;
-    const { _id, name } = auth.data.find(d => d._id.$oid === auth.user_id);
+    const { _id, name } = auth.data.find(d => d._id === auth.user_id);
     const handle = (key) => {
         form.validateFields()
         .then(values => {

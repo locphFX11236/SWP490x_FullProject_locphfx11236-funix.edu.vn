@@ -14,7 +14,7 @@ const Render = ({datas}) => (
         { datas.map((d, i) => (
             <Card key={i} className="px-4 my-2">
                 <div className="d-flex flex-row justify-content-between">
-                    <p><strong>{d.user_id.$oid}</strong></p>
+                    <p><strong>{d.user_id}</strong></p>
                     <p>{FormatTime(d.donationTime)}</p>
                     <p>{d.donationMoney} VND</p>
                 </div>
@@ -27,7 +27,7 @@ const Render = ({datas}) => (
 export const ProgDetail = () => {
     const location = useLocation();
     const prog = location.state;
-    const ns = SelectDataState().news.filter(n => n.program_id.$oid === prog._id.$oid);
+    const ns = SelectDataState().news.filter(n => n.program_id === prog._id);
     const diff = moment(prog.endTime).diff(moment(), 'days');
 
     return (

@@ -6,7 +6,7 @@ import { SelectDataState } from "../../core/slice/showData";
 
 const RenderItems = ({data}) => (
     <Card className='col col-12 col-md-5 m-2'>
-        <Link to={ `/programs/${data._id.$oid}` } state={data}>
+        <Link to={ `/programs/${data._id}` } state={data}>
             <CardImg src={ HandleUrl(data.imgProgram) } alt={ data.programName }/>
             <CardBody>
                 <CardTitle tag='h5' className='text-center'>{ data.programName }</CardTitle>
@@ -24,7 +24,7 @@ export const ProgramPage = ({ datas = SelectDataState().programs }) => {
             <CardBody>
                 <div className="container">
                     <div className="row">
-                        { datas.map(d => <RenderItems key={d._id.$oid} data={d}/>)}
+                        { datas.map(d => <RenderItems key={d._id} data={d}/>)}
                     </div>
                 </div>
             </CardBody>

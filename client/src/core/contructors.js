@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 const defaultProgram = {
-    organization_id: { $oid: 'Test id' },
+    organization_id: 'Test id',
     programName: '',
     descriptionStory: '',
     imgProgram: '',
@@ -35,7 +35,7 @@ export const ProgramForm = ({
     ...rest
 }) => ({
     ...defaultProgram,
-    organization_id: { $oid: organization.key },
+    organization_id: organization.key,
     programName: name,
     startTime: moment(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
     endTime: moment(endTime, 'HH:mm DD/MM/YYYY').toISOString(),

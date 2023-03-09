@@ -6,7 +6,7 @@ import { SelectDataState } from "../../core/slice/showData";
 
 const Item = (key, name, img, type, data) => (
     <Card key={key} className='col col-12 col-md-5 m-2'>
-        <Link to={ `/${type}/${data._id.$oid}` } state={data}>
+        <Link to={ `/${type}/${data._id}` } state={data}>
             <CardImg width='100%' src={img} alt={name}/>
             <CardBody>
                 <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
@@ -17,9 +17,9 @@ const Item = (key, name, img, type, data) => (
 
 const RenderItems = ({data, type}) => {
     switch (type) {
-        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, HandleUrl(d.imgProgram), type, d));
-        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, HandleUrl(d.logo), type, d));
-        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, HandleUrl(d.imgNews), type, d));
+        case 'programs': return data.map(d => Item(d._id, d.programName, HandleUrl(d.imgProgram), type, d));
+        case 'organizations': return data.map(d => Item(d._id, d.nameOrganization, HandleUrl(d.logo), type, d));
+        case 'news': return data.map(d => Item(d._id, d.newsName, HandleUrl(d.imgNews), type, d));
         default: return;
     };
 };

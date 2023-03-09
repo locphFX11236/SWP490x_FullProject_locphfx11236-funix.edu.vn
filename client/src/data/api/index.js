@@ -1,31 +1,22 @@
-import { Custom } from "../../shared/helper/customDataType";
+const port = 5000;
 
-export const GetShowData = async () => {
-    const option = {
-        method: "GET",
-        mode: "cors",
-        cache: "no-cache",
-        credentials: "same-origin",
-        headers: {
-            "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': '*'
-        },
-        redirect: "follow",
-        referrerPolicy: "no-referrer",
-    }
-    return (
-        fetch('http://localhost:5000/', option)
-        .then(res => res.json())
-        .then(({news, organizations, programs}) => {
-            return {
-                organizations: Custom(organizations),
-                programs: Custom(programs),
-                news: Custom(news)
-            }
-        })
-        .catch(err => console.log('Font-End, error: ', err))
-    );
+const defaultOption = {
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
 };
+
+export const GetShowData = async () => (
+    fetch(`http://localhost:${port}/`, { ...defaultOption, method: "GET", })
+    .then(res => res.json())
+    .catch(err => console.log('Font-End, error: ', err))
+);
 
 export const GetAuthData = async (auth) => {};
 

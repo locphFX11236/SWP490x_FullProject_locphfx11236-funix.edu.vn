@@ -10,8 +10,8 @@ import { NewsPage } from "./news";
 export const OrganDetail = () => {
     const location = useLocation();
     const organ = location.state;
-    const progs = SelectDataState().programs.filter(p => p.organization_id.$oid === organ._id.$oid);
-    const ns = SelectDataState().news.filter(n => n.organization_id.$oid === organ._id.$oid);
+    const progs = SelectDataState().programs.filter(p => p.organization_id === organ._id);
+    const ns = SelectDataState().news.filter(n => n.organization_id === organ._id);
 
     return (
         <Card>

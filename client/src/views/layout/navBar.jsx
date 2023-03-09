@@ -12,7 +12,7 @@ const Navigation = () => {
     const location = useLocation();
     const { isLogin, isAdmin, data, user_id } = SelectAuthState();
     const path = location.pathname;
-    const user = data.find(d => d._id.$oid === user_id);
+    const user = data.find(d => d._id === user_id);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">

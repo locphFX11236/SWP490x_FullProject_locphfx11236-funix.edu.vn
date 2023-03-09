@@ -21,7 +21,7 @@ const reducers = {
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
         const imgUrl = isWrongFile ? 'auto_insert_img.png' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const newUser = UserForm({
-            _id: { $oid: moment().toISOString() },
+            _id: moment().toISOString(),
             ...createValues,
             imgAvatar: imgUrl,
             createdAt: moment().toISOString(),
@@ -42,7 +42,7 @@ const reducers = {
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
         const imgUrl = isWrongFile ? imgAvatar : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const updateUser = UserForm({
-            _id: { $oid: key },
+            _id: key,
             ...restOldVal,
             imgAvatar: imgUrl,
             ...restNewVal,

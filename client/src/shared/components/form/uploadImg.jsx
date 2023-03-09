@@ -30,7 +30,7 @@ export const DraggerImg = () => (
 
 export const Avatar = () => {
     const { user_id, data } = SelectAuthState();
-    const imgAvatar = data.find(d => d._id.$oid === user_id).imgAvatar;
+    const imgAvatar = data.find(d => d._id === user_id).imgAvatar;
     const dispatch = useDispatch();
     const handleChange = (info) => {
         if (checkFile(info.file)) {

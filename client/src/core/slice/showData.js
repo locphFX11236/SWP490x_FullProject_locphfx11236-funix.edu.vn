@@ -19,7 +19,7 @@ const reducers = {
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
         const imgUrl = isWrongFile ? 'auto_insert_img.png' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const newProgram = ProgramForm({
-            _id: { $oid: moment().toISOString() },
+            _id: moment().toISOString(),
             ...createValues,
             imgProgram: imgUrl,
             management: [{
@@ -43,7 +43,7 @@ const reducers = {
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
         const imgUrl = isWrongFile ? imgProgram : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const updateProgram = ProgramForm({
-            _id: { $oid: key },
+            _id: key,
             ...restOldVal,
             imgProgram: imgUrl,
             ...restNewVal,

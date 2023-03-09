@@ -9,7 +9,7 @@ export const UserInforForm = () => {
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const { data, user_id } = SelectAuthState();
-    const user = data.find(d => d._id.$oid === user_id);
+    const user = data.find(d => d._id === user_id);
     const handle = () => {
         form.validateFields()
         .then(values => {
