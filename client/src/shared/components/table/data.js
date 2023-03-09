@@ -17,6 +17,8 @@ export const HandleData = (key) => {
         password: a.password,
         isAdmin: a.isAdmin,
         history: a.history,
+        createdAt: a.createdAt,
+        updatedAt: a.updatedAt,
     }))
     const FindOrg = (organization_key) => {
         const organs = organizations.map(o => ({

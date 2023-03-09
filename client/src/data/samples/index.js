@@ -64,4 +64,4 @@ export const UpdateCollection = (type, data) => console.log(`You updated ${type}
 
 export const DeleteCollection = (type, id) => console.log(`You deleted ${type} collection, with _id: `, id);
 
-export const PostImg = (data) => ({ url: 'public/asset/img/boat.png', file: data });
+export const PostImg = ([data]) => ({ url: 'public/asset/img/boat.png', file: data });

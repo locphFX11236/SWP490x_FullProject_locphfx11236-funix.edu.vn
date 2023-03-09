@@ -1,12 +1,14 @@
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { Avatar } from "antd";
 import { UserOutlined } from '@ant-design/icons';
-import { Link, useLocation, useNavigate } from "react-router-dom";
 
-import { SelectAuthState } from "../../core/slice/authData";
+import { LogOut, SelectAuthState } from "../../core/slice/authData";
 import Handle from "../../shared/helper/handleUrlImg";
 
 const Navigation = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const location = useLocation();
     const { isLogin, isAdmin, data, user_id } = SelectAuthState();
     const path = location.pathname;
@@ -41,7 +43,7 @@ const Navigation = () => {
                         <li className="nav-item m-1">
                             {
                                 isLogin ? 
-                                <button className="btn btn-outline-warning h-100" onClick={() => console.log('Log Out')} >Log Out</button> :
+                                <button className="btn btn-outline-warning h-100" onClick={() => dispatch( LogOut() )} >Log Out</button> :
                                 <Link className="btn btn-outline-success h-100 nav-link" to="/LogIn">Login</Link>
                             }
                         </li>

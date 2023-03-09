@@ -41,15 +41,16 @@ export const ProgDetail = () => {
                         <CardImg src={ HandleUrl(prog.imgProgram) } alt={ prog.programName } />
                     </div>
                 </div>
-                <div className="row text-center m-3">
+                <div className="row text-center m-3 sticky-top bg-light rounded">
                     <hr />
                     <h3>Thông tin quyên góp</h3>
                     <p>Đã được: <strong>{ prog.moneyCurrent } / { prog.moneyTotal } VNĐ</strong></p>
                     <p className="col">Đạt được:<br /><strong>{ prog.moneyRate }%</strong></p>
-                    <p className="col">Đã được:<br /><strong>{ prog.times }<br />Lượt quyên góp</strong></p>
+                    <p className="col">Đã được:<br /><strong>{ prog.times } Lượt<br />quyên góp</strong></p>
                     <p className="col">Ngày bắt đầu:<br /><strong>{FormatTime(prog.startTime)}</strong></p>
                     <p className="col">Ngày kết thúc:<br /><strong>{FormatTime(prog.endTime)}<br />({diff > 0 ? `Còn: ${diff} ngày` : 'Đã dừng quyên góp'})</strong></p>
                     <hr />
+                    <button className="btn btn-outline-info" type='button' onClick={() => console.log('Donation!!') } >Quyên góp</button>
                 </div>
                 <div className="text-justify" dangerouslySetInnerHTML={{ __html: prog.descriptionStory }}></div>
                 <div className="text-justify">

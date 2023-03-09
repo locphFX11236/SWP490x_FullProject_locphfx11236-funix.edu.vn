@@ -4,30 +4,29 @@ import { Card, CardImg, CardTitle, CardBody } from 'reactstrap';
 import HandleUrl from '../../shared/helper/handleUrlImg';
 import { SelectDataState } from "../../core/slice/showData";
 
-const Item = (key, name, img, type, data) => {
-    return (
-        <Card key={key} className='col col-12 col-md-5 m-2'>
-            <Link to={ `/${type}/${data._id.$oid}` } state={data}>
-                <CardImg width='100%' src={img} alt={name}/>
-                <CardBody>
-                    <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
-                </CardBody>
-            </Link>
-        </Card>
-    );
-}; 
+const Item = (key, name, img, type, data) => (
+    <Card key={key} className='col col-12 col-md-5 m-2'>
+        <Link to={ `/${type}/${data._id.$oid}` } state={data}>
+            <CardImg width='100%' src={img} alt={name}/>
+            <CardBody>
+                <CardTitle tag='h5' className='text-center'>{name}</CardTitle>
+            </CardBody>
+        </Link>
+    </Card>
+);
 
 const RenderItems = ({data, type}) => {
     switch (type) {
-        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, HandleUrl(d.imgProgram), 'programs', d));
-        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, HandleUrl(d.logo), 'organizations', d));
-        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, HandleUrl(d.imgNews), 'news', d));
+        case 'programs': return data.map(d => Item(d._id.$oid, d.programName, HandleUrl(d.imgProgram), type, d));
+        case 'organizations': return data.map(d => Item(d._id.$oid, d.nameOrganization, HandleUrl(d.logo), type, d));
+        case 'news': return data.map(d => Item(d._id.$oid, d.newsName, HandleUrl(d.imgNews), type, d));
         default: return;
     };
 };
 
 export const HomePage = () => {
     const { programs, organizations, news } = SelectDataState();
+    console.log(programs, organizations, news)
 
     return (
         <Card>
@@ -44,30 +43,33 @@ export const HomePage = () => {
             </CardTitle>
             <CardBody>
                 <hr />
-                <div className='container'>
+                <div className='container' >
                     <Link to='/programs'><h3 className='text-center'>Các hoàn cảnh quyên góp</h3></Link>
                     <div className='row'>
                         <RenderItems
+                            key='programs'
                             data={programs}
                             type='programs'
                         />
                     </div>
                 </div>
                 <hr />
-                <div className='container'>
+                <div className='container' >
                     <Link to='/organizations'><h3 className='text-center'>Các đối tác đồng hành</h3></Link>
                     <div className='row'>
                         <RenderItems
+                            key='organizations'
                             data={organizations}
                             type='organizations'
                         />
                     </div>
                 </div>
                 <hr />
-                <div className='container'>
+                <div className='container' >
                     <Link to='/news'><h3 className='text-center'>Tin tức cộng đồng</h3></Link>
                     <div className='row'>
                         <RenderItems
+                            key='news'
                             data={news}
                             type='news'
                         />

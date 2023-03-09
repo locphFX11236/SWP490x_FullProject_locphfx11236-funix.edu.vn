@@ -1,19 +1,15 @@
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Button, Form, Input, Row, Typography } from "antd";
+import { Card, Button, Form, Input, Row, Typography, message } from "antd";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
-import { RestAPIAuth } from "../../../core/slice/authData";
+import { CreateUser, RestAPIAuth } from "../../../core/slice/authData";
+import { SampleLogIn, SampleSignUp } from "./sample";
 
 const Title = {
     'SignUp': 'Đăng ký',
     'LogIn': 'Đăng nhập',
     'Forget': 'Quên mật khẩu',
-};
-
-const SampleLogIn = {
-    phoneNumber: "0987654321",
-    password: "123456",
 };
 
 export const AuthForm = () => {
@@ -23,22 +19,31 @@ export const AuthForm = () => {
     const [form] = Form.useForm();
     const typeForm = path.substring(1);
     const handle = (key) => {
+        const checkRePass = (val) => {
+            const { rePassword, ...rest } = val;
+            if (rest.password === rePassword) return rest;
+            else return;
+        };
         form.validateFields()
         .then(values => {
-            if (key === 'SignUp') {console.log('SignUp! with record', values)}
-            else if (key === 'LogIn') {console.log('LogIn! with record', values); dispatch( RestAPIAuth(SampleLogIn) ); navigate('/'); }
+            if (key === 'LogIn') return dispatch( RestAPIAuth({
+                phoneNumber: values.phoneNumber,
+                password: values.password
+            }) )
+            else if (key === 'SignUp') return checkRePass(values) ? dispatch( CreateUser( checkRePass(values) ) ) : message.error('Nhập lại password không đúng.');
             else if (key === 'Forget') {console.log('Forget! with record', values)}
             else {console.log('Cancel')}
         })
         .catch((err) => console.log(err))
     };
+    const sampleVal = typeForm === 'LogIn' ? SampleLogIn : SampleSignUp;
 
     return (
         <Card className="m-auto" style={{ width: 600 }}>
             <Form
                 name="login-form"
                 form={form}
-                initialValues={typeForm === 'LogIn' ? SampleLogIn : undefined}
+                initialValues={sampleVal}
             >
                 <Typography.Title level={3}>{ Title[typeForm] }</Typography.Title>
                 <Form.Item
@@ -64,7 +69,7 @@ export const AuthForm = () => {
                     />
                 </Form.Item>
                 <Form.Item
-                    name="re-password"
+                    name="rePassword"
                     hidden={typeForm === 'LogIn'}
                 >
                     <Input.Password

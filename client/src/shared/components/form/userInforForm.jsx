@@ -1,17 +1,20 @@
 import { Form, Input, Row } from 'antd';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { SelectAuthState } from '../../../core/slice/authData';
+import { SelectAuthState, UpdateUser } from '../../../core/slice/authData';
 
 export const UserInforForm = () => {
     const [allow, setAllow] = useState(true);
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const { data, user_id } = SelectAuthState();
     const user = data.find(d => d._id.$oid === user_id);
     const handle = () => {
         form.validateFields()
         .then(values => {
-            console.log('Update! with record', values);
+            const val = { ...values, imgAvatar: user.imgAvatar }
+            dispatch(UpdateUser({ oldVal: user, newVal: val }));
         })
         .catch((err) => console.log(err))
     };

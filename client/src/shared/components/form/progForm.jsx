@@ -2,6 +2,7 @@ import { Col, Form, Input, InputNumber, message, Row, Select, Slider, } from 'an
 import { useDispatch } from 'react-redux';
 
 import { CreateProgram, DeleteProgram, SelectDataState, UpdateProgram } from '../../../core/slice/showData';
+import { SelectAuthState } from '../../../core/slice/authData';
 import { programSample } from './sample';
 import { checkFile, DraggerImg, getBase64Encoder } from './uploadImg';
 
@@ -9,18 +10,19 @@ const { TextArea } = Input;
 
 export const ProgramForm = ({data, setOpen}) => {
     const { organizations } = SelectDataState();
+    const auth = SelectAuthState();
     const dispatch = useDispatch();
     const SelectOrgId = organizations.map(o => <Select.Option key={o._id.$oid} value={o._id.$oid}>{o.nameOrganization}</Select.Option>)
     const [form] = Form.useForm();
-    const isAdd = !data ? true : false;
+    const isAdd = !(data) ? true : false;
+    const { _id, name } = auth.data.find(d => d._id.$oid === auth.user_id);
     const handle = (key) => {
         form.validateFields()
         .then(values => {
-            if (key === 'Create') dispatch(CreateProgram(values));
-            else if (key === 'Update') dispatch(UpdateProgram({ oldVal: data, newVal: values }));
+            if (key === 'Create') dispatch(CreateProgram({ values: values, admin: { name: name, admin_id: _id } }));
+            else if (key === 'Update') dispatch(UpdateProgram({ oldVal: data, newVal: values, admin: { name: name, admin_id: _id } }));
             else if (key === 'Delete') dispatch(DeleteProgram(data.key));
             else console.log('Cancel!');
-            form.resetFields();
             setOpen(false);
             return;
         })
@@ -42,7 +44,6 @@ export const ProgramForm = ({data, setOpen}) => {
         <Form
             name="program-form"
             form={form}
-            onFinishFailed={(...e) => console.log(e)}
             labelAlign="left"
             wrapperCol={{ span: 16 }}
             labelCol={{ span: 8 }}
@@ -109,10 +110,10 @@ export const ProgramForm = ({data, setOpen}) => {
 
             <Form.Item noStyle>
                 <Row className='d-flex justify-content-between mt-3'> {/** Tại sao có type='button' thì không bi lỗi */}
+                    <button className="btn btn-success" type='button' onClick={() => handle('Create')} hidden={!isAdd}>Create</button>
                     <button className="btn btn-danger" type='button' onClick={() => handle('Delete')} hidden={isAdd}>Delete</button>
                     <button className="btn btn-warning" type='button' onClick={() => handle('Update')} hidden={isAdd}>Update</button>
-                    <button className="btn btn-success" type='button' onClick={() => handle('Create')} hidden={!isAdd}>Create</button>
-                    <button className="btn btn-outline-info" onClick={() => handle('Cancel')} >Cancel</button>
+                    <button className="btn btn-outline-info" type='button' onClick={() => handle('Cancel')} >Cancel</button>
                 </Row>
             </Form.Item>
         </Form>

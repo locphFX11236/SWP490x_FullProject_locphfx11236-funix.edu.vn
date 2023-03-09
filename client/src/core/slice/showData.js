@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import moment from 'moment';
 
 import RequestBE from '../../data';
@@ -13,40 +13,71 @@ const initialState = {
 
 const reducers = {
     CreateProgram: (state, action) => {
-        const { imgProgram, moneyCurrent, moneyRate, imgUpFile, ...createValues } = action.payload;
-        const imgUrl = RequestBE.PostImg(imgUpFile).url; // Post lấy url
+        // Xử lý payload
+        const { values, admin } = action.payload;
+        const { imgProgram, moneyCurrent, moneyRate, imgUpFile, ...createValues } = values;
+        const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
+        const imgUrl = isWrongFile ? 'auto_insert_img.png' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const newProgram = ProgramForm({
-            ...createValues,
-            imgProgram: imgUrl
-        });
-        state.programs.unshift({
             _id: { $oid: moment().toISOString() },
-            ...newProgram
-        }); // Thay đổi state
+            ...createValues,
+            imgProgram: imgUrl,
+            management: [{
+                admin_id: admin.admin_id,
+                descriptionChange: `Created by ${admin.name}.`,
+                executionTime: moment().toISOString(),
+            }],
+        });
+        // Xử lý yêu cầu
+        const progs = [ ...current(state).programs ];
+        progs.unshift(newProgram);
+        // Tạo kết quả
         RequestBE.CreateCollection('program', newProgram ); // Gửi Post Backend
-        return;
+        return { ...state, programs: progs }; // Thay đổi state
     },
     UpdateProgram: (state, action) => {
-        const { oldVal, newVal } = action.payload;
-        const { stt, users, key, ...restOldVal } = oldVal;
-        const { imgUpFile, imgProgram, ...restNewVal } = newVal;
-        const imgUrl = !(imgUpFile) ? RequestBE.PostImg(imgUpFile).url : imgProgram; // Post lấy url
+        // Xử lý payload
+        const { oldVal, newVal, admin } = action.payload;
+        const { stt, users, key, management, ...restOldVal } = oldVal;
+        const { imgUpFile, imgProgram, moneyCurrent, moneyTotal, ...restNewVal } = newVal;
+        const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
+        const imgUrl = isWrongFile ? imgProgram : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const updateProgram = ProgramForm({
-            ...restOldVal,
-            ...restNewVal,
             _id: { $oid: key },
-            imgProgram: imgUrl
+            ...restOldVal,
+            imgProgram: imgUrl,
+            ...restNewVal,
+            moneyTotal,
+            moneyCurrent,
+            moneyRate: (moneyCurrent/moneyTotal),
+            management: [
+                ...management,
+                {
+                    admin_id: admin.admin_id,
+                    descriptionChange: `Updated by ${admin.name}.`,
+                    executionTime: moment().toISOString(),
+                }
+            ],
         });
-        const progs = [ ...state.programs ];
+        // Xử lý yêu cầu
+        const progs = [ ...current(state).programs ];
         progs[stt - 1] = updateProgram;
+        // Tạo kết quả
         RequestBE.UpdateCollection('program', updateProgram); // Gửi Patch Backend
         return { ...state, programs: progs }; // Thay đổi state
     },
     DeleteProgram: (state, action) => {
+        // Xử lý payload
         const id = action.payload;
-        const progs = state.programs.filter(p => p._id.$oid !== id);
+        // Xử lý yêu cầu
+        const progs = [ ...current(state).programs.filter(p => p._id.$oid !== id) ];
+        // Tạo kết quả
         RequestBE.DeleteCollection('program', id); // Gửi Delete Backend
         return { ...state, programs: progs }; // Thay đổi state
+    },
+    Donation: (state, action) => {
+        // Xử lý payload
+        const donat = action.payload; console.log(donat);
     },
 };
 
@@ -80,7 +111,7 @@ const SelectData = (state) => state.DataState;
 // Custom hook selector to data
 export const SelectDataState = () => useSelector(SelectData);
 
-export const { CreateProgram, DeleteProgram, UpdateProgram } = ShowDataSlice.actions;
+export const { CreateProgram, DeleteProgram, UpdateProgram, Donation } = ShowDataSlice.actions;
 
 export { RestAPIShow };
 

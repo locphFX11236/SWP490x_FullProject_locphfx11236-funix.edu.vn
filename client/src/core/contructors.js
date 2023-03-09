@@ -15,6 +15,18 @@ const defaultProgram = {
     donations: []
 };
 
+const defaultUser = {
+    createdAt: '',
+    email: '',
+    history: [],
+    imgAvatar: '',
+    isAdmin: false,
+    name: '',
+    password: '',
+    phoneNumber: '',
+    updatedAt: '',
+};
+
 export const ProgramForm = ({
     organization,
     name,
@@ -28,4 +40,9 @@ export const ProgramForm = ({
     startTime: moment(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
     endTime: moment(endTime, 'HH:mm DD/MM/YYYY').toISOString(),
     ...rest
+});
+
+export const UserForm = (user) => ({
+    ...defaultUser,
+    ...user,
 });

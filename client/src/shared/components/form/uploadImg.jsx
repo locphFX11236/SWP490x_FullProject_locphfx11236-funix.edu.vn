@@ -1,11 +1,13 @@
-import { useState } from "react";
-import { Upload } from "antd";
+import { message, Upload } from "antd";
 import { CameraTwoTone } from '@ant-design/icons';
+import { useDispatch } from "react-redux";
+
+import { ChangeAvatar, SelectAuthState } from "../../../core/slice/authData";
+import Handle from "../../helper/handleUrlImg";
 
 export const checkFile = (file) => {
     const isMatchType = (file.type === 'image/jpeg' || file.type === 'image/png');
     const isMatchSize = (file.size / 1024 / 1024) < 2; // Size < 2MB, file.size is byte
-
     return ( isMatchType && isMatchSize );
 };
 
@@ -27,15 +29,23 @@ export const DraggerImg = () => (
 );
 
 export const Avatar = () => {
-    const [imageUrl, setImageUrl] = useState('asset/img/avartar.jpg');
-    const handleChange = (info) => getBase64Encoder(
-        info.file,
-        (url) => setImageUrl(url)
-    );
-
+    const { user_id, data } = SelectAuthState();
+    const imgAvatar = data.find(d => d._id.$oid === user_id).imgAvatar;
+    const dispatch = useDispatch();
+    const handleChange = (info) => {
+        if (checkFile(info.file)) {
+            getBase64Encoder(
+                info.file,
+                (url) => dispatch( ChangeAvatar({ user_id: user_id, imgAvatar:[url] }))
+            );
+            
+        } else {
+            message.error('File không phù hợp!');
+        };
+    }
     return (
-        <>
-            <img className="w-100" src={imageUrl} alt="avatar" />
+        <div className="col col-md-4 position-relative p-0">
+            <img className="w-100" src={Handle(imgAvatar)} alt="avatar" />
             <Upload
                 name="avatar"
                 type='select'
@@ -46,6 +56,6 @@ export const Avatar = () => {
             >
                 <CameraTwoTone style={{ fontSize: '35px' }} />
             </Upload>
-        </>
+        </div>
     );
 };

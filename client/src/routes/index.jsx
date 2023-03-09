@@ -1,5 +1,6 @@
-import { useDispatch } from "react-redux";
 import { useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 import PrivateRouter from "./private";
 import PublicRouter from "./public";
@@ -8,11 +9,13 @@ import { SelectAuthState } from "../core/slice/authData";
 
 const MainRouter = (views) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { isLogin } = SelectAuthState();
 
     useEffect(() => {
         dispatch( RestAPIShow() );
-    }, [ dispatch ]);
+        navigate('/')
+    }, [ dispatch, isLogin ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return isLogin ? <PrivateRouter { ...views } /> : <PublicRouter { ...views } />;
 };
