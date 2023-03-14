@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { message } from "antd";
 import moment from 'moment';
 
 import RequestBE from '../../data';
@@ -14,12 +15,16 @@ const initialState = {
 };
 
 const reducers = {
-    LogOut: () => ({ ...initialState, message: 'Log Out' }),
+    LogOut: () => {
+        RequestBE.PostLogOut();
+        message.success('You logged out!');
+        return { ...initialState, message: 'You logged out!' };
+    },
     CreateUser: (state, action) => {
         // Xử lý payload
         const { imgAvatar, imgUpFile, ...createValues} = action.payload;
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
-        const imgUrl = isWrongFile ? 'auto_insert_img.png' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
+        const imgUrl = isWrongFile ? '' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const newUser = UserForm({
             _id: moment().toISOString(),
             ...createValues,
@@ -31,7 +36,7 @@ const reducers = {
         const users = [ ...current(state).data ];
         users.unshift(newUser);
         // Tạo kết quả
-        RequestBE.CreateCollection('user', newUser ); // Gửi Post Backend
+        RequestBE.CreateCollection('user', newUser); // Gửi Post Backend
         return { ...state, data: users }; // Thay đổi state
     },
     UpdateUser: (state, action) => {
@@ -90,7 +95,9 @@ const extraReducers = (builder) => {
 
 const RestAPIAuth = createAsyncThunk('AuthData/get', async (params, thunkAPI) => {
     // console.log(params, thunkAPI);
-    const response = await RequestBE.GetAuthData(params);
+    const response = await RequestBE.PostLogIn(params);
+    if (response.isLogin) message.success(response.message);
+    else message.error(response.message);
     return response;
 });
 

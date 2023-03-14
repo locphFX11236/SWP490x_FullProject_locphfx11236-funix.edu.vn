@@ -12,7 +12,11 @@ const Navigation = () => {
     const location = useLocation();
     const { isLogin, isAdmin, data, user_id } = SelectAuthState();
     const path = location.pathname;
-    const user = data.find(d => d._id === user_id);
+    const handleLogOut = () => {
+        dispatch( LogOut() );
+        navigate('/');
+    };
+    const user = data?.find(d => d._id === user_id);
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -43,7 +47,7 @@ const Navigation = () => {
                         <li className="nav-item m-1">
                             {
                                 isLogin ? 
-                                <button className="btn btn-outline-warning h-100" onClick={() => dispatch( LogOut() )} >Log Out</button> :
+                                <button className="btn btn-outline-warning h-100" onClick={handleLogOut} >Log Out</button> :
                                 <Link className="btn btn-outline-success h-100 nav-link" to="/LogIn">Login</Link>
                             }
                         </li>

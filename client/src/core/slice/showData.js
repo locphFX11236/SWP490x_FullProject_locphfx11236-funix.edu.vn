@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import moment from 'moment';
+import ObjectId from 'bson-objectid'
 
 import RequestBE from '../../data';
 import { ProgramForm } from "../contructors";
@@ -19,7 +20,7 @@ const reducers = {
         const isWrongFile = (!imgUpFile || imgUpFile?.length === 0);
         const imgUrl = isWrongFile ? 'auto_insert_img.png' : RequestBE.PostImg(imgUpFile).url; // Post lấy url
         const newProgram = ProgramForm({
-            _id: moment().toISOString(),
+            _id: new ObjectId().toHexString(),
             ...createValues,
             imgProgram: imgUrl,
             management: [{
@@ -32,7 +33,7 @@ const reducers = {
         const progs = [ ...current(state).programs ];
         progs.unshift(newProgram);
         // Tạo kết quả
-        RequestBE.CreateCollection('program', newProgram ); // Gửi Post Backend
+        RequestBE.CreateCollection('program', newProgram); // Gửi Post Backend
         return { ...state, programs: progs }; // Thay đổi state
     },
     UpdateProgram: (state, action) => {
@@ -50,14 +51,11 @@ const reducers = {
             moneyTotal,
             moneyCurrent,
             moneyRate: (moneyCurrent/moneyTotal),
-            management: [
-                ...management,
-                {
-                    admin_id: admin.admin_id,
-                    descriptionChange: `Updated by ${admin.name}.`,
-                    executionTime: moment().toISOString(),
-                }
-            ],
+            management: management.push({
+                admin_id: admin.admin_id,
+                descriptionChange: `Updated by ${admin.name}.`,
+                executionTime: moment().toISOString(),
+            }),
         });
         // Xử lý yêu cầu
         const progs = [ ...current(state).programs ];

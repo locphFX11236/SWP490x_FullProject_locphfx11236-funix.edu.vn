@@ -1,7 +1,7 @@
 import * as local from "./samples";
 import * as restApi from "./api";
 
-const BACK_END_DEV = 'samples';
+const BACK_END_DEV = 'restAPI';
 
 const Setting = (BED) => {
     switch (BED) {

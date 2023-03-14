@@ -1,0 +1,5 @@
+1. Lỗi không tuần tự hóa dữ liệu nhận vào redux.
+2. EJSON, Buffer??
+3. function* ??
+4. RestAPI & RESTful
+5. Lấy _id sau tạo bằng redux/toolkit.

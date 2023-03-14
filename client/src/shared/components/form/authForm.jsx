@@ -26,13 +26,14 @@ export const AuthForm = () => {
         };
         form.validateFields()
         .then(values => {
-            if (key === 'LogIn') return dispatch( RestAPIAuth({
+            if (key === 'LogIn') dispatch( RestAPIAuth({
                 phoneNumber: values.phoneNumber,
                 password: values.password
             }) )
-            else if (key === 'SignUp') return checkRePass(values) ? dispatch( CreateUser( checkRePass(values) ) ) : message.error('Nhập lại password không đúng.');
+            else if (key === 'SignUp') checkRePass(values) ? dispatch( CreateUser( checkRePass(values) ) ) : message.error('Nhập lại password không đúng.');
             else if (key === 'Forget') {console.log('Forget! with record', values)}
-            else {console.log('Cancel')}
+            else navigate('/');
+            return;
         })
         .catch((err) => console.log(err))
     };

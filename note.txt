@@ -1,0 +1,7 @@
+BE
+1. Package:
+- cors: Cho phép FE connect với BE
+
+FE
+1. Package
+- bson: tạo Object Id ở FE

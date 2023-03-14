@@ -1,4 +1,4 @@
-const port = 5000;
+const PORT = 5000;
 
 const defaultOption = {
     mode: "cors",
@@ -6,21 +6,49 @@ const defaultOption = {
     credentials: "same-origin",
     headers: {
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
+        'Access-Control-Allow-Origin': '*',
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
 };
 
-export const GetShowData = async () => (
-    fetch(`http://localhost:${port}/`, { ...defaultOption, method: "GET", })
+export const GetShowData = async () => await (
+    fetch(`http://localhost:${PORT}/`, {
+        method: "GET",
+        ...defaultOption,
+    })
     .then(res => res.json())
     .catch(err => console.log('Font-End, error: ', err))
 );
 
-export const GetAuthData = async (auth) => {};
+export const PostLogIn = async (auth) => await (
+    fetch(`http://localhost:${PORT}/login`, {
+        method: "POST",
+        ...defaultOption,
+        body: JSON.stringify(auth),
+    })
+    .then(res => res.json())
+    .catch(err => console.log('Font-End, error: ', err))
+);
 
-export const CreateCollection = (type, data) => console.log(`You created ${type} collection, with data: `, data);
+export const PostLogOut = async () =>  await (
+    fetch(`http://localhost:${PORT}/logout`, {
+        method: "POST",
+        ...defaultOption,
+    })
+    .then(() => {})
+    .catch(err => console.log('Font-End, error: ', err))
+);
+
+export const CreateCollection = async (type, data) => await (
+    fetch(`http://localhost:${PORT}/add${type}`, {
+        method: "POST",
+        ...defaultOption,
+        body: JSON.stringify(data),
+    })
+    .then(res => res.json())
+    .catch(err => console.log('Font-End, error: ', err))
+);
 
 export const UpdateCollection = (type, data) => console.log(`You updated ${type} collection, with _id: ${data._id.$oid}, and data: `, data);
 
