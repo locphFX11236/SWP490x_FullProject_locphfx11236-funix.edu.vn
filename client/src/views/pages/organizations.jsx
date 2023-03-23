@@ -27,7 +27,7 @@ export const OrganizationPage = () => {
             <CardBody>
                 <div className="container">
                     <div className="row">
-                        { organizations.map(o => <RenderItems key={o._id} data={o}/>)}
+                        { organizations.map(o => <RenderItems key={o._id} data={o}/>) }
                     </div>
                 </div>
             </CardBody>

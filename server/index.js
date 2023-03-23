@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const Database = require('./config/database');
-const { showRoutes, authRoutes } = require('./routes');
+const { showRoutes, authRoutes, ortherRoutes } = require('./routes');
 // const CloneSamples = require('./data/handle');
 
 const MONGODB_URI = 'mongodb://localhost:27017/charity_app_dev';
@@ -17,6 +17,7 @@ app.use(express.json());
 // Các Routes
 app.use(showRoutes);
 app.use(authRoutes);
+app.use(ortherRoutes);
 
 // Handle to database
 Database(

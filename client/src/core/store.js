@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import AuthDataReducer from './slice/authData';
-import ShowDataReducer from './slice/showData';
+import { AuthDataSlice } from './slice/authData';
+import { ShowDataSlice } from './slice/showData';
 
 export const store = configureStore({
     reducer: {
-        DataState: ShowDataReducer,
-        AuthState: AuthDataReducer
+        [ShowDataSlice.name]: ShowDataSlice.reducer,
+        [AuthDataSlice.name]: AuthDataSlice.reducer,
     },
+    // middleware()
 });

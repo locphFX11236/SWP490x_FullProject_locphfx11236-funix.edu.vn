@@ -1,45 +1,35 @@
-import moment from 'moment';
-
 const defaultProgram = {
-    organization_id: 'Test id',
-    programName: '',
-    descriptionStory: '',
-    imgProgram: '',
+    organization_id: "Test id",
+    programName: "",
+    descriptionStory: "",
+    imgProgram: "",
     moneyTotal: 0,
     moneyCurrent: 0,
     moneyRate: 0,
     times: 0,
-    startTime: '',
-    endTime: '',
+    startTime: "",
+    endTime: "",
     management: [],
-    donations: []
+    donations: [],
 };
 
 const defaultUser = {
-    createdAt: '',
-    email: '',
+    createdAt: "",
+    email: "",
     history: [],
-    imgAvatar: '',
+    imgAvatar: "",
     isAdmin: false,
-    name: '',
-    password: '',
-    phoneNumber: '',
-    updatedAt: '',
+    name: "",
+    password: "",
+    phoneNumber: "",
+    updatedAt: "",
 };
 
-export const ProgramForm = ({
-    organization,
-    name,
-    startTime,
-    endTime,
-    ...rest
-}) => ({
+export const ProgramForm = ({ organization, name, ...rest }) => ({
     ...defaultProgram,
     organization_id: organization.key,
     programName: name,
-    startTime: moment(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
-    endTime: moment(endTime, 'HH:mm DD/MM/YYYY').toISOString(),
-    ...rest
+    ...rest,
 });
 
 export const UserForm = (user) => ({

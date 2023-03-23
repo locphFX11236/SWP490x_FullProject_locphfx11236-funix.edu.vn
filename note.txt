@@ -1,7 +1,31 @@
 BE
 1. Package:
 - cors: Cho phép FE connect với BE
+- Mongoose: All menthod: [
+    Model.deleteMany()
+    Model.deleteOne()
+    Model.find()
+    Model.findById()
+    Model.findByIdAndDelete()
+    Model.findByIdAndRemove()
+    Model.findByIdAndUpdate()
+    Model.findOne()
+    Model.findOneAndDelete()
+    Model.findOneAndRemove()
+    Model.findOneAndReplace()
+    Model.findOneAndUpdate()
+    Model.replaceOne()
+    Model.updateMany()
+    Model.updateOne()
+]
 
 FE
 1. Package
 - bson: tạo Object Id ở FE
+- Redux Toolkit: createSlice() => return {
+    actions,
+    caseReducers,
+    getInitialState,
+    name,
+    reducer,
+}

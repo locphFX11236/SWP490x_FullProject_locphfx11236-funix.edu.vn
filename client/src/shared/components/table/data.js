@@ -54,7 +54,7 @@ export const HandleData = (key) => {
 };
 
 export const AdminActionsData = ({ admins, users }) => admins.map((d, i) => ({
-    key: d._id,
+    key: (i + 1),
     stt: (i + 1),
     name: users.find(u => u.key === d.admin_id).name,
     descriptionChange: d.descriptionChange,
@@ -62,7 +62,7 @@ export const AdminActionsData = ({ admins, users }) => admins.map((d, i) => ({
 }));
 
 export const DonasActionsData = ({ donas, users }) => donas.map((d, i) => ({
-    key: d._id,
+    key: (i + 1),
     stt: (i + 1),
     name: users.find(u => u.key === d.user_id).name,
     donationMoney: d.donationMoney,

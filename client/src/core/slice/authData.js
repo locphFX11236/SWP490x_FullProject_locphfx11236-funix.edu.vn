@@ -101,17 +101,17 @@ const RestAPIAuth = createAsyncThunk('AuthData/get', async (params, thunkAPI) =>
     return response;
 });
 
-const AuthDataSlice = createSlice({
+export const AuthDataSlice = createSlice({
     name: 'AuthData',
     initialState,
     reducers,
     extraReducers
 });
 
-const AuthDataReducer = AuthDataSlice.reducer;
+// const AuthDataReducer = AuthDataSlice.reducer;
 
 // Là một hàm hướng dẫn cho Hook 'useSelector' lấy giá trị state theo yêu cầu
-const SelectAuth = (state) => state.AuthState;
+const SelectAuth = (state) => state[AuthDataSlice.name];
 
 // Custom hook selector to data
 export const SelectAuthState = () => useSelector(SelectAuth);
@@ -120,4 +120,4 @@ export const { LogOut, CreateUser, DeleteUser, UpdateUser, ChangeAvatar } = Auth
 
 export { RestAPIAuth };
 
-export default AuthDataReducer;
+// export default AuthDataReducer;

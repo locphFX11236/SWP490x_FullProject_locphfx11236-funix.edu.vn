@@ -1,10 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 
 import PrivateRouter from "./private";
 import PublicRouter from "./public";
-import { RestAPIShow } from "../core/slice/showData";
+import {
+    RestAPIShow,
+    UploadImg,
+} from "../core/slice/showData";
 import { SelectAuthState } from "../core/slice/authData";
 
 const MainRouter = (views) => {
@@ -13,11 +16,16 @@ const MainRouter = (views) => {
     const { isLogin } = SelectAuthState();
 
     useEffect(() => {
-        dispatch( RestAPIShow() );
-        navigate('/')
-    }, [ dispatch, isLogin ]); // eslint-disable-line react-hooks/exhaustive-deps
+        dispatch(RestAPIShow());
+        dispatch(UploadImg(["Test file Img"]));
+        navigate("/");
+    }, [dispatch, isLogin]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return isLogin ? <PrivateRouter { ...views } /> : <PublicRouter { ...views } />;
+    return isLogin ? (
+        <PrivateRouter {...views} />
+    ) : (
+        <PublicRouter {...views} />
+    );
 };
 
 export default MainRouter;

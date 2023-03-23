@@ -1,15 +1,18 @@
-const express = require('express');
-const { ShowDataController } = require('../controller');
+const express = require("express");
+
+const { ShowDataController } = require("../controller");
+
 const router = express.Router();
 
-router.get( // Sử dụng phương thức get để thực hiện router
-    '/', // Bắt lấy path này
-    ShowDataController.GetIndex
-);
+router.get("/", ShowDataController.GetIndex);
 
-router.post( // Sử dụng phương thức get để thực hiện router
-    '/addprogram', // Bắt lấy path này
-    ShowDataController.AddCollection
+router.post("/addProgram", ShowDataController.AddCollection);
+
+router.patch("/patchProgram/:id", ShowDataController.UpdateCollection);
+
+router.delete(
+    "/deleteProgram/:id/:admin_id",
+    ShowDataController.DeleteCollection
 );
 
 module.exports = router;
