@@ -1,19 +1,21 @@
 import { message, Upload } from "antd";
-import { CameraTwoTone } from '@ant-design/icons';
+import { CameraTwoTone } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 
-import { ChangeAvatar, SelectAuthState } from "../../../core/slice/authData";
-import Handle from "../../helper/handleUrlImg";
+import { SelectAuthState } from "../../../core/slice/authData";
+import { UploadImg } from "../../../core/thunkAction";
+import { EXTEND_URL } from "../../helper/publicPath";
 
 export const checkFile = (file) => {
-    const isMatchType = (file.type === 'image/jpeg' || file.type === 'image/png');
-    const isMatchSize = (file.size / 1024 / 1024) < 2; // Size < 2MB, file.size is byte
-    return ( isMatchType && isMatchSize );
+    const isMatchType = file.type === "image/jpeg" || file.type === "image/png";
+    const isMatchSize = file.size / 1024 / 1024 < 2; // Size < 2MB, file.size is byte
+    return isMatchType && isMatchSize;
 };
 
-export const getBase64Encoder = (img, callback) => { // Encoder image vs Base64 -> backend has to decoder
+export const getBase64Encoder = (img, callback) => {
+    // Encoder image vs Base64 -> backend has to decoder
     const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result) ); // Lấy kết quả file sau encoder
+    reader.addEventListener("load", () => callback(reader.result)); // Lấy kết quả file sau encoder
     reader.readAsDataURL(img);
 };
 
@@ -22,39 +24,46 @@ export const DraggerImg = () => (
         maxCount={1}
         listType="picture"
         beforeUpload={() => false}
-        itemRender={(node, file) => checkFile(file) ? node : false}
+        itemRender={(node, file) => (checkFile(file) ? node : false)}
     >
-        <p className="ant-upload-text">Click or drag image file to this area to upload</p>
+        <p className="ant-upload-text">
+            Click or drag image file to this area to upload
+        </p>
     </Upload.Dragger>
 );
 
 export const Avatar = () => {
     const { user_id, data } = SelectAuthState();
-    const imgAvatar = data.find(d => d._id === user_id).imgAvatar;
+    const imgAvatar = data.find((d) => d._id === user_id).imgAvatar;
     const dispatch = useDispatch();
     const handleChange = (info) => {
         if (checkFile(info.file)) {
-            getBase64Encoder(
-                info.file,
-                (url) => dispatch( ChangeAvatar({ user_id: user_id, imgAvatar:[url] }))
+            dispatch(
+                UploadImg({
+                    keyForm: "Avatar",
+                    data: {
+                        _id: user_id,
+                        imgFile: info.file,
+                    },
+                })
             );
-            
         } else {
-            message.error('File không phù hợp!');
-        };
-    }
+            message.error("File không phù hợp!");
+        }
+    };
+
     return (
         <div className="col col-md-4 position-relative p-0">
-            <img className="w-100" src={Handle(imgAvatar)} alt="avatar" />
+            <img className="w-100" src={EXTEND_URL + imgAvatar} alt="avatar" />
             <Upload
                 name="avatar"
-                type='select'
+                type="select"
                 className="avatar-uploader position-absolute bottom-0 end-0"
                 showUploadList={false}
                 beforeUpload={() => false}
                 onChange={handleChange}
             >
-                <CameraTwoTone style={{ fontSize: '35px' }} />
+                <CameraTwoTone style={{ fontSize: "35px" }} />
             </Upload>
         </div>
     );

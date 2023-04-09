@@ -1,6 +1,5 @@
 exports.PostImg = (req, res, next) => {
-	const data = req.body;
-	console.log(data);
-	const response = { url: "public/asset/img/boat.png" };
-	return res.json(response);
+    const data = req.file;
+    const response = `asset/img/${data.filename}`;
+    return res.json(response);
 };

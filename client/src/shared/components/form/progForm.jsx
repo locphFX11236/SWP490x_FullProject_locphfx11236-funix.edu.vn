@@ -9,21 +9,19 @@ import {
     Slider,
 } from "antd";
 import { useDispatch } from "react-redux";
+import moment from "moment";
 
-import {
-    ProgramCollections,
-    SelectDataState,
-} from "../../../core/slice/showData";
+import { ProgramCollections } from "../../../core/thunkAction";
+import { SelectDataState } from "../../../core/slice/showData";
 import { SelectAuthState } from "../../../core/slice/authData";
 import { programSample } from "./sample";
-import { checkFile, DraggerImg, getBase64Encoder } from "./uploadImg";
-import moment from "moment";
+import { checkFile, DraggerImg } from "./uploadImg";
 
 const { TextArea } = Input;
 
-const SelectItem = (Org) => (
-    <Select.Option key={Org._id} value={Org._id}>
-        {Org.nameOrganization}
+const SelectItem = (org) => (
+    <Select.Option key={org._id} value={org._id}>
+        {org.nameOrganization}
     </Select.Option>
 );
 
@@ -102,7 +100,7 @@ export const ProgramForm = ({ data, setOpen }) => {
         if (e.file.status === "removed") {
             return result;
         } else if (checkFile(e.file)) {
-            getBase64Encoder(e.file, (str) => result.unshift(str));
+            result.unshift(e.file);
             return result;
         } else {
             message.error("File không phù hợp!");
@@ -179,7 +177,7 @@ export const ProgramForm = ({ data, setOpen }) => {
                         getValueFromEvent={handleFile}
                     >
                         {DraggerImg()}
-                    </Form.Item>{" "}
+                    </Form.Item>
                     {/** Không dùng React component đc ??? */}
                 </Col>
             </Row>
@@ -193,7 +191,6 @@ export const ProgramForm = ({ data, setOpen }) => {
 
             <Form.Item noStyle>
                 <Row className="d-flex justify-content-between mt-3">
-                    {" "}
                     {/** Tại sao có type='button' thì không bi lỗi */}
                     <button
                         className="btn btn-success"

@@ -1,5 +1,13 @@
-import { CardImg } from 'reactstrap';
+import { CardImg } from "reactstrap";
 
-const HeaderLayout = () => <CardImg width='100%' src={`${process.env.PUBLIC_URL}/asset/img/banner1.jpg`} alt='Banner'/>;
+import { EXTEND_URL } from "../../shared/helper/publicPath";
+
+const HeaderLayout = () => (
+    <CardImg
+        width="100%"
+        src={EXTEND_URL + "asset/img/banner1.jpg"}
+        alt="Banner"
+    />
+);
 
 export default HeaderLayout;

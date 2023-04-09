@@ -6,13 +6,10 @@ const router = express.Router();
 
 router.get("/", ShowDataController.GetIndex);
 
-router.post("/addProgram", ShowDataController.AddCollection);
+router.post("/addProgram", ShowDataController.AddProgram);
 
-router.patch("/patchProgram/:id", ShowDataController.UpdateCollection);
+router.patch("/patchProgram/:id", ShowDataController.UpdateProgram);
 
-router.delete(
-    "/deleteProgram/:id/:admin_id",
-    ShowDataController.DeleteCollection
-);
+router.delete("/deleteProgram/:id/:admin_id", ShowDataController.DeleteProgram);
 
 module.exports = router;

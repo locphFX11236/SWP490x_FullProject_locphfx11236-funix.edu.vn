@@ -1,7 +1,9 @@
+const { ObjectId } = require("mongodb");
+
 const Organizations = require("../models/organizations");
 const Programs = require("../models/programs");
 const News = require("../models/news");
-const { ObjectId } = require("mongodb");
+const { DeleteFile } = require("../config/helper/deleteFile");
 
 exports.GetIndex = async (req, res, next) =>
     Promise.all([Organizations.find(), Programs.find(), News.find()])
@@ -11,9 +13,13 @@ exports.GetIndex = async (req, res, next) =>
             news: news,
         }))
         .then((data) => res.json(data))
-        .catch((err) => console.log(err));
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
 
-exports.AddCollection = async (req, res, next) => {
+exports.AddProgram = async (req, res, next) => {
     const { organization_id, ...rest } = req.body;
     const program = new Programs({
         organization_id: ObjectId(organization_id),
@@ -31,17 +37,25 @@ exports.AddCollection = async (req, res, next) => {
             })
         )
         .catch((err) => {
-            console.log(err);
-            // const error = new Error(err);
-            // error.httpStatus = 500;
-            // return next(error)
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
         });
 };
 
-exports.UpdateCollection = async (req, res, next) => {
+exports.UpdateProgram = async (req, res, next) => {
     const { _id, ...rest } = req.body;
 
     return Programs.findByIdAndUpdate(_id, rest)
+        .then((result) => {
+            const isChangeImg = rest.imgProgram !== result._doc.imgProgram;
+            const isAuto =
+                result._doc.imgProgram === "asset/img/auto_insert_img.jpg";
+            if (isChangeImg && !isAuto) {
+                DeleteFile(result._doc.imgProgram);
+                return { ...result._doc, ...rest };
+            } else return { ...result._doc, ...rest };
+        })
         .then((result) =>
             res.json({
                 message: "You updated program collection!",
@@ -50,14 +64,26 @@ exports.UpdateCollection = async (req, res, next) => {
                 result: result,
             })
         )
-        .catch((err) => console.log("Error: ", err));
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
 };
 
-exports.DeleteCollection = async (req, res, next) => {
+exports.DeleteProgram = async (req, res, next) => {
     const id = req.params.id;
     const admin_id = req.params.admin_id;
 
     return Programs.findByIdAndDelete(id)
+        .then((result) => {
+            const isAuto =
+                result.imgProgram === "asset/img/auto_insert_img.jpg";
+            if (!isAuto) {
+                DeleteFile(result.imgProgram);
+                return result;
+            } else return result;
+        })
         .then((result) =>
             res.json({
                 message: "You deleted program collection!",
@@ -66,5 +92,9 @@ exports.DeleteCollection = async (req, res, next) => {
                 result: result,
             })
         )
-        .catch((err) => console.log("Error: ", err));
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
 };

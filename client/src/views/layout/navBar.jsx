@@ -1,24 +1,16 @@
-import {
-    Link,
-    useLocation,
-    useNavigate,
-} from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-import {
-    LogOut,
-    SelectAuthState,
-} from "../../core/slice/authData";
-import Handle from "../../shared/helper/handleUrlImg";
+import { LogOut, SelectAuthState } from "../../core/slice/authData";
+import { EXTEND_URL } from "../../shared/helper/publicPath";
 
 const Navigation = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const location = useLocation();
-    const { isLogin, isAdmin, data, user_id } =
-        SelectAuthState();
+    const { isLogin, isAdmin, data, user_id } = SelectAuthState();
     const path = location.pathname;
     const handleLogOut = () => {
         dispatch(LogOut());
@@ -56,9 +48,7 @@ const Navigation = () => {
                         <li className="nav-item border border-dark rounded m-1">
                             <Link
                                 className={`nav-link${
-                                    path === "/"
-                                        ? " active"
-                                        : ""
+                                    path === "/" ? " active" : ""
                                 }`}
                                 to="/"
                             >
@@ -70,11 +60,7 @@ const Navigation = () => {
                         <li className="nav-item border border-dark rounded m-1">
                             <Link
                                 className={`nav-link${
-                                    path.includes(
-                                        "/programs"
-                                    )
-                                        ? " active"
-                                        : ""
+                                    path.includes("/programs") ? " active" : ""
                                 }`}
                                 to="/programs"
                             >
@@ -86,9 +72,7 @@ const Navigation = () => {
                         <li className="nav-item border border-dark rounded m-1">
                             <Link
                                 className={`nav-link${
-                                    path.includes(
-                                        "/organizations"
-                                    )
+                                    path.includes("/organizations")
                                         ? " active"
                                         : ""
                                 }`}
@@ -102,9 +86,7 @@ const Navigation = () => {
                         <li className="nav-item border border-dark rounded m-1">
                             <Link
                                 className={`nav-link${
-                                    path.includes("/news")
-                                        ? " active"
-                                        : ""
+                                    path.includes("/news") ? " active" : ""
                                 }`}
                                 to="/news"
                             >
@@ -119,9 +101,7 @@ const Navigation = () => {
                         >
                             <Link
                                 className={`nav-link${
-                                    path.includes("/admin")
-                                        ? " active"
-                                        : ""
+                                    path.includes("/admin") ? " active" : ""
                                 }`}
                                 to="/admin"
                             >
@@ -156,9 +136,7 @@ const Navigation = () => {
                                     className="border border-dark"
                                     src={
                                         user.imgAvatar
-                                            ? Handle(
-                                                  user.imgAvatar
-                                              )
+                                            ? EXTEND_URL + user.imgAvatar
                                             : undefined
                                     }
                                     icon={
@@ -166,11 +144,7 @@ const Navigation = () => {
                                             <UserOutlined />
                                         ) : undefined
                                     }
-                                    onClick={() =>
-                                        navigate(
-                                            "/userInfor"
-                                        )
-                                    }
+                                    onClick={() => navigate("/userInfor")}
                                 />
                             ) : (
                                 <Link

@@ -1,4 +1,4 @@
-const PORT = 5000;
+import { BACK_END_URL } from "../../shared/helper/publicPath";
 
 const defaultOption = {
     mode: "cors",
@@ -13,7 +13,7 @@ const defaultOption = {
 };
 
 export const GetShowData = async () =>
-    await fetch(`http://localhost:${PORT}/`, {
+    await fetch(`${BACK_END_URL}/`, {
         method: "GET",
         ...defaultOption,
     })
@@ -21,7 +21,7 @@ export const GetShowData = async () =>
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const PostLogIn = async (auth) =>
-    await fetch(`http://localhost:${PORT}/login`, {
+    await fetch(`${BACK_END_URL}/login`, {
         method: "POST",
         ...defaultOption,
         body: JSON.stringify(auth),
@@ -30,7 +30,7 @@ export const PostLogIn = async (auth) =>
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const PostLogOut = async () =>
-    await fetch(`http://localhost:${PORT}/logout`, {
+    await fetch(`${BACK_END_URL}/logout`, {
         method: "POST",
         ...defaultOption,
     })
@@ -38,7 +38,7 @@ export const PostLogOut = async () =>
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const CreateCollection = async (type, data) =>
-    await fetch(`http://localhost:${PORT}/add${type}`, {
+    await fetch(`${BACK_END_URL}/add${type}`, {
         method: "POST",
         ...defaultOption,
         body: JSON.stringify(data),
@@ -51,7 +51,7 @@ export const CreateCollection = async (type, data) =>
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const UpdateCollection = async (type, data) =>
-    await fetch(`http://localhost:${PORT}/patch${type}/${data._id}`, {
+    await fetch(`${BACK_END_URL}/patch${type}/${data._id}`, {
         method: "PATCH",
         ...defaultOption,
         body: JSON.stringify(data),
@@ -61,7 +61,7 @@ export const UpdateCollection = async (type, data) =>
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const DeleteCollection = async (type, id, admin_id) =>
-    await fetch(`http://localhost:${PORT}/delete${type}/${id}/${admin_id}`, {
+    await fetch(`${BACK_END_URL}/delete${type}/${id}/${admin_id}`, {
         method: "DELETE",
         ...defaultOption,
     })
@@ -69,11 +69,10 @@ export const DeleteCollection = async (type, id, admin_id) =>
         .then((result) => console.log(result))
         .catch((err) => console.log("Font-End, error: ", err));
 
-export const PostImg = async ([data]) =>
-    await fetch(`http://localhost:${PORT}/postImg`, {
+export const PostImg = async (data) =>
+    await fetch(`${BACK_END_URL}/postImg`, {
         method: "POST",
-        ...defaultOption,
-        body: JSON.stringify({ file: data }),
+        body: data,
     })
         .then((res) => res.json())
         .catch((err) => console.log("Font-End, error: ", err));

@@ -1,8 +1,8 @@
 [
     {
-        "_id": "63a993e000122368d6dc9286" ,
+        "_id": "63a993e000122368d6dc9286",
         "name": "Trần Thị User2",
-        "imgAvatar": "public/asset/img/avartar.jpg",
+        "imgAvatar": "asset/img/avartar.jpg",
         "email": "user2@gmail.com",
         "phoneNumber": "0987654332",
         "password": "123456",
@@ -34,9 +34,9 @@
         "__v": 20
     },
     {
-        "_id": "63a993e000122368d6dc9283" ,
+        "_id": "63a993e000122368d6dc9283",
         "name": "Nguyễn Văn Admin1",
-        "imgAvatar": "public/asset/img/avartar.jpg",
+        "imgAvatar": "asset/img/avartar.jpg",
         "email": "admin1@gmail.com",
         "phoneNumber": "0987654321",
         "password": "123456",
@@ -61,9 +61,9 @@
         "__v": 13
     },
     {
-        "_id": "63a993e000122368d6dc9287" ,
+        "_id": "63a993e000122368d6dc9287",
         "name": "Nguyễn Trần Thị User3",
-        "imgAvatar": "public/asset/img/avartar.jpg",
+        "imgAvatar": "asset/img/avartar.jpg",
         "email": "user3@gmail.com",
         "phoneNumber": "0987654333",
         "password": "123456",
@@ -98,9 +98,9 @@
         "__v": 23
     },
     {
-        "_id": "63a993e000122368d6dc9285" ,
+        "_id": "63a993e000122368d6dc9285",
         "name": "Nguyễn Văn User1",
-        "imgAvatar": "public/asset/img/avartar.jpg",
+        "imgAvatar": "asset/img/avartar.jpg",
         "email": "user1@gmail.com",
         "phoneNumber": "0987654331",
         "password": "123456",
@@ -131,9 +131,9 @@
         "__v": 19
     },
     {
-        "_id": "63a993e000122368d6dc9284" ,
+        "_id": "63a993e000122368d6dc9284",
         "name": "Trần Thị Admin2",
-        "imgAvatar": "public/asset/img/avartar.jpg",
+        "imgAvatar": "asset/img/avartar.jpg",
         "email": "admin2@gmail.com",
         "phoneNumber": "0987654322",
         "password": "123456",
