@@ -1,8 +1,6 @@
 import * as local from "./samples";
 import * as restApi from "./api";
 
-export const BACK_END_DEV = "restAPI";
-
 const Setting = (BED) => {
     switch (BED) {
         case "samples":
@@ -14,6 +12,6 @@ const Setting = (BED) => {
     }
 };
 
-const RequestBE = { ...Setting(BACK_END_DEV) };
+const RequestBE = { ...Setting(process.env.REACT_APP_BACK_END_DEV) };
 
 export default RequestBE;

@@ -7,3 +7,4 @@
 - a1 trước a2 => thực thi a1 rồi đến a2?
 - Lấy kết quả của a1 làm tham số a2?
 - Nếu a2 nằm trong func xử lý của a1?
+7. Tại sao cần sd FormData để gửi file lên BE

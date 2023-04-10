@@ -66,7 +66,7 @@ export const ProgramCollections = createAsyncThunk(
                             keyForm: KEY,
                             data: {
                                 _id: isCreateKey ? keyForm : oldVal.key,
-                                imgFile: imgUpFile?.[0],
+                                imgFile: imgUpFile[0],
                             },
                         })
                     );
