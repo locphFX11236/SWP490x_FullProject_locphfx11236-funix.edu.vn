@@ -12,4 +12,10 @@ router.post(
     AuthDataController.PostLogOut // Lấy function PostLogOut để xử lý router
 );
 
+router.post("/addUser", AuthDataController.AddUser);
+
+router.patch("/patchUser/:id", AuthDataController.UpdateUser);
+
+router.delete("/deleteUser/:id/:admin_id", AuthDataController.DeleteUser);
+
 module.exports = router;

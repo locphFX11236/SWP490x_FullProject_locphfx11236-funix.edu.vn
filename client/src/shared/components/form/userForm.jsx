@@ -1,35 +1,83 @@
-import { Form, Input, message, Row, } from 'antd';
-import { useDispatch } from 'react-redux';
+import { Form, Input, message, Row } from "antd";
+import { useDispatch } from "react-redux";
 
-import { CreateUser, DeleteUser, UpdateUser } from '../../../core/slice/authData';
-import { userSample } from './sample';
-import { checkFile, DraggerImg, getBase64Encoder } from './uploadImg';
+import {
+    // CreateUser,
+    // DeleteUser,
+    // UpdateUser,
+    SelectAuthState,
+} from "../../../core/slice/authData";
+import { UserCollections } from "../../../core/thunkAction";
+import { userSample } from "./sample";
+import { checkFile, DraggerImg } from "./uploadImg";
 
-export const UserForm = ({data, setOpen}) => {
+export const UserForm = ({ data, setOpen }) => {
     const dispatch = useDispatch();
+    const auth = SelectAuthState();
     const [form] = Form.useForm();
     const isAdd = !data ? true : false;
-    const handle = (key) => {
+    const { _id, name } = auth.data.find((d) => d._id === auth.user_id);
+    const handle = (keyForm) => {
         form.validateFields()
-        .then(values => {
-            if (key === 'Create') dispatch(CreateUser(values))
-            else if (key === 'Update') dispatch(UpdateUser({ oldVal: data, newVal: values }));
-            else if (key === 'Delete') dispatch(DeleteUser(data.key));
-            else {console.log('Cancel!')}
-            setOpen(false);
-        })
-        .catch((err) => console.log(err))
+            .then((values) => {
+                if (keyForm === "Create")
+                    dispatch(
+                        UserCollections({
+                            keyForm,
+                            data: {
+                                oldVal: {},
+                                values: values,
+                                admin: {
+                                    name: name,
+                                    admin_id: _id,
+                                },
+                            },
+                        })
+                    );
+                else if (keyForm === "Update")
+                    dispatch(
+                        UserCollections({
+                            keyForm,
+                            data: {
+                                oldVal: data,
+                                values: values,
+                                admin: {
+                                    name: name,
+                                    admin_id: _id,
+                                },
+                            },
+                        })
+                    );
+                else if (keyForm === "Delete")
+                    dispatch(
+                        UserCollections({
+                            keyForm,
+                            data: {
+                                oldVal: data,
+                                values: values,
+                                admin: {
+                                    name: name,
+                                    admin_id: _id,
+                                },
+                            },
+                        })
+                    );
+                else console.log("Cancel!");
+                setOpen(false);
+                return;
+            })
+            .catch((err) => console.log(err));
     };
     const normFile = (e) => {
         const result = [];
-        if (e.file.status === 'removed') return result;
-        else if( checkFile(e.file) ) {
-            getBase64Encoder(e.file, str => result.unshift(str))
+        if (e.file.status === "removed") return result;
+        else if (checkFile(e.file)) {
+            result.unshift(e.file);
             return result;
         } else {
-            message.error('File không phù hợp!');
+            message.error("File không phù hợp!");
             return result;
-        };
+        }
     };
 
     return (
@@ -39,29 +87,29 @@ export const UserForm = ({data, setOpen}) => {
             labelAlign="left"
             wrapperCol={{ span: 16 }}
             labelCol={{ span: 8 }}
-            initialValues={ isAdd ? userSample : data }
+            initialValues={isAdd ? userSample : data}
         >
-            <Form.Item label="User ID" hidden={isAdd} >
-                <span className="ant-form-text">{isAdd ? '' : data.key}</span>
+            <Form.Item label="User ID" hidden={isAdd}>
+                <span className="ant-form-text">{isAdd ? "" : data.key}</span>
             </Form.Item>
 
-            <Form.Item label="Họ tên" name='name' >
+            <Form.Item label="Họ tên" name="name">
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Avatar Url" name='imgAvatar' hidden={isAdd} >
+            <Form.Item label="Avatar Url" name="imgAvatar" hidden={isAdd}>
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Số điện thoại" name='phoneNumber' >
+            <Form.Item label="Số điện thoại" name="phoneNumber">
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Email" name='email' >
+            <Form.Item label="Email" name="email">
                 <Input />
             </Form.Item>
 
-            <Form.Item label="Mật khẩu" name='password' >
+            <Form.Item label="Mật khẩu" name="password">
                 <Input.Password />
             </Form.Item>
 
@@ -71,15 +119,42 @@ export const UserForm = ({data, setOpen}) => {
                 valuePropName="file"
                 getValueFromEvent={normFile}
             >
-                { DraggerImg() }
+                {DraggerImg()}
             </Form.Item>
 
             <Form.Item noStyle>
-                <Row className='d-flex justify-content-between mt-3'>
-                    <button className="btn btn-danger" type='button' onClick={() => handle('Delete')} hidden={isAdd}>Delete</button>
-                    <button className="btn btn-warning" type='button' onClick={() => handle('Update')} hidden={isAdd}>Update</button>
-                    <button className="btn btn-success" type='button' onClick={() => handle('Create')} hidden={!isAdd}>Create</button>
-                    <button className="btn btn-outline-info" type='button' onClick={() => handle('Cancel')} >Cancel</button>
+                <Row className="d-flex justify-content-between mt-3">
+                    <button
+                        className="btn btn-danger"
+                        type="button"
+                        onClick={() => handle("Delete")}
+                        hidden={isAdd}
+                    >
+                        Delete
+                    </button>
+                    <button
+                        className="btn btn-warning"
+                        type="button"
+                        onClick={() => handle("Update")}
+                        hidden={isAdd}
+                    >
+                        Update
+                    </button>
+                    <button
+                        className="btn btn-success"
+                        type="button"
+                        onClick={() => handle("Create")}
+                        hidden={!isAdd}
+                    >
+                        Create
+                    </button>
+                    <button
+                        className="btn btn-outline-info"
+                        type="button"
+                        onClick={() => handle("Cancel")}
+                    >
+                        Cancel
+                    </button>
                 </Row>
             </Form.Item>
         </Form>

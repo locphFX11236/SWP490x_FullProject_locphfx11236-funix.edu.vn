@@ -12,12 +12,12 @@ export const checkFile = (file) => {
     return isMatchType && isMatchSize;
 };
 
-export const getBase64Encoder = (img, callback) => {
-    // Encoder image vs Base64 -> backend has to decoder
-    const reader = new FileReader();
-    reader.addEventListener("load", () => callback(reader.result)); // Lấy kết quả file sau encoder
-    reader.readAsDataURL(img);
-};
+// export const getBase64Encoder = (img, callback) => {
+//     // Encoder image vs Base64 -> backend has to decoder
+//     const reader = new FileReader();
+//     reader.addEventListener("load", () => callback(reader.result)); // Lấy kết quả file sau encoder
+//     reader.readAsDataURL(img);
+// };
 
 export const DraggerImg = () => (
     <Upload.Dragger
@@ -43,7 +43,7 @@ export const Avatar = () => {
                     keyForm: "Avatar",
                     data: {
                         _id: user_id,
-                        imgFile: info.file,
+                        imgFiles: [info.file],
                     },
                 })
             );

@@ -1,10 +1,8 @@
 import { useSelector } from "react-redux";
 import { createSlice, current } from "@reduxjs/toolkit";
 import { message } from "antd";
-import moment from "moment";
 
 import RequestBE from "../../data";
-import { UserForm } from "../contructors";
 import { RestAPIAuth } from "../thunkAction";
 
 const initialState = {
@@ -23,59 +21,30 @@ const reducers = {
     },
     CreateUser: (state, action) => {
         // Xử lý payload
-        const { imgAvatar, imgUpFile, ...createValues } = action.payload;
-        const isWrongFile = !imgUpFile || imgUpFile?.length === 0;
-        const imgUrl = isWrongFile ? "" : RequestBE.PostImg(imgUpFile).url; // Post lấy url
-        const newUser = UserForm({
-            _id: moment().toISOString(),
-            ...createValues,
-            imgAvatar: imgUrl,
-            createdAt: moment().toISOString(),
-            updatedAt: moment().toISOString(),
-        });
-        // Xử lý yêu cầu
+        const newUser = action.payload;
         const users = [...current(state).data];
         users.unshift(newUser);
         // Tạo kết quả
-        RequestBE.CreateCollection("user", newUser); // Gửi Post Backend
         return { ...state, data: users }; // Thay đổi state
     },
     UpdateUser: (state, action) => {
         // Xử lý payload
-        const { oldVal, newVal } = action.payload;
-        const { stt, key, ...restOldVal } = oldVal;
-        const { imgUpFile, imgAvatar, ...restNewVal } = newVal;
-        const isWrongFile = !imgUpFile || imgUpFile?.length === 0;
-        const imgUrl = isWrongFile
-            ? imgAvatar
-            : RequestBE.PostImg(imgUpFile).url; // Post lấy url
-        const updateUser = UserForm({
-            _id: key,
-            ...restOldVal,
-            imgAvatar: imgUrl,
-            ...restNewVal,
-            updatedAt: moment().toISOString(),
-        });
-        // Xử lý yêu cầu
+        const { stt, updateUser } = action.payload;
         const users = [...current(state).data];
         users[stt - 1] = updateUser;
         // Tạo kết quả
-        RequestBE.UpdateCollection("user", updateUser); // Gửi Patch Backend
         return { ...state, data: users }; // Thay đổi state
     },
     DeleteUser: (state, action) => {
         // Xử lý payload
         const id = action.payload;
-        // Xử lý yêu cầu
-        const users = [...current(state).data.filter((u) => u._id.$oid !== id)];
+        const users = [...current(state).data.filter((u) => u._id !== id)];
         // Tạo kết quả
-        RequestBE.DeleteCollection("user", id); // Gửi Delete Backend
         return { ...state, data: users }; // Thay đổi state
     },
     ChangeAvatar: (state, action) => {
         // Xử lý payload
         const { user_id, imgAvatar } = action.payload;
-        console.log(action.payload);
         const index = state.data.findIndex((d) => d._id === user_id);
         // Xử lý yêu cầu
         const users = [...current(state).data];
@@ -83,7 +52,6 @@ const reducers = {
             ...users[index],
             imgAvatar: imgAvatar,
         };
-        console.log(updateUser);
         users[index] = updateUser;
         // Tạo kết quả
         // RequestBE.UpdateCollection('user', updateUser); // Gửi Patch Backend

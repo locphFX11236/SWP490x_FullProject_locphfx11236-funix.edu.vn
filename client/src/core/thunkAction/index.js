@@ -3,8 +3,8 @@ import { message } from "antd";
 import moment from "moment";
 
 import RequestBE from "../../data";
-import { ProgramForm } from "../contructors";
-import { ChangeAvatar } from "../slice/authData";
+import { ProgramForm, UserForm } from "../contructors";
+import { AuthDataSlice, ChangeAvatar } from "../slice/authData";
 import { ShowDataSlice } from "../slice/showData";
 
 export const RestAPIShow = createAsyncThunk(
@@ -22,13 +22,14 @@ export const UploadImg = createAsyncThunk(
         // console.log(params, thunkAPI);
         const dispatch = thunkAPI.dispatch;
         const { keyForm, data } = params;
+        const { _id, imgFiles } = data;
         const formData = new FormData();
         formData.append("fileName", `${keyForm}-${moment().valueOf()}`);
-        formData.append("imgFile", data.imgFile);
+        formData.append("imgFile", imgFiles[0]);
 
         const response = await RequestBE.PostImg(formData);
         if (keyForm === "Avatar") {
-            dispatch(ChangeAvatar({ user_id: data._id, imgAvatar: response }));
+            dispatch(ChangeAvatar({ user_id: _id, imgAvatar: response }));
             return response;
         } else {
             return response;
@@ -59,14 +60,14 @@ export const ProgramCollections = createAsyncThunk(
             .then(() => {
                 const hasFile = imgUpFile?.length > 0;
                 const isNull = !imgProgram;
-                if (hasFile) {
-                    const isCreateKey = keyForm === "Create";
+                const isDelete = keyForm === "Delete";
+                if (hasFile && !isDelete) {
                     const imgUrl = dispatch(
                         UploadImg({
                             keyForm: KEY,
                             data: {
-                                _id: isCreateKey ? keyForm : oldVal.key,
-                                imgFile: imgUpFile[0],
+                                _id: oldVal.key || "",
+                                imgFiles: imgUpFile,
                             },
                         })
                     );
@@ -164,5 +165,98 @@ export const RestAPIAuth = createAsyncThunk(
         if (response.isLogin) message.success(response.message);
         else message.error(response.message);
         return response;
+    }
+);
+
+export const UserCollections = createAsyncThunk(
+    "Thunk/changeInUser",
+    async (params, thunkAPI) => {
+        // console.log(params, thunkAPI);
+        // Xử lý payload
+        const { keyForm, data } = params;
+        const { oldVal, values, admin } = data;
+        const { imgAvatar, imgUpFile, ...restPostValues } = values;
+        const KEY = "User";
+        const userObject = UserForm(restPostValues);
+        const dispatch = thunkAPI.dispatch;
+        const reduxAction = AuthDataSlice.actions[keyForm + KEY];
+        const handlePromise = new Promise((resolve, reject) => resolve());
+        handlePromise
+            .then(() => {
+                const hasFile = imgUpFile?.length > 0;
+                const isNull = !imgAvatar;
+                const isDelete = keyForm === "Delete";
+                if (hasFile && !isDelete) {
+                    const imgUrl = dispatch(
+                        UploadImg({
+                            keyForm: KEY,
+                            data: {
+                                _id: oldVal.key || "",
+                                imgFiles: imgUpFile,
+                            },
+                        })
+                    );
+                    return imgUrl;
+                } else if (isNull) {
+                    return { payload: "asset/img/auto_insert_img.jpg" };
+                } else {
+                    return { payload: imgAvatar };
+                }
+            })
+            .then((imgUrl) => {
+                userObject.imgAvatar = imgUrl.payload;
+                return;
+            })
+            .then(() => {
+                switch (keyForm) {
+                    case "Create": {
+                        return RequestBE.CreateCollection(KEY, userObject);
+                    }
+
+                    case "Update": {
+                        const { stt, key, ...restOldVal } = oldVal;
+                        const updateUser = UserForm({
+                            _id: key,
+                            ...restOldVal,
+                            ...userObject,
+                        });
+
+                        dispatch(reduxAction({ stt, updateUser }));
+                        return updateUser;
+                    }
+
+                    case "Delete": {
+                        const { key } = oldVal;
+                        dispatch(reduxAction(key));
+                        return key;
+                    }
+
+                    default:
+                        return;
+                }
+            })
+            .then((result) => {
+                switch (keyForm) {
+                    case "Create": {
+                        return dispatch(reduxAction(result.result));
+                    }
+
+                    case "Update": {
+                        return RequestBE.UpdateCollection(KEY, result);
+                    }
+
+                    case "Delete": {
+                        return RequestBE.DeleteCollection(
+                            KEY,
+                            result,
+                            admin.admin_id
+                        );
+                    }
+
+                    default:
+                        return;
+                }
+            })
+            .catch((err) => console.log(err));
     }
 );

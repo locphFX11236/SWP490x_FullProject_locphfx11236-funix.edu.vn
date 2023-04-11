@@ -14,7 +14,6 @@ const defaultProgram = {
 };
 
 const defaultUser = {
-    createdAt: "",
     email: "",
     history: [],
     imgAvatar: "",
@@ -22,7 +21,6 @@ const defaultUser = {
     name: "",
     password: "",
     phoneNumber: "",
-    updatedAt: "",
 };
 
 export const ProgramForm = ({ organization, name, ...rest }) => ({
