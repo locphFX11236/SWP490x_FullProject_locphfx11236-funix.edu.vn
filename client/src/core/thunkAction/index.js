@@ -4,7 +4,7 @@ import moment from "moment";
 
 import RequestBE from "../../data";
 import { ProgramForm, UserForm } from "../contructors";
-import { AuthDataSlice, ChangeAvatar } from "../slice/authData";
+import { AuthDataSlice } from "../slice/authData";
 import { ShowDataSlice } from "../slice/showData";
 
 export const RestAPIShow = createAsyncThunk(
@@ -22,14 +22,20 @@ export const UploadImg = createAsyncThunk(
         // console.log(params, thunkAPI);
         const dispatch = thunkAPI.dispatch;
         const { keyForm, data } = params;
-        const { _id, imgFiles } = data;
+        const { imgFiles, index, oldVal } = data;
         const formData = new FormData();
+        const Post = async (data) => await RequestBE.PostImg(data);
+        let response = { payload: "asset/img/auto_insert_img.jpg" };
+
         formData.append("fileName", `${keyForm}-${moment().valueOf()}`);
         formData.append("imgFile", imgFiles[0]);
 
-        const response = await RequestBE.PostImg(formData);
-        if (keyForm === "Avatar") {
-            dispatch(ChangeAvatar({ user_id: _id, imgAvatar: response }));
+        response = await Post(formData);
+        if (oldVal) {
+            const reduxAction = AuthDataSlice.actions[`Update${keyForm}`];
+            const updateUser = { ...oldVal, imgAvatar: response };
+            dispatch(reduxAction({ stt: index + 1, updateUser }));
+            RequestBE.UpdateCollection(keyForm, updateUser);
             return response;
         } else {
             return response;
@@ -65,10 +71,7 @@ export const ProgramCollections = createAsyncThunk(
                     const imgUrl = dispatch(
                         UploadImg({
                             keyForm: KEY,
-                            data: {
-                                _id: oldVal.key || "",
-                                imgFiles: imgUpFile,
-                            },
+                            data: { imgFiles: imgUpFile },
                         })
                     );
                     return imgUrl;
@@ -118,13 +121,13 @@ export const ProgramCollections = createAsyncThunk(
                         });
 
                         dispatch(reduxAction({ stt, updateProgram }));
-                        return updateProgram;
+                        return { updateProgram };
                     }
 
                     case "Delete": {
                         const { key } = oldVal;
                         dispatch(reduxAction(key));
-                        return key;
+                        return { deleteId: key };
                     }
 
                     default:
@@ -138,13 +141,16 @@ export const ProgramCollections = createAsyncThunk(
                     }
 
                     case "Update": {
-                        return RequestBE.UpdateCollection(KEY, result);
+                        return RequestBE.UpdateCollection(
+                            KEY,
+                            result.updateProgram
+                        );
                     }
 
                     case "Delete": {
                         return RequestBE.DeleteCollection(
                             KEY,
-                            result,
+                            result.deleteId,
                             admin.admin_id
                         );
                     }
@@ -190,10 +196,7 @@ export const UserCollections = createAsyncThunk(
                     const imgUrl = dispatch(
                         UploadImg({
                             keyForm: KEY,
-                            data: {
-                                _id: oldVal.key || "",
-                                imgFiles: imgUpFile,
-                            },
+                            data: { imgFiles: imgUpFile },
                         })
                     );
                     return imgUrl;
@@ -214,21 +217,23 @@ export const UserCollections = createAsyncThunk(
                     }
 
                     case "Update": {
-                        const { stt, key, ...restOldVal } = oldVal;
+                        const { stt, key, _id, ...restOldVal } = oldVal;
                         const updateUser = UserForm({
-                            _id: key,
+                            _id: key || _id,
                             ...restOldVal,
                             ...userObject,
                         });
+                        const userData = thunkAPI.getState().AuthData.data;
+                        const i = userData.findIndex((u) => u._id === _id) + 1;
 
-                        dispatch(reduxAction({ stt, updateUser }));
-                        return updateUser;
+                        dispatch(reduxAction({ stt: stt || i, updateUser }));
+                        return { updateUser };
                     }
 
                     case "Delete": {
                         const { key } = oldVal;
                         dispatch(reduxAction(key));
-                        return key;
+                        return { deleteId: key };
                     }
 
                     default:
@@ -242,13 +247,16 @@ export const UserCollections = createAsyncThunk(
                     }
 
                     case "Update": {
-                        return RequestBE.UpdateCollection(KEY, result);
+                        return RequestBE.UpdateCollection(
+                            KEY,
+                            result.updateUser
+                        );
                     }
 
                     case "Delete": {
                         return RequestBE.DeleteCollection(
                             KEY,
-                            result,
+                            result.deleteId,
                             admin.admin_id
                         );
                     }

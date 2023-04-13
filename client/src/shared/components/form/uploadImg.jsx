@@ -12,13 +12,6 @@ export const checkFile = (file) => {
     return isMatchType && isMatchSize;
 };
 
-// export const getBase64Encoder = (img, callback) => {
-//     // Encoder image vs Base64 -> backend has to decoder
-//     const reader = new FileReader();
-//     reader.addEventListener("load", () => callback(reader.result)); // Lấy kết quả file sau encoder
-//     reader.readAsDataURL(img);
-// };
-
 export const DraggerImg = () => (
     <Upload.Dragger
         maxCount={1}
@@ -34,15 +27,18 @@ export const DraggerImg = () => (
 
 export const Avatar = () => {
     const { user_id, data } = SelectAuthState();
-    const imgAvatar = data.find((d) => d._id === user_id).imgAvatar;
+    const index = data.findIndex((d) => d._id === user_id);
+    const user = data[index];
+    const imgAvatar = user.imgAvatar;
     const dispatch = useDispatch();
     const handleChange = (info) => {
         if (checkFile(info.file)) {
             dispatch(
                 UploadImg({
-                    keyForm: "Avatar",
+                    keyForm: "User",
                     data: {
-                        _id: user_id,
+                        index: index,
+                        oldVal: user,
                         imgFiles: [info.file],
                     },
                 })

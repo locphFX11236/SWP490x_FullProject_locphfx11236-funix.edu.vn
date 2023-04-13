@@ -1,12 +1,7 @@
 import { Form, Input, message, Row } from "antd";
 import { useDispatch } from "react-redux";
 
-import {
-    // CreateUser,
-    // DeleteUser,
-    // UpdateUser,
-    SelectAuthState,
-} from "../../../core/slice/authData";
+import { SelectAuthState } from "../../../core/slice/authData";
 import { UserCollections } from "../../../core/thunkAction";
 import { userSample } from "./sample";
 import { checkFile, DraggerImg } from "./uploadImg";

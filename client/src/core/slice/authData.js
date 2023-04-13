@@ -42,21 +42,6 @@ const reducers = {
         // Tạo kết quả
         return { ...state, data: users }; // Thay đổi state
     },
-    ChangeAvatar: (state, action) => {
-        // Xử lý payload
-        const { user_id, imgAvatar } = action.payload;
-        const index = state.data.findIndex((d) => d._id === user_id);
-        // Xử lý yêu cầu
-        const users = [...current(state).data];
-        const updateUser = {
-            ...users[index],
-            imgAvatar: imgAvatar,
-        };
-        users[index] = updateUser;
-        // Tạo kết quả
-        // RequestBE.UpdateCollection('user', updateUser); // Gửi Patch Backend
-        return { ...state, data: users }; // Thay đổi state
-    },
 };
 
 const extraReducers = (builder) => {
