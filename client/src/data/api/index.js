@@ -2,14 +2,15 @@ import { BACK_END_URL } from "../../shared/helper/publicPath";
 
 const defaultOption = {
     mode: "cors",
-    cache: "no-cache",
+    cache: "default",
     credentials: "same-origin",
     headers: {
-        "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Content-Type": "application/json",
     },
     redirect: "follow",
-    referrerPolicy: "no-referrer",
+    referrerPolicy: "same-origin",
 };
 
 export const GetShowData = async () =>

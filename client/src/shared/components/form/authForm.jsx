@@ -68,6 +68,7 @@ export const AuthForm = () => {
                         prefix={<LockOutlined />}
                         type="password"
                         placeholder="Nhập password"
+                        autoFocus
                     />
                 </Form.Item>
                 <Form.Item name="rePassword" hidden={typeForm === "LogIn"}>

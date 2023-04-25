@@ -8,7 +8,6 @@ exports.PostAuth = (req, res, next) => {
         isAdmin: false,
         isLogin: false,
         message: "Phone numbers don't match",
-        data: [],
     };
 
     return Users.find()
@@ -24,19 +23,23 @@ exports.PostAuth = (req, res, next) => {
                     result.isAdmin = user.isAdmin;
                     result.isLogin = true;
                     result.message = "Success Login";
+                    req.session.user = result;
                     if (result.isAdmin) result.data = users;
                     else result.data = [user];
                 } else {
                     result.message = "Password don't match";
                 }
             }
+            console.log(req.sessionID);
             return result;
         })
-        .then((result) => res.json(result))
+        .then(() => res.json(result))
         .catch((err) => console.log(err));
 };
 
 exports.PostLogOut = (req, res, next) => {
+    console.log(req.session.user);
+    req.session.destroy();
     return res.end();
 };
 

@@ -47,8 +47,8 @@ const reducers = {
 const extraReducers = (builder) => {
     // builder.addCase(FetchGetDatas.pending, (state: SerState) => state.loading = true);
     builder.addCase(RestAPIAuth.fulfilled, (state, actions) => {
-        state = actions.payload; // payload lấy dữ liệu từ return của createAsyncThunk/async function
-        return state;
+        const response = actions.payload; // payload lấy dữ liệu từ return của createAsyncThunk/async function
+        return response;
     });
     builder.addCase(RestAPIAuth.rejected, () => {
         console.log("RestAPI thất bại!");

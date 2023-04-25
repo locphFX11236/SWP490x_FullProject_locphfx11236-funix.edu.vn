@@ -6,6 +6,7 @@ const cors = require("cors");
 const Database = require("./config/database");
 const { showRoutes, authRoutes, ortherRoutes } = require("./routes");
 const Upload = require("./config/upload");
+const Session = require("./config/session");
 // const CloneSamples = require('./data/handle');
 
 const MONGODB_URI = "mongodb://localhost:27017/charity_app_dev";
@@ -13,7 +14,7 @@ const PORT = 5000;
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(Session(MONGODB_URI));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -21,6 +22,13 @@ app.use(
     express.static(path.join(__dirname, "public/asset")) // Path trong file chứa project
 ); // Xữ lý file tĩnh cho trình duyệt truy cập trực tiếp
 app.use(Upload.single("imgFile")); // Handle upload image
+app.use(
+    cors({
+        origin: "*",
+        optionsSuccessStatus: 200,
+        credentials: true,
+    })
+);
 
 // Các Routes
 app.use(showRoutes);

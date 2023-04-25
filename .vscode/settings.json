@@ -1,4 +1,4 @@
 {
     "editor.formatOnSave": true, // Cho phép thay đổi code khi save
-    "editor.defaultFormatter": "esbenp.prettier-vscode" // Mặc định format từ ext: prettier
+    "editor.defaultFormatter": "esbenp.prettier-vscode" // Mặc định format từ extendsion: prettier
 }
