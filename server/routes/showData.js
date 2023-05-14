@@ -1,15 +1,20 @@
 const express = require("express");
 
+const isAuth = require("../config/helper/isAuth");
 const { ShowDataController } = require("../controller");
 
 const router = express.Router();
 
 router.get("/", ShowDataController.GetIndex);
 
-router.post("/addProgram", ShowDataController.AddProgram);
+router.post("/addProgram", isAuth, ShowDataController.AddProgram);
 
-router.patch("/patchProgram/:id", ShowDataController.UpdateProgram);
+router.patch("/patchProgram/:id", isAuth, ShowDataController.UpdateProgram);
 
-router.delete("/deleteProgram/:id/:admin_id", ShowDataController.DeleteProgram);
+router.delete(
+    "/deleteProgram/:id/:admin_id",
+    isAuth,
+    ShowDataController.DeleteProgram
+);
 
 module.exports = router;

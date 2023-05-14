@@ -23,22 +23,28 @@ exports.PostAuth = (req, res, next) => {
                     result.isAdmin = user.isAdmin;
                     result.isLogin = true;
                     result.message = "Success Login";
-                    req.session.user = result;
                     if (result.isAdmin) result.data = users;
                     else result.data = [user];
                 } else {
                     result.message = "Password don't match";
                 }
             }
-            console.log(req.sessionID);
             return result;
         })
-        .then(() => res.json(result))
+        .then(() => {
+            req.session.user = result;
+            res.setHeader("Content-Type", "text/html");
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            console.log("Log In:", req.sessionID);
+            return res.json(result);
+        })
         .catch((err) => console.log(err));
 };
 
 exports.PostLogOut = (req, res, next) => {
-    console.log(req.session.user);
+    console.log("Log Out:", req.sessionID);
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.set("Access-Control-Allow-Credentials", "true");
     req.session.destroy();
     return res.end();
 };

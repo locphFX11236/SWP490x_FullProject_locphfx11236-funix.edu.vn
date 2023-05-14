@@ -111,11 +111,7 @@ export const HomePage = () => {
                     </div>
                 </div>
             </CardBody>
-            <CardImg
-                width="100%"
-                src={EXTEND_URL + "asset/img/banner3.jpg"}
-                alt="Banner"
-            />
+            <CardImg width="100%" src="asset/img/banner2.jpg" alt="Banner" />
         </Card>
     );
 };
