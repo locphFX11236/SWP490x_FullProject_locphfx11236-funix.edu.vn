@@ -6,7 +6,7 @@ const Database = require("./config/database");
 const { showRoutes, authRoutes, ortherRoutes } = require("./routes");
 const Upload = require("./config/upload");
 const Session = require("./config/session");
-const CORS = require("./config/CORS");
+const CORS = require("./config/cors");
 // const CloneSamples = require('./data/handle');
 
 const MONGODB_URI = "mongodb://localhost:27017/charity_app_dev";

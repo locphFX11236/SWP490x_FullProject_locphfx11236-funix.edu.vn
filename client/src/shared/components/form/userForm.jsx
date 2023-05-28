@@ -22,10 +22,7 @@ export const UserForm = ({ data, setOpen }) => {
                             data: {
                                 oldVal: {},
                                 values: values,
-                                admin: {
-                                    name: name,
-                                    admin_id: _id,
-                                },
+                                admin: {},
                             },
                         })
                     );
@@ -36,10 +33,7 @@ export const UserForm = ({ data, setOpen }) => {
                             data: {
                                 oldVal: data,
                                 values: values,
-                                admin: {
-                                    name: name,
-                                    admin_id: _id,
-                                },
+                                admin: {},
                             },
                         })
                     );
@@ -50,10 +44,7 @@ export const UserForm = ({ data, setOpen }) => {
                             data: {
                                 oldVal: data,
                                 values: values,
-                                admin: {
-                                    name: name,
-                                    admin_id: _id,
-                                },
+                                admin: { admin_id: _id },
                             },
                         })
                     );

@@ -43,6 +43,11 @@ export const UploadImg = createAsyncThunk(
     }
 );
 
+const messageToUser = (keyForm, result) =>
+    result.result === "err"
+        ? message.error(result.message)
+        : message.success(`${keyForm} success!`);
+
 export const ProgramCollections = createAsyncThunk(
     "Thunk/changeProgram",
     async (params, thunkAPI) => {
@@ -61,7 +66,7 @@ export const ProgramCollections = createAsyncThunk(
         const programObject = ProgramForm(restPostValues);
         const dispatch = thunkAPI.dispatch;
         const reduxAction = ShowDataSlice.actions[keyForm + KEY];
-        const handlePromise = new Promise((resolve, reject) => resolve());
+        const handlePromise = Promise.resolve();
         handlePromise
             .then(() => {
                 const hasFile = imgUpFile?.length > 0;
@@ -137,7 +142,8 @@ export const ProgramCollections = createAsyncThunk(
             .then((result) => {
                 switch (keyForm) {
                     case "Create": {
-                        return dispatch(reduxAction(result.result));
+                        if (result.result === "err") return result;
+                        else return dispatch(reduxAction(result.result));
                     }
 
                     case "Update": {
@@ -159,6 +165,7 @@ export const ProgramCollections = createAsyncThunk(
                         return;
                 }
             })
+            .then((result) => messageToUser(keyForm, result))
             .catch((err) => console.log(err));
     }
 );
@@ -166,11 +173,29 @@ export const ProgramCollections = createAsyncThunk(
 export const RestAPIAuth = createAsyncThunk(
     "Thunk/login",
     async (params, thunkAPI) => {
-        // console.log(params, thunkAPI);
         const response = await RequestBE.PostLogIn(params);
-        if (response.isLogin) message.success(response.message);
-        else message.error(response.message);
+        const sessionID = document.cookie.split("=")[1];
+        sessionStorage.setItem("SessionID", sessionID);
+        if (response) messageToUser("Login", response);
+        else message.error("Đăng nhập thất bại!");
         return response;
+    }
+);
+
+export const LogOutAuth = createAsyncThunk(
+    "Thunk/login",
+    async (params, thunkAPI) => {
+        // console.log(params, thunkAPI);
+        const dispatch = thunkAPI.dispatch;
+        const response = await RequestBE.PostLogOut();
+        const reduxAction = AuthDataSlice.actions.LogOut;
+        dispatch(reduxAction(response.message));
+        setTimeout(() => {
+            document.cookie = "SessionID=";
+            sessionStorage.setItem("SessionID", "");
+        });
+        if (response) messageToUser("Logout", response);
+        else message.error("Đăng xuất thất bại!");
     }
 );
 
@@ -186,7 +211,7 @@ export const UserCollections = createAsyncThunk(
         const userObject = UserForm(restPostValues);
         const dispatch = thunkAPI.dispatch;
         const reduxAction = AuthDataSlice.actions[keyForm + KEY];
-        const handlePromise = new Promise((resolve, reject) => resolve());
+        const handlePromise = Promise.resolve();
         handlePromise
             .then(() => {
                 const hasFile = imgUpFile?.length > 0;
@@ -219,7 +244,7 @@ export const UserCollections = createAsyncThunk(
                     case "Update": {
                         const { stt, key, _id, ...restOldVal } = oldVal;
                         const updateUser = UserForm({
-                            _id: key || _id,
+                            _id: key || _id || admin.admin_id,
                             ...restOldVal,
                             ...userObject,
                         });
@@ -243,7 +268,8 @@ export const UserCollections = createAsyncThunk(
             .then((result) => {
                 switch (keyForm) {
                     case "Create": {
-                        return dispatch(reduxAction(result.result));
+                        if (result.result === "err") return result;
+                        else return dispatch(reduxAction(result.result));
                     }
 
                     case "Update": {
@@ -265,6 +291,7 @@ export const UserCollections = createAsyncThunk(
                         return;
                 }
             })
+            .then((result) => messageToUser(keyForm, result))
             .catch((err) => console.log(err));
     }
 );

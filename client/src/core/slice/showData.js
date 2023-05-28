@@ -64,5 +64,3 @@ const SelectData = (state) => state[ShowDataSlice.name];
 
 // Custom hook selector to data
 export const SelectDataState = () => useSelector(SelectData);
-
-export const { DeleteProgram, UpdateProgram, Donation } = ShowDataSlice.actions;

@@ -1,8 +1,6 @@
 import { useSelector } from "react-redux";
 import { createSlice, current } from "@reduxjs/toolkit";
-import { message } from "antd";
 
-import RequestBE from "../../data";
 import { RestAPIAuth } from "../thunkAction";
 
 const initialState = {
@@ -14,11 +12,7 @@ const initialState = {
 };
 
 const reducers = {
-    LogOut: () => {
-        RequestBE.PostLogOut();
-        message.success("You logged out!");
-        return { ...initialState, message: "You logged out!" };
-    },
+    LogOut: (state, action) => ({ ...initialState, message: action.payload }),
     CreateUser: (state, action) => {
         // Xử lý payload
         const newUser = action.payload;
@@ -69,6 +63,3 @@ const SelectAuth = (state) => state[AuthDataSlice.name];
 
 // Custom hook selector to data
 export const SelectAuthState = () => useSelector(SelectAuth);
-
-export const { LogOut, CreateUser, DeleteUser, UpdateUser, ChangeAvatar } =
-    AuthDataSlice.actions;

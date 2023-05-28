@@ -21,10 +21,7 @@ export const UserInforForm = () => {
                         data: {
                             oldVal: data[index],
                             values: val,
-                            admin: {
-                                name: "myself",
-                                admin_id: user_id,
-                            },
+                            admin: {},
                         },
                     })
                 );

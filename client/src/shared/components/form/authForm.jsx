@@ -3,8 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Button, Form, Input, Row, Typography, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
-import { CreateUser } from "../../../core/slice/authData";
-import { RestAPIAuth } from "../../../core/thunkAction";
+// import { CreateUser } from "../../../core/slice/authData";
+import { RestAPIAuth, UserCollections } from "../../../core/thunkAction";
 import { SampleLogIn, SampleSignUp } from "./sample";
 
 const Title = {
@@ -36,11 +36,31 @@ export const AuthForm = () => {
                     );
                 else if (key === "SignUp")
                     checkRePass(values)
-                        ? dispatch(CreateUser(checkRePass(values)))
+                        ? dispatch(
+                              UserCollections({
+                                  keyForm: "Create",
+                                  data: {
+                                      oldVal: {},
+                                      values: checkRePass(values),
+                                      admin: {},
+                                  },
+                              })
+                          )
                         : message.error("Nhập lại password không đúng.");
-                else if (key === "Forget") {
-                    console.log("Forget! with record", values);
-                } else navigate("/");
+                else if (key === "Forget")
+                    checkRePass(values)
+                        ? dispatch(
+                              UserCollections({
+                                  keyForm: "Update",
+                                  data: {
+                                      oldVal: {},
+                                      values: checkRePass(values),
+                                      admin: { admin_id: "ForgetPassword" },
+                                  },
+                              })
+                          )
+                        : message.error("Nhập lại password không đúng.");
+                else navigate("/");
                 return;
             })
             .catch((err) => console.log(err));
@@ -50,7 +70,13 @@ export const AuthForm = () => {
     return (
         <Card className="m-auto" style={{ width: 600 }}>
             <Form name="login-form" form={form} initialValues={sampleVal}>
-                <Typography.Title level={3}>{Title[typeForm]}</Typography.Title>
+                <Typography.Title level={2}>
+                    {Title[typeForm]}
+                    <hr />
+                </Typography.Title>
+                <Typography.Title level={5} hidden={typeForm !== "Forget"}>
+                    Thông tin xác thực{" "}
+                </Typography.Title>
                 <Form.Item name="name" hidden={typeForm === "LogIn"}>
                     <Input placeholder="Nhập họ tên" />
                 </Form.Item>
@@ -63,6 +89,10 @@ export const AuthForm = () => {
                         placeholder="Nhập số điện thoại"
                     />
                 </Form.Item>
+                <Typography.Title level={5} hidden={typeForm !== "Forget"}>
+                    <hr />
+                    Nhập password mới
+                </Typography.Title>
                 <Form.Item name="password">
                     <Input.Password
                         prefix={<LockOutlined />}

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
@@ -10,32 +10,34 @@ const userSchema = new Schema(
         },
         imgAvatar: {
             type: String,
-            required: true
+            required: true,
         },
         email: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         phoneNumber: {
             type: String,
             required: true,
-            unique: true
+            unique: true,
         },
         password: {
             type: String,
-            required: true
+            required: true,
         },
         isAdmin: {
             type: Boolean,
-            required: true
+            required: true,
         },
-        history: [{
-            type: String,
-            required: true
-        }],
+        history: [
+            {
+                type: String,
+                required: true,
+            },
+        ],
     },
     { timestamps: true }
 );
 
-module.exports = mongoose.model('Users', userSchema);
+module.exports = mongoose.model("Users", userSchema);

@@ -5,7 +5,8 @@ const router = express.Router();
 
 router.post(
     "/login", // Bắt lấy path này
-    AuthDataController.PostAuth // Lấy function PostAuth để xử lý router
+    AuthDataController.PostAuth, // Lấy function PostAuth để xử lý router
+    AuthDataController.GetAuth
 );
 
 router.post(
@@ -14,9 +15,9 @@ router.post(
     AuthDataController.PostLogOut // Lấy function PostLogOut để xử lý router
 );
 
-router.post("/addUser", isAuth, AuthDataController.AddUser);
+router.post("/addUser", AuthDataController.AddUser);
 
-router.patch("/patchUser/:id", isAuth, AuthDataController.UpdateUser);
+router.patch("/patchUser/:id", AuthDataController.UpdateUser);
 
 router.delete(
     "/deleteUser/:id/:admin_id",

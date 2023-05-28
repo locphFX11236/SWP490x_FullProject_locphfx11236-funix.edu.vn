@@ -13,12 +13,12 @@ const MiddlewareSession = (MONGODB_URI) =>
             secure: false,
             sameSite: "lax",
             httpOnly: false,
-            maxAge: 1000 * 60 * 3,
+            maxAge: 1000 * 60 * 30,
         },
         store: MongoDBStore({
             uri: MONGODB_URI,
             collection: "sessions",
-            expires: 1000 * 60 * 5,
+            expires: 1000 * 60 * 60 * 24 * 7,
         }),
     });
 
