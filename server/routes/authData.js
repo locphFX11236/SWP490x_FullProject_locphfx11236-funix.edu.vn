@@ -6,6 +6,7 @@ const router = express.Router();
 router.post(
     "/login", // Bắt lấy path này
     AuthDataController.PostAuth, // Lấy function PostAuth để xử lý router
+    isAuth,
     AuthDataController.GetAuth
 );
 

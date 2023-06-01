@@ -43,10 +43,10 @@ export const UploadImg = createAsyncThunk(
     }
 );
 
-const messageToUser = (keyForm, result) =>
-    result.result === "err"
-        ? message.error(result.message)
-        : message.success(`${keyForm} success!`);
+const messageToUser = (key, res) =>
+    res.result === "err"
+        ? message.error(res.message)
+        : message.success(`${key} success!`);
 
 export const ProgramCollections = createAsyncThunk(
     "Thunk/changeProgram",
@@ -176,14 +176,14 @@ export const RestAPIAuth = createAsyncThunk(
         const response = await RequestBE.PostLogIn(params);
         const sessionID = document.cookie.split("=")[1];
         sessionStorage.setItem("SessionID", sessionID);
-        if (response) messageToUser("Login", response);
+        if (response) messageToUser(response.message, response);
         else message.error("Đăng nhập thất bại!");
-        return response;
+        return response.result;
     }
 );
 
 export const LogOutAuth = createAsyncThunk(
-    "Thunk/login",
+    "Thunk/logout",
     async (params, thunkAPI) => {
         // console.log(params, thunkAPI);
         const dispatch = thunkAPI.dispatch;
@@ -194,7 +194,7 @@ export const LogOutAuth = createAsyncThunk(
             document.cookie = "SessionID=";
             sessionStorage.setItem("SessionID", "");
         });
-        if (response) messageToUser("Logout", response);
+        if (response) messageToUser(response.message, response);
         else message.error("Đăng xuất thất bại!");
     }
 );

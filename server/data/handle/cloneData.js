@@ -23,7 +23,8 @@ const newOrgans = () => OrganizationSamples.forEach(o => {
 });
 
 const newUsers = () => UserSamples.forEach(u => {
-    const newUser = new Users({ ...u, history: [] })
+    const hashPass = await bcrypt.hash(u.password, 12);
+    const newUser = new Users({ ...u, password: hashPass, history: [] })
     newUser.save();
     return;
 });

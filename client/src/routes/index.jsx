@@ -19,9 +19,13 @@ const MainRouter = (views) => {
     }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        const rest = setInterval(() => dispatch(RestAPIShow()), 1000 * 60 * 30);
+        const time = 1000 * 60 * 15; // ms
+        const Show = () => dispatch(RestAPIShow());
+        const rest = setInterval(Show, time);
+        const Cleanup = () => clearInterval(rest);
+
         navigate("/");
-        return () => clearInterval(rest);
+        return Cleanup;
     }, [dispatch, isLogin]); // eslint-disable-line react-hooks/exhaustive-deps
 
     return isLogin ? <PrivateRouter {...views} /> : <PublicRouter {...views} />;

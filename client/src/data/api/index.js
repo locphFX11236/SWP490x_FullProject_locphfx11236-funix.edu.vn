@@ -49,10 +49,6 @@ export const CreateCollection = async (type, data) =>
         body: JSON.stringify(data),
     })
         .then((res) => res.json())
-        .then((res) => {
-            console.log(res);
-            return res;
-        })
         .catch((err) => console.log("Font-End, error: ", err));
 
 export const UpdateCollection = async (type, data) =>
