@@ -11,7 +11,7 @@ export const UserForm = ({ data, setOpen }) => {
     const auth = SelectAuthState();
     const [form] = Form.useForm();
     const isAdd = !data ? true : false;
-    const { _id, name } = auth.data.find((d) => d._id === auth.user_id);
+    const { _id } = auth.data.find((d) => d._id === auth.user_id);
     const handle = (keyForm) => {
         form.validateFields()
             .then((values) => {

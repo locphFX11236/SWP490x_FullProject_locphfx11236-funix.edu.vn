@@ -26,9 +26,9 @@ const SelectItem = (org) => (
 );
 
 export const ProgramForm = ({ data, setOpen }) => {
-    const { organizations } = SelectDataState();
-    const auth = SelectAuthState();
     const dispatch = useDispatch();
+    const auth = SelectAuthState();
+    const { organizations } = SelectDataState();
     const SelectOrgId = organizations.map((o) => SelectItem(o));
     const [form] = Form.useForm();
     const isAdd = !data ? true : false;

@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { createSlice, current } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 import { RestAPIAuth } from "../thunkAction";
 
@@ -16,7 +16,7 @@ const reducers = {
     CreateUser: (state, action) => {
         // Xử lý payload
         const newUser = action.payload;
-        const users = [...current(state).data];
+        const users = [...state.data];
         users.unshift(newUser);
         // Tạo kết quả
         return { ...state, data: users }; // Thay đổi state
@@ -24,7 +24,7 @@ const reducers = {
     UpdateUser: (state, action) => {
         // Xử lý payload
         const { stt, updateUser } = action.payload;
-        const users = [...current(state).data];
+        const users = [...state.data];
         users[stt - 1] = updateUser;
         // Tạo kết quả
         return { ...state, data: users }; // Thay đổi state
@@ -32,9 +32,17 @@ const reducers = {
     DeleteUser: (state, action) => {
         // Xử lý payload
         const id = action.payload;
-        const users = [...current(state).data.filter((u) => u._id !== id)];
+        const users = [...state.data.filter((u) => u._id !== id)];
         // Tạo kết quả
         return { ...state, data: users }; // Thay đổi state
+    },
+    Donation: (state, action) => {
+        // Xử lý payload
+        const { history, user_id } = action.payload;
+        const index = state.data.findIndex((u) => u._id === user_id);
+        // Tạo kết quả
+        state.data[index].history.push(history);
+        return state;
     },
 };
 

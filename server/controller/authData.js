@@ -69,8 +69,8 @@ exports.GetAuth = (req, res, next) => {
 };
 
 exports.PostLogOut = (req, res, next) => {
-    console.log("Log Out:", req.sessionID);
     try {
+        console.log("Log Out:", req.sessionID);
         req.session.destroy();
         res.set("Access-Control-Allow-Origin", "http://localhost:3000");
         res.set("Access-Control-Allow-Credentials", "true");
@@ -219,4 +219,18 @@ exports.DeleteUser = async (req, res, next) => {
             return next(error);
         })
         .finally(() => res.end());
+};
+
+exports.History = async (data) => {
+    const { _id, history } = data;
+    return Users.findById(_id)
+        .then((user) => {
+            user.history.push(history);
+            return user.save();
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
 };

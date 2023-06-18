@@ -1,17 +1,17 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
 const programSchema = new Schema({
     organization_id: {
         type: Schema.Types.ObjectId,
-        ref: 'Organizations',
+        ref: "Organizations",
         required: true,
     },
     programName: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     descriptionStory: {
         type: String,
@@ -19,7 +19,7 @@ const programSchema = new Schema({
     },
     imgProgram: {
         type: String,
-        required: true
+        required: true,
     },
     moneyTotal: {
         type: Number,
@@ -49,7 +49,7 @@ const programSchema = new Schema({
         {
             admin_id: {
                 type: Schema.Types.ObjectId,
-                ref: 'Users',
+                ref: "Users",
                 required: true,
             },
             executionTime: {
@@ -66,7 +66,7 @@ const programSchema = new Schema({
         {
             user_id: {
                 type: Schema.Types.ObjectId,
-                ref: 'Users',
+                ref: "Users",
                 required: true,
             },
             donationMoney: {
@@ -79,10 +79,9 @@ const programSchema = new Schema({
             },
             message: {
                 type: String,
-                required: true,
             },
-        }
-    ]
+        },
+    ],
 });
 
-module.exports = mongoose.model('Programs', programSchema);
+module.exports = mongoose.model("Programs", programSchema);

@@ -204,10 +204,10 @@ export const UserCollections = createAsyncThunk(
     async (params, thunkAPI) => {
         // console.log(params, thunkAPI);
         // Xử lý payload
+        const KEY = "User";
         const { keyForm, data } = params;
         const { oldVal, values, admin } = data;
         const { imgAvatar, imgUpFile, ...restPostValues } = values;
-        const KEY = "User";
         const userObject = UserForm(restPostValues);
         const dispatch = thunkAPI.dispatch;
         const reduxAction = AuthDataSlice.actions[keyForm + KEY];
@@ -293,5 +293,36 @@ export const UserCollections = createAsyncThunk(
             })
             .then((result) => messageToUser(keyForm, result))
             .catch((err) => console.log(err));
+    }
+);
+
+export const CreatePaypalOrder = createAsyncThunk(
+    "Thunk/create-paypal-order",
+    async (params, thunkAPI) => {
+        const { donation } = params;
+        return await RequestBE.PaymentOrder({ donation });
+    }
+);
+
+export const CapturePaypalOrder = createAsyncThunk(
+    "Thunk/capture-paypal-order",
+    async (params, thunkAPI) => {
+        const dispatch = thunkAPI.dispatch;
+        const { data, donation } = params;
+        const Donation = AuthDataSlice.actions.Donation;
+        try {
+            const approve = await RequestBE.PaymentCapture({
+                orderId: data.orderID,
+                donation: donation,
+            });
+            const { captureData, ...rest } = approve;
+
+            dispatch(RestAPIShow());
+            dispatch(Donation(rest));
+            return message.success("Quyên góp thành công!");
+        } catch (err) {
+            console.log(err);
+            return message.success("Quyên góp thất bại!");
+        }
     }
 );

@@ -8,6 +8,8 @@ import { SelectDataState } from "../../core/slice/showData";
 import { NewsPage } from "./news";
 import { EXTEND_URL } from "../../shared/helper/publicPath";
 
+import { DonationModal } from "../../shared/components/modal";
+
 const Render = ({ datas }) => (
     <>
         <h3>Các nhà hảo tâm</h3>
@@ -15,7 +17,7 @@ const Render = ({ datas }) => (
             <Card key={i} className="px-4 my-2">
                 <div className="d-flex flex-row justify-content-between">
                     <p>
-                        <strong>{d.user_id}</strong>
+                        Id quyên góp: <strong>{d._id}</strong>
                     </p>
                     <p>{FormatTime(d.donationTime)}</p>
                     <p>{d.donationMoney} VND</p>
@@ -50,7 +52,7 @@ export const ProgDetail = () => {
                         />
                     </div>
                 </div>
-                <div className="row text-center m-3 sticky-top bg-light rounded">
+                <div className="row text-center m-3 bg-light rounded">
                     <hr />
                     <h3>Thông tin quyên góp</h3>
                     <p>
@@ -92,13 +94,7 @@ export const ProgDetail = () => {
                         </strong>
                     </p>
                     <hr />
-                    <button
-                        className="btn btn-outline-info"
-                        type="button"
-                        onClick={() => console.log("Donation!!")}
-                    >
-                        Quyên góp
-                    </button>
+                    <DonationModal program={prog} />
                 </div>
                 <div
                     className="text-justify"

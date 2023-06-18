@@ -93,7 +93,7 @@ const newDonations = async () => {
                     return Users.findById(userID);
                 })
                 .then(u => {
-                    u.history.push(`Progs: ${progID} - Donas: ${donations_id}`);
+                    u.history.push(`Program: ${progID} - Donation: ${donations_id}- Payment: Clone Auto`);
                     u.save();
                 })
                 .catch(err => console.log(err))

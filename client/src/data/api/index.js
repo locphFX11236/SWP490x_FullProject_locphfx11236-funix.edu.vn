@@ -68,6 +68,34 @@ export const DeleteCollection = async (type, id, admin_id) =>
         .then((res) => res.json())
         .catch((err) => console.log("Font-End, error: ", err));
 
+export const PaymentOrder = async (data) =>
+    await fetch(`${BACK_END_URL}/create-paypal-order`, {
+        method: "POST",
+        ...defaultOption,
+        referrerPolicy: "same-origin",
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then((order) => {
+            console.log("Create Order:", order);
+            return order.id;
+        })
+        .catch((err) => console.log("FE at createOrder, error:", err));
+
+export const PaymentCapture = async (data) =>
+    await fetch(`${BACK_END_URL}/capture-paypal-order`, {
+        method: "POST",
+        ...defaultOption,
+        referrerPolicy: "same-origin",
+        body: JSON.stringify(data),
+    })
+        .then((response) => response.json())
+        .then((res) => {
+            console.log("Approve:", res);
+            return res;
+        })
+        .catch((err) => console.log("FE at onApprove, error:", err));
+
 export const PostImg = async (data) =>
     await fetch(`${BACK_END_URL}/postImg`, {
         method: "POST",

@@ -6,7 +6,7 @@ const News = require("../models/news");
 const { DeleteFile } = require("../config/helper/deleteFile");
 
 exports.GetIndex = async (req, res, next) =>
-    Promise.all([Organizations.find(), Programs.find(), News.find()])
+    await Promise.all([Organizations.find(), Programs.find(), News.find()])
         .then(([orga, prog, news]) => ({
             organizations: orga,
             programs: prog,
@@ -26,7 +26,7 @@ exports.AddProgram = async (req, res, next) => {
         ...rest,
     });
 
-    return program
+    return await program
         .save()
         .then((result) =>
             res.json({
@@ -51,7 +51,7 @@ exports.AddProgram = async (req, res, next) => {
 exports.UpdateProgram = async (req, res, next) => {
     const { _id, ...rest } = req.body;
 
-    return Programs.findByIdAndUpdate(_id, rest)
+    return await Programs.findByIdAndUpdate(_id, rest)
         .then((result) => {
             const isChangeImg = rest.imgProgram !== result._doc.imgProgram;
             const isAuto =
@@ -80,7 +80,7 @@ exports.DeleteProgram = async (req, res, next) => {
     const id = req.params.id;
     const admin_id = req.params.admin_id;
 
-    return Programs.findByIdAndDelete(id)
+    return await Programs.findByIdAndDelete(id)
         .then((result) => {
             const isAuto =
                 result.imgProgram === "asset/img/auto_insert_img.jpg";
@@ -103,3 +103,25 @@ exports.DeleteProgram = async (req, res, next) => {
             return next(error);
         });
 };
+
+exports.Donation = async ({ _id, orderId, ...donat }) =>
+    await Programs.findById(_id)
+        .then((prog) => {
+            const { moneyTotal, times } = prog;
+            const { donationMoney } = donat;
+            prog.moneyCurrent += donationMoney;
+            prog.moneyRate = prog.moneyCurrent / moneyTotal;
+            prog.times = times + 1;
+            prog.donations.push(donat);
+            return prog.save();
+        })
+        .then((prog) => {
+            const index = prog.donations.length - 1;
+            const donation = prog.donations[index];
+            return `Program: ${_id} - Donation: ${donation._id} - Payment: ${orderId}`;
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
