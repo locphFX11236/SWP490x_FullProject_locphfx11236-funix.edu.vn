@@ -6,6 +6,7 @@ const APP_SECRET =
     "EFJR-RPOuP2aeOxfwpgv7AXy8kjBifjvkSd4Og2V-29gYtx6pheoDJSG6dCPWlyJDCheFuCnusW-wRap";
 const base = "https://api-m.sandbox.paypal.com";
 
+// Rest api lấy tỷ giá ngoại tệ
 const CurrencyVNDUSD = 23000;
 
 const HandleResponse = async (response) => {

@@ -72,7 +72,6 @@ export const PaymentOrder = async (data) =>
     await fetch(`${BACK_END_URL}/create-paypal-order`, {
         method: "POST",
         ...defaultOption,
-        referrerPolicy: "same-origin",
         body: JSON.stringify(data),
     })
         .then((response) => response.json())
@@ -86,7 +85,6 @@ export const PaymentCapture = async (data) =>
     await fetch(`${BACK_END_URL}/capture-paypal-order`, {
         method: "POST",
         ...defaultOption,
-        referrerPolicy: "same-origin",
         body: JSON.stringify(data),
     })
         .then((response) => response.json())
@@ -99,7 +97,7 @@ export const PaymentCapture = async (data) =>
 export const PostImg = async (data) =>
     await fetch(`${BACK_END_URL}/postImg`, {
         method: "POST",
-        ...defaultOption,
+        credentials: "include",
         body: data,
     })
         .then((res) => res.json())

@@ -23,6 +23,7 @@ export const UploadImg = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const { keyForm, data } = params;
         const { imgFiles, index, oldVal } = data;
+
         const formData = new FormData();
         const Post = async (data) => await RequestBE.PostImg(data);
         let response = { payload: "asset/img/auto_insert_img.jpg" };
@@ -31,6 +32,7 @@ export const UploadImg = createAsyncThunk(
         formData.append("imgFile", imgFiles[0]);
 
         response = await Post(formData);
+        console.log(response);
         if (oldVal) {
             const reduxAction = AuthDataSlice.actions[`Update${keyForm}`];
             const updateUser = { ...oldVal, imgAvatar: response };
@@ -173,12 +175,23 @@ export const ProgramCollections = createAsyncThunk(
 export const RestAPIAuth = createAsyncThunk(
     "Thunk/login",
     async (params, thunkAPI) => {
+        const dispatch = thunkAPI.dispatch;
         const response = await RequestBE.PostLogIn(params);
         const sessionID = document.cookie.split("=")[1];
+        const result = response.result;
+        const { ShowMyPass, LogOut } = AuthDataSlice.actions;
         sessionStorage.setItem("SessionID", sessionID);
-        if (response) messageToUser(response.message, response);
-        else message.error("Đăng nhập thất bại!");
-        return response.result;
+        messageToUser("Login", response);
+        if (params) setTimeout(() => dispatch(ShowMyPass(params)));
+        if (result === "err" && !sessionID) {
+            setTimeout(() => {
+                document.cookie = "SessionID=";
+                sessionStorage.setItem("SessionID", "");
+            });
+            dispatch(LogOut());
+            return;
+        }
+        return result;
     }
 );
 
@@ -189,13 +202,12 @@ export const LogOutAuth = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const response = await RequestBE.PostLogOut();
         const reduxAction = AuthDataSlice.actions.LogOut;
-        dispatch(reduxAction(response.message));
+        dispatch(reduxAction());
         setTimeout(() => {
             document.cookie = "SessionID=";
             sessionStorage.setItem("SessionID", "");
         });
-        if (response) messageToUser(response.message, response);
-        else message.error("Đăng xuất thất bại!");
+        messageToUser("Logout", response);
     }
 );
 

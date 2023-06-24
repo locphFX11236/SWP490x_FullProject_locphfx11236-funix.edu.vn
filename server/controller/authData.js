@@ -3,13 +3,25 @@ const bcrypt = require("bcryptjs");
 const { DeleteFile } = require("../config/helper/deleteFile");
 const Users = require("../models/users");
 
+const SendClient = (res, { message, result, ...rest }) => {
+    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.set("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Content-Type", "text/html");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    return res.json({
+        message,
+        result,
+        ...rest,
+    });
+};
+
 exports.PostAuth = (req, res, next) => {
     const { phoneNumber, password } = req.body;
     const result = {
         user_id: "",
         isAdmin: false,
         isLogin: false,
-        message: "Phone numbers don't match",
+        data: [],
     };
 
     if (phoneNumber) {
@@ -18,69 +30,72 @@ exports.PostAuth = (req, res, next) => {
                 const index = users.findIndex(
                     (p) => p.phoneNumber === phoneNumber
                 );
-                return [users, index];
+                if (index !== -1) {
+                    return [users, index];
+                } else throw "Phone numbers don't match";
             })
             .then(([users, index]) => {
                 const user = users[index];
-                if (user) {
-                    return bcrypt
-                        .compare(password, user.password)
-                        .then((isConnect) => {
-                            if (isConnect) {
-                                result.user_id = user._id;
-                                result.isAdmin = user.isAdmin;
-                                result.isLogin = true;
-                                users[index].password = password;
-                                if (result.isAdmin) result.data = users;
-                                else result.data = [user];
-                            } else {
-                                result.message = "Password don't match!";
-                            }
-                            return result;
-                        });
-                } else return result;
+                result.user_id = user._id;
+                result.isAdmin = user.isAdmin;
+                return bcrypt
+                    .compare(password, user.password)
+                    .then((isConnect) => {
+                        if (isConnect) {
+                            result.isLogin = true;
+                            return;
+                        } else {
+                            throw "Password don't match!";
+                        }
+                    })
+                    .then(() => {
+                        if (result.isAdmin) result.data = users;
+                        else result.data = [user];
+                        req.session.user = result;
+                        console.log("Log In:", req.sessionID);
+                        return "Login success!";
+                    });
             })
-            .then(() => {
-                req.session.user = result;
-                res.setHeader("Content-Type", "text/html");
-                res.setHeader("Access-Control-Allow-Credentials", "true");
-                console.log("Log In:", req.sessionID);
-                return res.json({
-                    message: "Login",
+            .then((message) =>
+                SendClient(res, {
+                    message,
                     result,
-                });
-            })
-            .catch((err) => console.log(err))
+                })
+            )
+            .catch((err) =>
+                SendClient(res, {
+                    message: err,
+                    result: "err",
+                })
+            )
             .finally(() => res.end());
     } else return next();
 };
 
 exports.GetAuth = (req, res, next) => {
     const result = req.session.user;
-    try {
-        res.json({
-            message: "Re-Loading",
-            result,
-        });
-        return res.end();
-    } catch (err) {
-        return res.status(500).send(err.message);
-    }
+    SendClient(res, {
+        message: "Re-Loading",
+        result,
+    });
+    return res.end();
 };
 
 exports.PostLogOut = (req, res, next) => {
     try {
         console.log("Log Out:", req.sessionID);
         req.session.destroy();
-        res.set("Access-Control-Allow-Origin", "http://localhost:3000");
-        res.set("Access-Control-Allow-Credentials", "true");
-        res.json({
+        SendClient(res, {
             message: "Logout",
             result: {},
         });
         return res.end();
     } catch (err) {
-        return res.status(500).send(err.message);
+        res.status(500);
+        return SendClient(res, {
+            message: "Logout thất bại!",
+            result: "err",
+        });
     }
 };
 
@@ -91,7 +106,6 @@ exports.AddUser = async (req, res, next) => {
         ...userObject,
         password: hashPass,
     });
-    console.log("Pass", userObject.password, hashPass);
 
     return user
         .save()
@@ -101,23 +115,27 @@ exports.AddUser = async (req, res, next) => {
             } else return result;
         })
         .then((result) => {
-            const newResult = req.session.user.data;
-            newResult.push(result);
-            req.session.user.data = newResult;
-            return result;
+            const isSignIn = req.session.user;
+            if (isSignIn) {
+                const newResult = isSignIn.data;
+                newResult.push(result);
+                req.session.user.data = newResult;
+                return result;
+            } else return result;
         })
         .then((result) =>
-            res.json({
+            SendClient(res, {
                 message: "You created user collection!",
+                result: result,
                 endpoint: "/addUser",
                 id: result._id,
-                result: result,
             })
         )
         .catch((err) => {
             const error = new Error(err);
             error.httpStatus = 500;
-            res.json({
+            res.status(500);
+            SendClient(res, {
                 message:
                     "Information already exists.\
                     Change information, please!",
@@ -129,21 +147,25 @@ exports.AddUser = async (req, res, next) => {
 };
 
 exports.UpdateUser = async (req, res, next) => {
-    const { _id, ...rest } = req.body;
+    const { _id, password, ...rest } = req.body;
 
     return Users.findByIdAndUpdate(_id, rest)
-        .then((result) => {
+        .then(async (result) => {
             if (!result) {
                 const { email, name, phoneNumber } = rest;
                 return Users.findOneAndUpdate(
                     { email, name, phoneNumber },
                     rest
                 );
-            } else return result;
+            } else {
+                const hashPass = await bcrypt.hash(password, 12);
+                result.password = hashPass;
+                return result.save();
+            }
         })
         .then((result) => {
             if (!result) {
-                res.json({
+                SendClient(res, {
                     message: "Incorrect information!",
                     result: "err",
                 });
@@ -161,25 +183,24 @@ exports.UpdateUser = async (req, res, next) => {
         })
         .then((result) => {
             const newResult = req.session.user.data;
-            const index = newResult.findIndex((r) => r._id === id);
+            const index = newResult.findIndex((r) => r._id === _id);
             newResult[index] = result;
             req.session.user.data = newResult;
             return result;
         })
         .then((result) =>
-            res.json({
+            SendClient(res, {
                 message: "You updated user collection!",
+                result: result,
                 endpoint: `/patchUser/${result._id}`,
                 id: result._id,
-                result: result,
             })
         )
         .catch((err) => {
             const error = new Error(err);
             error.httpStatus = 500;
             return next(error);
-        })
-        .finally(() => res.end());
+        });
 };
 
 exports.DeleteUser = async (req, res, next) => {
@@ -202,7 +223,7 @@ exports.DeleteUser = async (req, res, next) => {
             return result;
         })
         .then((result) =>
-            res.json({
+            SendClient(res, {
                 message: "You deleted user collection!",
                 endpoint: `/deleteUser/${id}/${admin_id}`,
                 id: id,
@@ -212,7 +233,8 @@ exports.DeleteUser = async (req, res, next) => {
         .catch((err) => {
             const error = new Error(err);
             error.httpStatus = 500;
-            res.json({
+            res.status(500);
+            SendClient(res, {
                 message: "Not found!",
                 result: "err",
             });

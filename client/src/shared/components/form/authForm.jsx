@@ -3,7 +3,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Button, Form, Input, Row, Typography, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
-// import { CreateUser } from "../../../core/slice/authData";
 import { RestAPIAuth, UserCollections } from "../../../core/thunkAction";
 import { SampleLogIn, SampleSignUp } from "./sample";
 

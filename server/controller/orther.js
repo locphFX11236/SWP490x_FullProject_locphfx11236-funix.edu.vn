@@ -41,9 +41,9 @@ exports.CapturePayment = async (req, res, next) => {
 exports.PostImg = (req, res, next) => {
     try {
         const data = req.file;
-        const response = `asset/img/${data.filename}`;
+        const imgAvatar = `asset/img/${data.filename}`;
 
-        return res.json(response);
+        return res.json(imgAvatar);
     } catch (err) {
         return res.status(500).send(err.message);
     } finally {

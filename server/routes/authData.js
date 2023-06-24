@@ -12,7 +12,6 @@ router.post(
 
 router.post(
     "/logout", // Bắt lấy path này
-    isAuth,
     AuthDataController.PostLogOut // Lấy function PostLogOut để xử lý router
 );
 

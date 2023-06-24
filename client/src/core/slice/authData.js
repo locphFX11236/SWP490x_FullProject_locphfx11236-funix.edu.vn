@@ -7,12 +7,16 @@ const initialState = {
     user_id: "",
     isAdmin: false,
     isLogin: false,
-    message: "",
     data: [],
 };
 
 const reducers = {
-    LogOut: (state, action) => ({ ...initialState, message: action.payload }),
+    ShowMyPass: (state, action) => {
+        const { password } = action.payload;
+        const index = state.data.findIndex((u) => u._id === state.user_id);
+        state.data[index].password = password;
+        return state;
+    },
     CreateUser: (state, action) => {
         // Xử lý payload
         const newUser = action.payload;
@@ -44,6 +48,7 @@ const reducers = {
         state.data[index].history.push(history);
         return state;
     },
+    LogOut: () => initialState,
 };
 
 const extraReducers = (builder) => {
