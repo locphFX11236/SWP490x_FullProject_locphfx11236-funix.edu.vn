@@ -29,3 +29,9 @@ FE
     name,
     reducer,
 }
+
+Task
+- CKEDITOR
+- OAuth2
+- Nodemailer
+- Tao tai khoan admin

@@ -1,15 +1,9 @@
-import {
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    message,
-    Row,
-    Select,
-    Slider,
-} from "antd";
+import { useState } from "react";
+import * as AntComponents from "antd";
 import { useDispatch } from "react-redux";
 import moment from "moment";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import { ProgramCollections } from "../../../core/thunkAction";
 import { SelectDataState } from "../../../core/slice/showData";
@@ -17,7 +11,8 @@ import { SelectAuthState } from "../../../core/slice/authData";
 import { programSample } from "./sample";
 import { checkFile, DraggerImg } from "./uploadImg";
 
-const { TextArea } = Input;
+const { Col, Form, Input, InputNumber, message, Row, Select, Slider } =
+    AntComponents;
 
 const SelectItem = (org) => (
     <Select.Option key={org._id} value={org._id}>
@@ -26,13 +21,27 @@ const SelectItem = (org) => (
 );
 
 export const ProgramForm = ({ data, setOpen }) => {
+    const [desc, setDesc] = useState("");
     const dispatch = useDispatch();
     const auth = SelectAuthState();
     const { organizations } = SelectDataState();
     const SelectOrgId = organizations.map((o) => SelectItem(o));
     const [form] = Form.useForm();
-    const isAdd = !data ? true : false;
     const { _id, name } = auth.data.find((d) => d._id === auth.user_id);
+    const Ready = (editor) => {
+        editor.editing.view.change((writer) => {
+            writer.setStyle(
+                "height",
+                "200px",
+                editor.editing.view.document.getRoot()
+            );
+        });
+        setDesc(data?.descriptionStory || programSample.descriptionStory);
+    };
+    const ChangeCKE = (event, editor) => {
+        const data = editor.getData();
+        setDesc(data);
+    };
     const handle = (keyForm) => {
         form.validateFields()
             .then((values) => {
@@ -47,6 +56,7 @@ export const ProgramForm = ({ data, setOpen }) => {
                 return values;
             })
             .then((values) => {
+                values.descriptionStory = desc;
                 if (keyForm === "Create")
                     dispatch(
                         ProgramCollections({
@@ -115,26 +125,26 @@ export const ProgramForm = ({ data, setOpen }) => {
             labelAlign="left"
             wrapperCol={{ span: 16 }}
             labelCol={{ span: 8 }}
-            initialValues={isAdd ? programSample : data}
+            initialValues={data || programSample}
         >
-            <Form.Item label="Program ID" hidden={isAdd}>
-                <span className="ant-form-text">{isAdd ? "" : data.key}</span>
+            <Form.Item label="Program ID" hidden={!data}>
+                <span className="ant-form-text">{data?.key || ""}</span>
             </Form.Item>
 
             <Form.Item name="name" label="Tên chương trình">
                 <Input />
             </Form.Item>
 
-            <Form.Item name="imgProgram" label="Url Ảnh" hidden={isAdd}>
-                <Input disabled={isAdd} />
+            <Form.Item name="imgProgram" label="Url Ảnh" hidden={!data}>
+                <Input disabled={!data} />
             </Form.Item>
 
             <Form.Item
                 name="moneyRate"
                 label={`Tỷ lệ hoàn thành (${
-                    isAdd ? "" : data.moneyRate.toFixed(2)
+                    !data ? "" : data.moneyRate.toFixed(2)
                 }%)`}
-                hidden={isAdd}
+                hidden={!data}
             >
                 <Slider disabled />
             </Form.Item>
@@ -164,9 +174,9 @@ export const ProgramForm = ({ data, setOpen }) => {
                     <Form.Item
                         name="moneyCurrent"
                         label="Số tiền hiện tại (VNĐ)"
-                        hidden={isAdd}
+                        hidden={!data}
                     >
-                        <InputNumber disabled={isAdd} />
+                        <InputNumber disabled={!data} />
                     </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -186,7 +196,12 @@ export const ProgramForm = ({ data, setOpen }) => {
                 <p>Mô tả câu chuyện:</p>
             </label>
             <Form.Item name="descriptionStory" noStyle>
-                <TextArea rows={15} />
+                <CKEditor
+                    editor={ClassicEditor}
+                    data={desc}
+                    onReady={Ready}
+                    onChange={ChangeCKE}
+                />
             </Form.Item>
 
             <Form.Item noStyle>
@@ -196,7 +211,7 @@ export const ProgramForm = ({ data, setOpen }) => {
                         className="btn btn-success"
                         type="button"
                         onClick={() => handle("Create")}
-                        hidden={!isAdd}
+                        hidden={data}
                     >
                         Create
                     </button>
@@ -204,7 +219,7 @@ export const ProgramForm = ({ data, setOpen }) => {
                         className="btn btn-danger"
                         type="button"
                         onClick={() => handle("Delete")}
-                        hidden={isAdd}
+                        hidden={!data}
                     >
                         Delete
                     </button>
@@ -212,7 +227,7 @@ export const ProgramForm = ({ data, setOpen }) => {
                         className="btn btn-warning"
                         type="button"
                         onClick={() => handle("Update")}
-                        hidden={isAdd}
+                        hidden={!data}
                     >
                         Update
                     </button>
