@@ -10,6 +10,16 @@ router.post(
     AuthDataController.GetAuth
 );
 
+router.get(
+    "/auth/google", // Bắt lấy path này
+    AuthDataController.GoogleAsk // Yêu cầu google cung cấp tài nguyên trước khi xác thực
+);
+
+router.get(
+    "/auth/google/callback", // Bắt lấy path này
+    AuthDataController.GoogleCallback // Kết quả xác thực google trả về
+);
+
 router.post(
     "/logout", // Bắt lấy path này
     AuthDataController.PostLogOut // Lấy function PostLogOut để xử lý router

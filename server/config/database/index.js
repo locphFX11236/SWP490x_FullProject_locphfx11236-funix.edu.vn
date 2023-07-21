@@ -1,7 +1,7 @@
 const Connect = require("./mongoose");
 
-const HandleDatabase = (listen, MONGODB_URI) =>
-    Connect(MONGODB_URI)
+const HandleDatabase = (listen) =>
+    Connect()
         // Connect to databse
         .then(() => listen())
         .catch((err) => {

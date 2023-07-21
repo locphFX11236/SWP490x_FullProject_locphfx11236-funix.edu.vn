@@ -129,16 +129,20 @@ const Navigation = () => {
                                     size="large"
                                     className="border border-dark p-1"
                                     src={
-                                        user.imgAvatar
-                                            ? EXTEND_URL + user.imgAvatar
-                                            : undefined
+                                        user.imgAvatar.includes("http")
+                                            ? user.imgAvatar
+                                            : EXTEND_URL + user.imgAvatar
                                     }
                                     icon={
                                         !user.imgAvatar ? (
                                             <UserOutlined />
                                         ) : undefined
                                     }
-                                    onClick={() => navigate("/userInfor")}
+                                    onClick={() =>
+                                        user.phoneNumber.includes("google")
+                                            ? ""
+                                            : navigate("/userInfor")
+                                    }
                                 />
                             ) : (
                                 <Link

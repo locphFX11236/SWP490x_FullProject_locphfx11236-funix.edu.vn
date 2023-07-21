@@ -33,9 +33,7 @@ export const PayPalPayment = ({ setOpen, ...rest }) => {
         );
     const OnError = () => message.error("Quyên góp thất bại!");
 
-    useEffect(() => {
-        donat.current = rest;
-    }, [rest]);
+    useEffect(() => (donat.current = rest), [rest]);
 
     return (
         <PayPalScriptProvider options={initialOptions}>

@@ -1,10 +1,16 @@
 import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Card, Button, Form, Input, Row, Typography, message } from "antd";
+import * as AntComponents from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
-import { RestAPIAuth, UserCollections } from "../../../core/thunkAction";
+import * as Thunks from "../../../core/thunkAction";
 import { SampleLogIn, SampleSignUp } from "./sample";
+import { EXTEND_URL } from "../../helper/publicPath";
+
+const { Card, Button, Form, Input, Row, Typography, message, Image } =
+    AntComponents;
+
+const { RestAPIAuth, UserCollections, OAuth2 } = Thunks;
 
 const Title = {
     SignUp: "Đăng ký",
@@ -64,6 +70,7 @@ export const AuthForm = () => {
             })
             .catch((err) => console.log(err));
     };
+    const GoogleOAuth = () => dispatch(OAuth2("google"));
     const sampleVal = typeForm === "LogIn" ? SampleLogIn : SampleSignUp;
 
     return (
@@ -151,6 +158,24 @@ export const AuthForm = () => {
                         </Button>
                     </Row>
                 </Form.Item>
+                <div className="mt-3">
+                    <Button
+                        type="default"
+                        className="w-100"
+                        icon={
+                            <Image
+                                width={24}
+                                height={24}
+                                className="mb-1"
+                                src={EXTEND_URL + "asset/svg/google.svg"}
+                                preview={false}
+                            />
+                        }
+                        onClick={GoogleOAuth}
+                    >
+                        Continue with Google
+                    </Button>
+                </div>
             </Form>
         </Card>
     );

@@ -30,6 +30,15 @@ FE
     reducer,
 }
 
+DEV
+1. Lỡ push cả file .env lên git remote. Hãy chạy 3 câu lệnh này:
+- Xóa file .env ra khỏi repo
+git rm -r --cached .env
+- Xóa khỏi các git history
+git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch .env" HEAD
+- Đẩy lên remote với lệnh force
+git push origin --force --all
+
 Task
 - CKEDITOR
 - OAuth2

@@ -20,7 +20,6 @@ export const GetShowData = async () =>
     await fetch(`${BACK_END_URL}/`, {
         method: "GET",
         ...defaultOption,
-        credentials: "same-origin",
     })
         .then((res) => res.json())
         .catch((err) => console.log("Font-End, error: ", err));

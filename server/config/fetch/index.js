@@ -1,10 +1,8 @@
 const fetch = require("node-fetch");
 
-const CLIENT_ID =
-    "AcdK-MLwoxIbT6mYyuric84NGivCBsx47UiwYvyEms32pnH2D_o1fXLYT-9YndpLxgJuA2F8_mWNPSiW";
-const APP_SECRET =
-    "EFJR-RPOuP2aeOxfwpgv7AXy8kjBifjvkSd4Og2V-29gYtx6pheoDJSG6dCPWlyJDCheFuCnusW-wRap";
-const base = "https://api-m.sandbox.paypal.com";
+const CLIENT_ID = process.env.CLIENT_ID_PAYPAL;
+const APP_SECRET = process.env.APP_SECRET_PAYPAL;
+const base = process.env.PAYPAL_SANDBOX_URI;
 
 // Rest api lấy tỷ giá ngoại tệ
 const CurrencyVNDUSD = 23000;

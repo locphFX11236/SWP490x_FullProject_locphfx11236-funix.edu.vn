@@ -3,7 +3,7 @@ const connect = require("connect-mongodb-session");
 
 const MongoDBStore = new connect(session);
 
-const MiddlewareSession = (MONGODB_URI) =>
+const MiddlewareSession = () =>
     session({
         name: "SessionID", // Tên của cookie
         secret: "my secret",
@@ -16,7 +16,7 @@ const MiddlewareSession = (MONGODB_URI) =>
             maxAge: 1000 * 60 * 30,
         },
         store: MongoDBStore({
-            uri: MONGODB_URI,
+            uri: process.env.MONGODB_URI,
             collection: "sessions",
             expires: 1000 * 60 * 60 * 24 * 7,
         }),

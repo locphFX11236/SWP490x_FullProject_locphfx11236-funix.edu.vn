@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
 const PrivateRouter = ({
     MainLayout,
@@ -10,23 +10,25 @@ const PrivateRouter = ({
     NewsPage,
     NewsDetail,
     Manage,
-    UserInforPage
+    UserInforPage,
+    WaitingPage,
 }) => (
     <Routes>
-        <Route path='/' element={ <MainLayout /> } >
-            <Route index element={ <HomePage /> } />
-            <Route path='organizations' element={ <OrganizationPage /> } />
-            <Route path='organizations/:id' element={ <OrganDetail /> } />
-            <Route path='programs' element={ <ProgramPage /> } />
-            <Route path='programs/:id' element={ <ProgDetail /> } />
-            <Route path='news' element={ <NewsPage /> } />
-            <Route path='news/:id' element={ <NewsDetail /> } />
-            <Route path='admin' element={ <Manage /> } />
-            <Route path='userInfor' element={ <UserInforPage /> } />
+        <Route path="/" element={<MainLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="organizations" element={<OrganizationPage />} />
+            <Route path="organizations/:id" element={<OrganDetail />} />
+            <Route path="programs" element={<ProgramPage />} />
+            <Route path="programs/:id" element={<ProgDetail />} />
+            <Route path="news" element={<NewsPage />} />
+            <Route path="news/:id" element={<NewsDetail />} />
+            <Route path="admin" element={<Manage />} />
+            <Route path="userInfor" element={<UserInforPage />} />
         </Route>
 
+        <Route path="waiting/:state" element={<WaitingPage />} />
         {/* Error path v6 */}
-        <Route path='*' element={ <h1>Error 404</h1> } />
+        <Route path="*" element={<h1>Error 404</h1>} />
     </Routes>
 );
 

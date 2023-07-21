@@ -1,10 +1,11 @@
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 const { DeleteFile } = require("../config/helper/deleteFile");
 const Users = require("../models/users");
 
 const SendClient = (res, { message, result, ...rest }) => {
-    res.set("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.set("Access-Control-Allow-Origin", process.env.FRONTEND_URI);
     res.set("Access-Control-Allow-Credentials", "true");
     res.setHeader("Content-Type", "text/html");
     res.setHeader("Access-Control-Allow-Credentials", "true");
@@ -23,6 +24,7 @@ exports.PostAuth = (req, res, next) => {
         isLogin: false,
         data: [],
     };
+    console.log("Log In:", req.sessionID);
 
     if (phoneNumber) {
         return Users.find()
@@ -52,7 +54,6 @@ exports.PostAuth = (req, res, next) => {
                         if (result.isAdmin) result.data = users;
                         else result.data = [user];
                         req.session.user = result;
-                        console.log("Log In:", req.sessionID);
                         return "Login success!";
                     });
             })
@@ -80,6 +81,17 @@ exports.GetAuth = (req, res, next) => {
     });
     return res.end();
 };
+
+exports.GoogleAsk = (req, res, next) =>
+    passport.authenticate("google", {
+        scope: ["email", "profile"],
+    })(req, res, next);
+
+exports.GoogleCallback = (req, res, next) =>
+    passport.authenticate("google", {
+        successRedirect: "http://localhost:3000/waiting/success-5",
+        failureRedirect: "http://localhost:3000/waiting/failure-5",
+    })(req, res, next);
 
 exports.PostLogOut = (req, res, next) => {
     try {
@@ -150,19 +162,6 @@ exports.UpdateUser = async (req, res, next) => {
     const { _id, password, ...rest } = req.body;
 
     return Users.findByIdAndUpdate(_id, rest)
-        .then(async (result) => {
-            if (!result) {
-                const { email, name, phoneNumber } = rest;
-                return Users.findOneAndUpdate(
-                    { email, name, phoneNumber },
-                    rest
-                );
-            } else {
-                const hashPass = await bcrypt.hash(password, 12);
-                result.password = hashPass;
-                return result.save();
-            }
-        })
         .then((result) => {
             if (!result) {
                 SendClient(res, {
@@ -170,6 +169,13 @@ exports.UpdateUser = async (req, res, next) => {
                     result: "err",
                 });
                 throw new Error("Incorrect information!");
+            } else return result;
+        })
+        .then(async (result) => {
+            if (password) {
+                const hashPass = await bcrypt.hash(password, 12);
+                result.password = hashPass;
+                return await result.save();
             } else return result;
         })
         .then((result) => {
@@ -210,7 +216,8 @@ exports.DeleteUser = async (req, res, next) => {
     return Users.findByIdAndDelete(id)
         .then((result) => {
             const isAuto = result.imgAvatar === "asset/img/auto_insert_img.jpg";
-            if (!isAuto) {
+            const outFile = result.imgAvatar.includes("http");
+            if (!isAuto && !outFile) {
                 DeleteFile(result.imgAvatar);
                 return result;
             } else return result;

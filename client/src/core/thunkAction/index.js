@@ -138,7 +138,7 @@ export const ProgramCollections = createAsyncThunk(
                     }
 
                     default:
-                        return;
+                        throw new Error();
                 }
             })
             .then((result) => {
@@ -164,7 +164,7 @@ export const ProgramCollections = createAsyncThunk(
                     }
 
                     default:
-                        return;
+                        throw new Error();
                 }
             })
             .then((result) => messageToUser(keyForm, result))
@@ -192,6 +192,29 @@ export const RestAPIAuth = createAsyncThunk(
             return;
         }
         return result;
+    }
+);
+
+export const OAuth2 = createAsyncThunk(
+    "Thunk/OAuth2",
+    async (params, thunkAPI) => {
+        // console.log(params, thunkAPI);
+        const dispatch = thunkAPI.dispatch;
+        const newWindow = window.open(
+            "http://localhost:5000/auth/google",
+            "_blank",
+            "width=400,height=500"
+        );
+        let timer;
+
+        if (newWindow) {
+            timer = setInterval(() => {
+                if (newWindow.closed) {
+                    dispatch(RestAPIAuth());
+                    if (timer) return clearInterval(timer);
+                }
+            }, 500);
+        }
     }
 );
 
@@ -274,7 +297,7 @@ export const UserCollections = createAsyncThunk(
                     }
 
                     default:
-                        return;
+                        throw new Error();
                 }
             })
             .then((result) => {
@@ -300,7 +323,7 @@ export const UserCollections = createAsyncThunk(
                     }
 
                     default:
-                        return;
+                        throw new Error();
                 }
             })
             .then((result) => messageToUser(keyForm, result))

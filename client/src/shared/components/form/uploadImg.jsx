@@ -30,6 +30,7 @@ export const Avatar = () => {
     const index = data.findIndex((d) => d._id === user_id);
     const user = data[index];
     const imgAvatar = user.imgAvatar;
+    const isOutFile = user.imgAvatar.includes("http");
     const dispatch = useDispatch();
     const handleChange = (info) => {
         if (checkFile(info.file)) {
@@ -50,7 +51,11 @@ export const Avatar = () => {
 
     return (
         <div className="col col-md-4 position-relative p-0">
-            <img className="w-100" src={EXTEND_URL + imgAvatar} alt="avatar" />
+            <img
+                className="w-100"
+                src={isOutFile ? imgAvatar : EXTEND_URL + imgAvatar}
+                alt="avatar"
+            />
             <Upload
                 name="avatar"
                 type="select"

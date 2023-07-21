@@ -1,16 +1,18 @@
-export * from './home';
+export * from "./home";
 
-export * from './organizations';
-export * from './organDetail';
+export * from "./organizations";
+export * from "./organDetail";
 
-export * from './programs';
-export * from './progDetail';
+export * from "./programs";
+export * from "./progDetail";
 
-export * from './news';
-export * from './newsDetail';
+export * from "./news";
+export * from "./newsDetail";
 
-export * from './adminManage';
+export * from "./adminManage";
 
-export * from './auth';
+export * from "./auth";
 
-export * from './userInfor';
+export * from "./userInfor";
+
+export * from "./waiting";
