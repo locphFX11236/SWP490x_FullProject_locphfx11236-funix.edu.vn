@@ -304,14 +304,30 @@ export const UserCollections = createAsyncThunk(
                 switch (keyForm) {
                     case "Create": {
                         if (result.result === "err") return result;
-                        else return dispatch(reduxAction(result.result));
+                        else {
+                            setTimeout(() => {
+                                const redirect = window.confirm(
+                                    "You need verify in your email!\nWe are going to redirect to your mail!"
+                                );
+                                if (redirect)
+                                    window.location.replace(
+                                        "https://mail.google.com"
+                                    );
+                            }, 1000);
+                            return dispatch(reduxAction(result.result));
+                        }
                     }
 
                     case "Update": {
-                        return RequestBE.UpdateCollection(
-                            KEY,
-                            result.updateUser
-                        );
+                        let hashPass;
+                        if (admin.admin_id) {
+                            hashPass = result.updateUser.password;
+                        }
+
+                        return RequestBE.UpdateCollection(KEY, {
+                            ...result.updateUser,
+                            hashPass,
+                        });
                     }
 
                     case "Delete": {

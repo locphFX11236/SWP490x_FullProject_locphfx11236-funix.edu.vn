@@ -48,7 +48,7 @@ export const UserInforForm = () => {
             </Form.Item>
 
             <Form.Item label="Email" name="email">
-                <Input />
+                <Input readOnly/>
             </Form.Item>
 
             <Form.Item label="Mật khẩu" name="password">

@@ -1,4 +1,4 @@
-const NodeFetch = require("../config/fetch");
+const NodeFetch = require("../config/api");
 const { History } = require("./authData");
 const { Donation } = require("./showData");
 

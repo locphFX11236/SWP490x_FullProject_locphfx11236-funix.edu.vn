@@ -24,16 +24,21 @@ const VerifyRequest = (
         .then(async (user) => {
             // Query user or create
             if (!user) {
-                const createUser = new Users({
-                    email: profile.email,
-                    history: [],
-                    imgAvatar: profile.picture,
-                    isAdmin: false,
-                    name: profile.displayName,
-                    password: profile.id,
-                    phoneNumber: `${profile.provider}Id:${profile.id}`,
-                });
-                return await createUser.save();
+                try {
+                    const createUser = new Users({
+                        email: profile.email,
+                        history: [],
+                        imgAvatar: profile.picture,
+                        isAdmin: false,
+                        name: profile.displayName,
+                        password: profile.id,
+                        phoneNumber: `${profile.provider}Id:${profile.id}`,
+                    });
+                    return await createUser.save();
+                } catch (error) {
+                    console.log("-----", error, "-----");
+                    throw "Email đã đăng ký!";
+                }
             } else {
                 return user;
             }
@@ -55,9 +60,10 @@ const VerifyRequest = (
             return;
         })
         .catch((err) => {
-            res.status(500);
+            // res.status(500);
             console.log(err);
-            throw err;
+            done(err, null);
+            return;
         });
 };
 
@@ -65,7 +71,10 @@ const MiddlewarePassport = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
     passport.use(new GoogleStrategy(StrategyOptions, VerifyRequest));
-    passport.serializeUser((user, done) => done(null, user));
+    passport.serializeUser((user, done) => {
+        if (user) done(null, user);
+        else done(err, null);
+    });
     passport.deserializeUser((user, done) => done(null, user));
     return (req, res, next) => next();
 };

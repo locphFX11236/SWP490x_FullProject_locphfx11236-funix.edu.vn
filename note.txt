@@ -18,6 +18,17 @@ BE
     Model.updateMany()
     Model.updateOne()
 ]
+2. req
+url/:id => req.params.id
+<form><input name="id" /></form> => req.body.id
+new URLSearchParams({id}) => url?id=${value}&... => req.query.id
+3. res
+res.send('Text') => <p>Text</p>
+res.json({}}) => res.json()
+res.render({}) + view engine => props in view
+res.redirect => chuyển hướng route
+res.end() => kết thúc event
+res.status() => gửi status mặc định
 
 FE
 1. Package
@@ -31,16 +42,39 @@ FE
 }
 
 DEV
-1. Lỡ push cả file .env lên git remote. Hãy chạy 3 câu lệnh này:
+1. Lỡ push cả file .env lên git remote. Hãy chạy các câu lệnh này:
+- Lệnh reset commit
+    git reset --soft HEAD~1
 - Xóa file .env ra khỏi repo
-git rm -r --cached .env
-- Xóa khỏi các git history
-git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch .env" HEAD
+    git rm -r --cached .env
+- Xóa khỏi các git history (chon 1 trong 2)
+    git filter-branch --index-filter "git rm -rf --cached --ignore-unmatch .env" HEAD
+    git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch application/.env.example' --prune-empty --tag-name-filter cat -- --all
+- Commit lại
+    git add .
+    git commit -m '...'
 - Đẩy lên remote với lệnh force
-git push origin --force --all
+    git push origin --force --all
 
 Task
-- CKEDITOR
-- OAuth2
-- Nodemailer
-- Tao tai khoan admin
+- Loi OAuth2
+- All Hook
+    - useState
+    - useEffect
+    useMemo / React.memo
+    useCallback
+    - useRef
+    useContext
+    useReducer
+    ## From F8
+    x useLayoutEffect
+    X useImperativeHandle + forwardRef -> tránh đem ra toàn bộ obj ra ngoài -> mất tính toàn vẹn dữ liệu, tính đóng gói, mất tính bảo mật
+    ## From Holetex. In React 18
+    useId
+    useTransition
+    X useDeferredValue
+    x useDebugValue + React DevTool -> Chỉ sử dụng cho việc debug cho custom Hook
+    ## Custom Hook
+- Module
+- CSS / SCSS
+- file .doc

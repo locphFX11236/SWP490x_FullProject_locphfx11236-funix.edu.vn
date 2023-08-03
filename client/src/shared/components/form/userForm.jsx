@@ -33,7 +33,7 @@ export const UserForm = ({ data, setOpen }) => {
                             data: {
                                 oldVal: data,
                                 values: values,
-                                admin: {},
+                                admin: { admin_id: _id },
                             },
                         })
                     );
@@ -92,7 +92,7 @@ export const UserForm = ({ data, setOpen }) => {
             </Form.Item>
 
             <Form.Item label="Email" name="email">
-                <Input />
+                <Input readOnly />
             </Form.Item>
 
             <Form.Item label="Mật khẩu" name="password">

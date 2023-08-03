@@ -10,7 +10,7 @@ export const programSample = {
 
 export const userSample = {
     name: "Test user",
-    email: "test@test.com",
+    email: "locphfx11236@funix.edu.vn",
     phoneNumber: "090 909 09 09",
     password: "000",
 };
@@ -22,7 +22,7 @@ export const SampleLogIn = {
 
 export const SampleSignUp = {
     name: "Test user",
-    email: "test@test.com",
+    email: "locphfx11236@funix.edu.vn",
     phoneNumber: "090 909 09 09",
     password: "123456",
     rePassword: "123456",

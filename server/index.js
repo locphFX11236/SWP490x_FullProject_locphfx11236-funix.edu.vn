@@ -7,7 +7,7 @@ const Database = require("./config/database");
 const Upload = require("./config/upload");
 const CORS = require("./config/cors");
 const Session = require("./config/session");
-const Passport = require("./config/passport");
+const Passport = require("./config/auth");
 const { showRoutes, authRoutes, ortherRoutes } = require("./routes");
 // const CloneSamples = require('./data/handle');
 

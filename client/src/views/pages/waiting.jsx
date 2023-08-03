@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Spin } from "antd";
 import { useParams } from "react-router-dom";
 
-export const WaitingPage = () => {
+export const WaitingPage = (props) => {
     const param = useParams();
     const stateArr = param.state.split("-");
     useEffect(() => {

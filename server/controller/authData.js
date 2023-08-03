@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 
 const { DeleteFile } = require("../config/helper/deleteFile");
+const { SendMail } = require("../config/mail");
 const Users = require("../models/users");
 
 const SendClient = (res, { message, result, ...rest }) => {
@@ -34,7 +35,7 @@ exports.PostAuth = (req, res, next) => {
                 );
                 if (index !== -1) {
                     return [users, index];
-                } else throw "Phone numbers don't match";
+                } else throw "Phone numbers don't match\nor unconfirmed email";
             })
             .then(([users, index]) => {
                 const user = users[index];
@@ -89,8 +90,8 @@ exports.GoogleAsk = (req, res, next) =>
 
 exports.GoogleCallback = (req, res, next) =>
     passport.authenticate("google", {
-        successRedirect: "http://localhost:3000/waiting/success-5",
-        failureRedirect: "http://localhost:3000/waiting/failure-5",
+        successRedirect: `${process.env.FRONTEND_URI}/waiting/success-5`,
+        failureRedirect: `${process.env.FRONTEND_URI}/waiting/failure-5`,
     })(req, res, next);
 
 exports.PostLogOut = (req, res, next) => {
@@ -112,10 +113,12 @@ exports.PostLogOut = (req, res, next) => {
 };
 
 exports.AddUser = async (req, res, next) => {
-    const userObject = req.body;
-    const hashPass = await bcrypt.hash(userObject.password, 12);
+    const { phoneNumber, password, ...rest } = req.body;
+    const hashPass = await bcrypt.hash(password, 12);
+    const hashCoded = hashPass.slice(-7, -2);
     const user = new Users({
-        ...userObject,
+        ...rest,
+        phoneNumber: `${phoneNumber}~(Unconfirmed~${hashCoded})`,
         password: hashPass,
     });
 
@@ -135,9 +138,32 @@ exports.AddUser = async (req, res, next) => {
                 return result;
             } else return result;
         })
+        .then(async (result) => {
+            // Send email to confirm
+            const token = await bcrypt.hash(hashCoded, 12);
+            const url =
+                process.env.BACKEND_PORT != 5000
+                    ? process.env.BACKEND_PORT
+                    : process.env.LOCALHOST_URL;
+            const verifyLink = `${url}/verify?id=${result._id}&token=${token}`;
+            const mailContent = `<div style="text-align:center;">
+                <h3>Bạn đã đăng ký với email: <i>${result.email}</i></h3>
+                <p>Vui lòng click vào link dưới đây để verify tài khoản</p>
+                <a href="${verifyLink}">CLICK HERE TO VERIFY</a>
+            </div>`;
+            SendMail({
+                to: result.email,
+                subject: "Verify Email",
+                htmlContent: mailContent,
+            });
+
+            return result;
+        })
         .then((result) =>
             SendClient(res, {
-                message: "You created user collection!",
+                message:
+                    "You created user collection!\
+                    \nAnd need confirm with email.",
                 result: result,
                 endpoint: "/addUser",
                 id: result._id,
@@ -150,7 +176,7 @@ exports.AddUser = async (req, res, next) => {
             SendClient(res, {
                 message:
                     "Information already exists.\
-                    Change information, please!",
+                    \nChange information, please!",
                 result: "err",
             });
             return next(error);
@@ -159,7 +185,7 @@ exports.AddUser = async (req, res, next) => {
 };
 
 exports.UpdateUser = async (req, res, next) => {
-    const { _id, password, ...rest } = req.body;
+    const { _id, password, hashPass, ...rest } = req.body;
 
     return Users.findByIdAndUpdate(_id, rest)
         .then((result) => {
@@ -172,9 +198,9 @@ exports.UpdateUser = async (req, res, next) => {
             } else return result;
         })
         .then(async (result) => {
-            if (password) {
-                const hashPass = await bcrypt.hash(password, 12);
-                result.password = hashPass;
+            if (!hashPass) {
+                const _hashPass = await bcrypt.hash(password, 12);
+                result.password = _hashPass;
                 return await result.save();
             } else return result;
         })
@@ -256,6 +282,35 @@ exports.History = async (data) => {
         .then((user) => {
             user.history.push(history);
             return user.save();
+        })
+        .catch((err) => {
+            const error = new Error(err);
+            error.httpStatus = 500;
+            return next(error);
+        });
+};
+
+exports.Verify = async (req, res, next) => {
+    const id = req.query.id;
+    const token = req.query.token;
+
+    return Users.findById(id)
+        .then(async (user) => {
+            if (user) {
+                const hashCoded = user.password.slice(-7, -2);
+                return bcrypt.compare(hashCoded, token).then((isRight) => {
+                    if (isRight) {
+                        const confirm = user.phoneNumber.split("~");
+                        user.phoneNumber = confirm[0];
+                        user.save();
+                        return res.redirect(process.env.FRONTEND_URI);
+                    } else {
+                        throw "Wrong token!";
+                    }
+                });
+            } else {
+                throw "Wrong id!";
+            }
         })
         .catch((err) => {
             const error = new Error(err);

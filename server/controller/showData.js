@@ -41,7 +41,7 @@ exports.AddProgram = async (req, res, next) => {
             error.httpStatus = 500;
             res.json({
                 message:
-                    "Information already exists. Change information, please!",
+                    "Information already exists.\nChange information, please!",
                 result: "err",
             });
             return next(error);

@@ -27,6 +27,8 @@ router.post(
 
 router.post("/addUser", AuthDataController.AddUser);
 
+router.get("/verify", AuthDataController.Verify);
+
 router.patch("/patchUser/:id", AuthDataController.UpdateUser);
 
 router.delete(

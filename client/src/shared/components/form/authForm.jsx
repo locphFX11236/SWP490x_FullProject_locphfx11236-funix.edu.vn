@@ -158,7 +158,7 @@ export const AuthForm = () => {
                         </Button>
                     </Row>
                 </Form.Item>
-                <div className="mt-3">
+                <div className="mt-3" hidden={typeForm !== "LogIn"}>
                     <Button
                         type="default"
                         className="w-100"
