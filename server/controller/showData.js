@@ -1,9 +1,7 @@
 const { ObjectId } = require("mongodb");
 
-const Organizations = require("../models/organizations");
-const Programs = require("../models/programs");
-const News = require("../models/news");
-const { DeleteFile } = require("../config/helper/deleteFile");
+const { News, Organizations, Programs } = require("../models");
+const { DeleteFile } = require("../config");
 
 exports.GetIndex = async (req, res, next) =>
     await Promise.all([Organizations.find(), Programs.find(), News.find()])

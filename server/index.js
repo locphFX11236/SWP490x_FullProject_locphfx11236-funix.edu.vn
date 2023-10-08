@@ -3,16 +3,16 @@ const path = require("path");
 require("dotenv/config");
 const express = require("express");
 
-const Database = require("./config/database");
-const Upload = require("./config/upload");
-const CORS = require("./config/cors");
-const Session = require("./config/session");
-const Passport = require("./config/auth");
-const { showRoutes, authRoutes, ortherRoutes } = require("./routes");
-// const CloneSamples = require('./data/handle');
+const config = require("./config");
+const allRoutes = require("./routes");
+const { HandleSamplesData } = require("./data");
 
 const app = express();
+const { Passport, CORS, Database, Session, SetTemplate, Upload } = config;
+const { showRoutes, authRoutes, ortherRoutes } = allRoutes;
 const OAuth2 = () => Passport(app);
+const ViewEngine = () => SetTemplate(app);
+const Listen = () => app.listen(process.env.BACKEND_PORT);
 
 // Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -21,6 +21,7 @@ app.use(
     "/public/asset", // Path truy cập từ trình duyệt (path tuyệt đối)
     express.static(path.join(__dirname, "public/asset")) // Path trong file chứa project
 ); // Xữ lý file tĩnh cho trình duyệt truy cập trực tiếp
+app.use(ViewEngine());
 app.use(Upload.single("imgFile")); // Handle upload image
 app.use(CORS());
 app.use(Session());
@@ -32,6 +33,10 @@ app.use(authRoutes);
 app.use(ortherRoutes);
 
 // Handle to database
-Database(() => app.listen(process.env.BACKEND_PORT));
-// CloneSamples.CloneData('All');
-// CloneSamples.Tool();
+HandleSamplesData({
+    // clone: false | 'All' | 'Organizations' | 'Users' | 'Programs' | 'News' | 'Donations'
+    clone: false,
+    // tool: false | true
+    tool: false,
+});
+Database(Listen);

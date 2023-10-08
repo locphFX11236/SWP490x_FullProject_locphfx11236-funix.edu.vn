@@ -1,41 +1,53 @@
-import TableComponent from './table';
-import { AdminActionsData, DonasActionsData, DonasHistoryData, HandleData } from './data';
-import { AdminActionsColumns, DonasActionsColumns, DonasHistoryColumns, ProgramsColumns, UsersColumns } from './columns';
-import { PlusProgram, PlusUser } from '../modal';
+import TableComponent from "./table";
+import {
+    AdminActionsData,
+    DonasActionsData,
+    DonasHistoryData,
+    HandleData,
+} from "./data";
+import {
+    AdminActionsColumns,
+    DonasActionsColumns,
+    DonasHistoryColumns,
+    ProgramsColumns,
+    UsersColumns,
+} from "./columns";
+import { PlusProgram, PlusUser } from "../modal";
+import { useMemo } from "react";
 
 export const ProgramsTable = () => (
     <TableComponent
-        columns={ ProgramsColumns }
-        data={ HandleData('programs') }
-        header={ <PlusProgram /> }
+        columns={useMemo(() => ProgramsColumns, [])}
+        data={HandleData("programs")}
+        header={<PlusProgram />}
     />
 );
 
 export const UsersTable = () => (
     <TableComponent
-        columns={ UsersColumns }
-        data={ HandleData('users') }
-        header={ <PlusUser /> }
+        columns={UsersColumns}
+        data={HandleData("users")}
+        header={<PlusUser />}
     />
 );
 
 export const AdminActionsTable = ({ data }) => (
     <TableComponent
-        columns={ AdminActionsColumns }
-        data={ AdminActionsData(data) }
+        columns={AdminActionsColumns}
+        data={AdminActionsData(data)}
     />
 );
 
 export const DonasActionsTable = ({ data }) => (
     <TableComponent
-        columns={ DonasActionsColumns }
-        data={ DonasActionsData(data) }
+        columns={DonasActionsColumns}
+        data={DonasActionsData(data)}
     />
 );
 
 export const DonasHistoryTable = ({ data }) => (
     <TableComponent
-        columns={ DonasHistoryColumns }
-        data={ DonasHistoryData(data) }
+        columns={DonasHistoryColumns}
+        data={DonasHistoryData(data)}
     />
 );

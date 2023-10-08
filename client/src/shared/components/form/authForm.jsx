@@ -3,14 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import * as AntComponents from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
-import * as Thunks from "../../../core/thunkAction";
+import { RestAPIAuth, UserCollections, OAuth2 } from "../../../core";
+import { EXTEND_URL } from "../../helper";
 import { SampleLogIn, SampleSignUp } from "./sample";
-import { EXTEND_URL } from "../../helper/publicPath";
 
 const { Card, Button, Form, Input, Row, Typography, message, Image } =
     AntComponents;
-
-const { RestAPIAuth, UserCollections, OAuth2 } = Thunks;
 
 const Title = {
     SignUp: "Đăng ký",
@@ -52,25 +50,34 @@ export const AuthForm = () => {
                               })
                           )
                         : message.error("Nhập lại password không đúng.");
-                else if (key === "Forget")
-                    checkRePass(values)
-                        ? dispatch(
-                              UserCollections({
-                                  keyForm: "Update",
-                                  data: {
-                                      oldVal: {},
-                                      values: checkRePass(values),
-                                      admin: { admin_id: "ForgetPassword" },
-                                  },
-                              })
-                          )
-                        : message.error("Nhập lại password không đúng.");
-                else navigate("/");
+                else if (key === "Forget") {
+                    console.log("Form 1");
+                    dispatch(
+                        UserCollections({
+                            keyForm: "Update",
+                            data: {
+                                oldVal: {},
+                                values: {
+                                    ...values,
+                                    password: Date.now().toString(),
+                                },
+                                admin: {},
+                            },
+                        })
+                    );
+                    console.log("Form 2");
+                } else throw new Error();
                 return;
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
+            .finally(() => {
+                navigate("/");
+            });
     };
-    const GoogleOAuth = () => dispatch(OAuth2("google"));
+    const GoogleOAuth = () => {
+        dispatch(OAuth2("google"));
+        navigate("/");
+    };
     const sampleVal = typeForm === "LogIn" ? SampleLogIn : SampleSignUp;
 
     return (
@@ -81,13 +88,10 @@ export const AuthForm = () => {
                     <hr />
                 </Typography.Title>
                 <Typography.Title level={5} hidden={typeForm !== "Forget"}>
-                    Thông tin xác thực{" "}
+                    Thông tin xác thực
                 </Typography.Title>
                 <Form.Item name="name" hidden={typeForm === "LogIn"}>
                     <Input placeholder="Nhập họ tên" />
-                </Form.Item>
-                <Form.Item name="email" hidden={typeForm === "LogIn"}>
-                    <Input placeholder="Nhập email" />
                 </Form.Item>
                 <Form.Item name="phoneNumber">
                     <Input
@@ -95,11 +99,24 @@ export const AuthForm = () => {
                         placeholder="Nhập số điện thoại"
                     />
                 </Form.Item>
-                <Typography.Title level={5} hidden={typeForm !== "Forget"}>
+                <Form.Item name="email" hidden={typeForm === "LogIn"}>
+                    {typeForm === "Forget" ? (
+                        <strong>
+                            Bạn cần đăng nhập vào email để nhận mật khẩu
+                        </strong>
+                    ) : (
+                        <Input placeholder="Nhập email" />
+                    )}
+                </Form.Item>
+                <Typography.Title level={5} hidden={typeForm !== "SignUp"}>
                     <hr />
-                    Nhập password mới
+                    Tạo mật khẩu
                 </Typography.Title>
-                <Form.Item name="password">
+                <Form.Item
+                    name="password"
+                    hidden={typeForm === "Forget"}
+                    disabled={typeForm === "Forget"}
+                >
                     <Input.Password
                         prefix={<LockOutlined />}
                         type="password"
@@ -107,7 +124,11 @@ export const AuthForm = () => {
                         autoFocus
                     />
                 </Form.Item>
-                <Form.Item name="rePassword" hidden={typeForm === "LogIn"}>
+                <Form.Item
+                    name="rePassword"
+                    hidden={typeForm !== "SignUp"}
+                    disabled={typeForm !== "SignUp"}
+                >
                     <Input.Password
                         prefix={<LockOutlined />}
                         type="password"

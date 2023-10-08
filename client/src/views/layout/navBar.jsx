@@ -3,9 +3,10 @@ import { useDispatch } from "react-redux";
 import { Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-import { SelectAuthState } from "../../core/slice/authData";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
-import { LogOutAuth } from "../../core/thunkAction";
+import { SelectAuthState, LogOutAuth } from "../../core";
+import { helper } from "../../shared";
+
+const { EXTEND_URL } = helper;
 
 const Navigation = () => {
     const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Navigation = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarToggler">
                     <ul className="navbar-nav me-auto text-center">
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item rounded m-1">
                             <Link
                                 className={`nav-link ${HasActive("/")}`}
                                 to="/"
@@ -59,7 +60,7 @@ const Navigation = () => {
                                 chủ
                             </Link>
                         </li>
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item rounded m-1">
                             <Link
                                 className={`nav-link ${HasActive("/programs")}`}
                                 to="/programs"
@@ -69,7 +70,7 @@ const Navigation = () => {
                                 quyên góp
                             </Link>
                         </li>
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item rounded m-1">
                             <Link
                                 className={`nav-link ${HasActive("/orgs")}`}
                                 to="/organizations"
@@ -79,7 +80,7 @@ const Navigation = () => {
                                 đồng hành
                             </Link>
                         </li>
-                        <li className="nav-item border border-dark rounded m-1">
+                        <li className="nav-item rounded m-1">
                             <Link
                                 className={`nav-link ${HasActive("/news")}`}
                                 to="/news"
@@ -89,10 +90,7 @@ const Navigation = () => {
                                 cộng đồng
                             </Link>
                         </li>
-                        <li
-                            className="nav-item border border-dark rounded m-1"
-                            hidden={!isAdmin}
-                        >
+                        <li className="nav-item rounded m-1" hidden={!isAdmin}>
                             <Link
                                 className={`nav-link ${HasActive("/admin")}`}
                                 to="/admin"
@@ -116,7 +114,9 @@ const Navigation = () => {
                                 </button>
                             ) : (
                                 <Link
-                                    className="btn btn-outline-success h-100 nav-link p-1"
+                                    className={`btn btn-outline-success h-100 nav-link p-1 ${HasActive(
+                                        "/LogIn"
+                                    )}`}
                                     to="/LogIn"
                                 >
                                     Login
@@ -146,7 +146,9 @@ const Navigation = () => {
                                 />
                             ) : (
                                 <Link
-                                    className="btn btn-outline-info h-100 nav-link p-1"
+                                    className={`btn btn-outline-info h-100 nav-link p-1 ${HasActive(
+                                        "/SignUp"
+                                    )}`}
                                     to="/SignUp"
                                 >
                                     Signup

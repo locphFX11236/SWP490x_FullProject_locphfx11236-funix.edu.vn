@@ -2,10 +2,9 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { message } from "antd";
 import moment from "moment";
 
-import RequestBE from "../../data";
+import RequestBE from "../../../data";
+import { AuthDataSlice, ShowDataSlice } from "../slice";
 import { ProgramForm, UserForm } from "../contructors";
-import { AuthDataSlice } from "../slice/authData";
-import { ShowDataSlice } from "../slice/showData";
 
 export const RestAPIShow = createAsyncThunk(
     "Thunk/get",
@@ -179,15 +178,18 @@ export const RestAPIAuth = createAsyncThunk(
         const response = await RequestBE.PostLogIn(params);
         const sessionID = document.cookie.split("=")[1];
         const result = response.result;
-        const { ShowMyPass, LogOut } = AuthDataSlice.actions;
+        const { LogOut } = AuthDataSlice.actions;
         sessionStorage.setItem("SessionID", sessionID);
         messageToUser("Login", response);
-        if (params) setTimeout(() => dispatch(ShowMyPass(params)));
-        if (result === "err" && !sessionID) {
-            setTimeout(() => {
-                document.cookie = "SessionID=";
-                sessionStorage.setItem("SessionID", "");
-            });
+        if (params) {
+            const { password } = params;
+            const { data } = result;
+            const i = data.findIndex((u) => u._id === result.user_id);
+            data[i].password = password;
+        }
+        if (result === "err" || !sessionID) {
+            document.cookie = "SessionID=";
+            sessionStorage.setItem("SessionID", "");
             dispatch(LogOut());
             return;
         }
@@ -225,12 +227,10 @@ export const LogOutAuth = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const response = await RequestBE.PostLogOut();
         const reduxAction = AuthDataSlice.actions.LogOut;
-        dispatch(reduxAction());
-        setTimeout(() => {
-            document.cookie = "SessionID=";
-            sessionStorage.setItem("SessionID", "");
-        });
+        document.cookie = "SessionID=";
+        sessionStorage.setItem("SessionID", "");
         messageToUser("Logout", response);
+        dispatch(reduxAction());
     }
 );
 
@@ -247,6 +247,13 @@ export const UserCollections = createAsyncThunk(
         const dispatch = thunkAPI.dispatch;
         const reduxAction = AuthDataSlice.actions[keyForm + KEY];
         const handlePromise = Promise.resolve();
+        const GoToMail = (message) => {
+            setTimeout(() => {
+                const redirect = window.confirm(message);
+                if (redirect)
+                    window.location.replace("https://mail.google.com");
+            }, 1000);
+        };
         handlePromise
             .then(() => {
                 const hasFile = imgUpFile?.length > 0;
@@ -277,6 +284,7 @@ export const UserCollections = createAsyncThunk(
                     }
 
                     case "Update": {
+                        console.log("Update 1");
                         const { stt, key, _id, ...restOldVal } = oldVal;
                         const updateUser = UserForm({
                             _id: key || _id || admin.admin_id,
@@ -301,27 +309,27 @@ export const UserCollections = createAsyncThunk(
                 }
             })
             .then((result) => {
+                console.log("Update 2", result);
                 switch (keyForm) {
                     case "Create": {
-                        if (result.result === "err") return result;
-                        else {
-                            setTimeout(() => {
-                                const redirect = window.confirm(
-                                    "You need verify in your email!\nWe are going to redirect to your mail!"
-                                );
-                                if (redirect)
-                                    window.location.replace(
-                                        "https://mail.google.com"
-                                    );
-                            }, 1000);
+                        if (result.result === "err") {
+                            return result;
+                        } else if (!admin.admin_id) {
+                            GoToMail(
+                                "You need verify in your email!\nWe are going to redirect to your mail!"
+                            );
                             return dispatch(reduxAction(result.result));
-                        }
+                        } else return dispatch(reduxAction(result.result));
                     }
 
                     case "Update": {
                         let hashPass;
                         if (admin.admin_id) {
                             hashPass = result.updateUser.password;
+                        } else if (!oldVal._id) {
+                            GoToMail(
+                                "You need to go to your email!\nWe are going to redirect to your mail!"
+                            );
                         }
 
                         return RequestBE.UpdateCollection(KEY, {

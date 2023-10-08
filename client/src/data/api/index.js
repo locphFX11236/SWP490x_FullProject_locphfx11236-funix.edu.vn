@@ -1,4 +1,6 @@
-import { BACK_END_URL, FRONT_END_URL } from "../../shared/helper/publicPath";
+import { helper } from "../../shared";
+
+const { BACK_END_URL, FRONT_END_URL } = helper;
 
 const defaultOption = {
     mode: "cors",
@@ -74,10 +76,7 @@ export const PaymentOrder = async (data) =>
         body: JSON.stringify(data),
     })
         .then((response) => response.json())
-        .then((order) => {
-            console.log("Create Order:", order);
-            return order.id;
-        })
+        .then((order) => order.id)
         .catch((err) => console.log("FE at createOrder, error:", err));
 
 export const PaymentCapture = async (data) =>
@@ -87,10 +86,7 @@ export const PaymentCapture = async (data) =>
         body: JSON.stringify(data),
     })
         .then((response) => response.json())
-        .then((res) => {
-            console.log("Approve:", res);
-            return res;
-        })
+        .then((res) => res)
         .catch((err) => console.log("FE at onApprove, error:", err));
 
 export const PostImg = async (data) =>

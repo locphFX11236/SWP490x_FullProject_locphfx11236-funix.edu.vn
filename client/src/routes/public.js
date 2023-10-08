@@ -1,17 +1,19 @@
+import { memo } from "react";
 import { Routes, Route } from "react-router-dom";
 
-const PublicRouter = ({
-    MainLayout,
-    HomePage,
-    OrganizationPage,
-    OrganDetail,
-    ProgramPage,
-    ProgDetail,
-    NewsPage,
-    NewsDetail,
-    AuthPage,
-    WaitingPage,
-}) => (
+import * as views from "../views";
+
+const MainLayout = views.MainLayout;
+const HomePage = memo(views.HomePage);
+const OrganizationPage = memo(views.OrganizationPage);
+const OrganDetail = memo(views.OrganDetail);
+const ProgramPage = memo(views.ProgramPage);
+const ProgDetail = memo(views.ProgDetail);
+const NewsPage = memo(views.NewsPage);
+const NewsDetail = memo(views.NewsDetail);
+const AuthPage = memo(views.AuthPage);
+
+const PublicRouter = () => (
     <Routes>
         <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
@@ -26,10 +28,9 @@ const PublicRouter = ({
             <Route path="Forget" element={<AuthPage />} />
         </Route>
 
-        <Route path="waiting/:state" element={<WaitingPage />} />
         {/* Error path v6 */}
         <Route path="*" element={<h1>Error 404</h1>} />
     </Routes>
 );
 
-export default PublicRouter;
+export default memo(PublicRouter);

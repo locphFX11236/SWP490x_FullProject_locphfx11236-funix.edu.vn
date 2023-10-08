@@ -1,12 +1,19 @@
+import { useId } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardImg, CardTitle, CardBody } from "reactstrap";
 
-import { SelectDataState } from "../../core/slice/showData";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
+import { SelectDataState } from "../../core";
+import { helper } from "../../shared";
+
+const { EXTEND_URL } = helper;
 
 const Item = (key, name, img, type, data) => (
     <Card key={key} className="col col-12 col-md-5 m-2">
-        <Link to={`/${type}/${data._id}`} state={data}>
+        <Link
+            to={`/${type}/${data._id}`}
+            state={data}
+            className={type === "organizations" ? "organ" : ""}
+        >
             <CardImg width="100%" src={EXTEND_URL + img} alt={name} />
             <CardBody>
                 <CardTitle tag="h5" className="text-center">
@@ -30,12 +37,13 @@ const RenderItems = ({ data, type }) => {
         case "news":
             return data.map((d) => Item(d._id, d.newsName, d.imgNews, type, d));
         default:
-            return;
+            throw new Error("type invalid");
     }
 };
 
 export const HomePage = () => {
     const { programs, organizations, news } = SelectDataState();
+    const id = useId();
 
     return (
         <Card>
@@ -81,11 +89,16 @@ export const HomePage = () => {
                         <h3 className="text-center">Các hoàn cảnh quyên góp</h3>
                     </Link>
                     <div className="row">
-                        <RenderItems
-                            key="programs"
-                            data={programs}
-                            type="programs"
-                        />
+                        <RenderItems key={id} data={programs} type="programs" />
+                    </div>
+                </div>
+                <hr />
+                <div className="container">
+                    <Link to="/news">
+                        <h3 className="text-center">Tin tức cộng đồng</h3>
+                    </Link>
+                    <div className="row">
+                        <RenderItems key={id} data={news} type="news" />
                     </div>
                 </div>
                 <hr />
@@ -95,19 +108,10 @@ export const HomePage = () => {
                     </Link>
                     <div className="row">
                         <RenderItems
-                            key="organizations"
+                            key={id}
                             data={organizations}
                             type="organizations"
                         />
-                    </div>
-                </div>
-                <hr />
-                <div className="container">
-                    <Link to="/news">
-                        <h3 className="text-center">Tin tức cộng đồng</h3>
-                    </Link>
-                    <div className="row">
-                        <RenderItems key="news" data={news} type="news" />
                     </div>
                 </div>
             </CardBody>

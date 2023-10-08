@@ -1,18 +1,19 @@
-import { Card, CardBody, CardTitle, CardImg, CardText } from "reactstrap";
+import { Card, CardBody, CardTitle, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 
-import { SelectDataState } from "../../core/slice/showData";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
+import { SelectDataState } from "../../core";
+import { helper } from "../../shared";
+
+const { EXTEND_URL } = helper;
 
 const RenderItems = ({ data }) => (
     <Card className="col col-12 col-md-5 m-2">
-        <Link to={`/organizations/${data._id}`} state={data}>
+        <Link className="organ" to={`/organizations/${data._id}`} state={data}>
             <CardImg src={EXTEND_URL + data.logo} alt={data.nameOrganization} />
             <CardBody>
-                <CardTitle tag="h5" className="text-center">
+                <CardTitle className="text-center">
                     {data.nameOrganization}
                 </CardTitle>
-                <CardText>{data.title}</CardText>
             </CardBody>
         </Link>
     </Card>

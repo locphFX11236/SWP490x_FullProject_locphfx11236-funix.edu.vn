@@ -1,7 +1,7 @@
 const path = require("path");
 const multer = require("multer");
 
-const mainPath = require("../helper/mainPath");
+const mainPath = require("../helper");
 
 exports.fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {

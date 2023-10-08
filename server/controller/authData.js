@@ -1,9 +1,8 @@
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
 
-const { DeleteFile } = require("../config/helper/deleteFile");
-const { SendMail } = require("../config/mail");
-const Users = require("../models/users");
+const { SendMail, DeleteFile } = require("../config");
+const { Users } = require("../models");
 
 const SendClient = (res, { message, result, ...rest }) => {
     res.set("Access-Control-Allow-Origin", process.env.FRONTEND_URI);
@@ -89,10 +88,14 @@ exports.GoogleAsk = (req, res, next) =>
     })(req, res, next);
 
 exports.GoogleCallback = (req, res, next) =>
-    passport.authenticate("google", {
-        successRedirect: `${process.env.FRONTEND_URI}/waiting/success-5`,
-        failureRedirect: `${process.env.FRONTEND_URI}/waiting/failure-5`,
-    })(req, res, next);
+    passport.authenticate("google", (err, user, info, status) =>
+        res.render("oAuth2", {
+            oauth2: "Google",
+            result: !err ? "Success" : "Failure",
+            text: !err ? `Hello ${user.data[0].name}!` : "Đã xảy ra lỗi",
+            FRONTEND_URI: process.env.FRONTEND_URI,
+        })
+    )(req, res, next);
 
 exports.PostLogOut = (req, res, next) => {
     try {
@@ -118,7 +121,7 @@ exports.AddUser = async (req, res, next) => {
     const hashCoded = hashPass.slice(-7, -2);
     const user = new Users({
         ...rest,
-        phoneNumber: `${phoneNumber}~(Unconfirmed~${hashCoded})`,
+        phoneNumber: `${phoneNumber}~(Unconfirmed):${hashCoded}:`,
         password: hashPass,
     });
 
@@ -185,16 +188,17 @@ exports.AddUser = async (req, res, next) => {
 };
 
 exports.UpdateUser = async (req, res, next) => {
-    const { _id, password, hashPass, ...rest } = req.body;
+    const { _id, email, password, hashPass, ...rest } = req.body;
 
-    return Users.findByIdAndUpdate(_id, rest)
+    return Users.findOneAndUpdate({ email }, rest)
         .then((result) => {
+            console.log("Aaa", result);
             if (!result) {
                 SendClient(res, {
                     message: "Incorrect information!",
                     result: "err",
                 });
-                throw new Error("Incorrect information!");
+                throw Error("Incorrect information!");
             } else return result;
         })
         .then(async (result) => {
@@ -214,11 +218,27 @@ exports.UpdateUser = async (req, res, next) => {
             } else return { ...result._doc, ...rest };
         })
         .then((result) => {
-            const newResult = req.session.user.data;
-            const index = newResult.findIndex((r) => r._id === _id);
-            newResult[index] = result;
-            req.session.user.data = newResult;
-            return result;
+            if (req.session.user) {
+                const newResult = req.session.user.data;
+                const index = newResult.findIndex((r) => r._id === _id);
+                newResult[index] = result;
+                req.session.user.data = newResult;
+                return result;
+            } else {
+                // Send email to get pass
+                const mailContent = `<div style="text-align:center;">
+                    <p>Bạn nên thay đổi mật khẩu lại sau đăng nhập</p>
+                    <p>Vui lòng click vào <a href="${process.env.FRONTEND_URI}">link</a> để đăng nhập tài khoản</p>
+                    <p>Mật khẩu của bạn là: ${password}</p>
+                </div>`;
+                SendMail({
+                    to: result.email,
+                    subject: "Get Password Email",
+                    htmlContent: mailContent,
+                });
+
+                return result;
+            }
         })
         .then((result) =>
             SendClient(res, {

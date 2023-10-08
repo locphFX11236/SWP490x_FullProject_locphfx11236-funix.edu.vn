@@ -1,18 +1,20 @@
+import { memo } from "react";
 import { Routes, Route } from "react-router-dom";
 
-const PrivateRouter = ({
-    MainLayout,
-    HomePage,
-    OrganizationPage,
-    OrganDetail,
-    ProgramPage,
-    ProgDetail,
-    NewsPage,
-    NewsDetail,
-    Manage,
-    UserInforPage,
-    WaitingPage,
-}) => (
+import * as views from "../views";
+
+const MainLayout = views.MainLayout;
+const HomePage = memo(views.HomePage);
+const OrganizationPage = memo(views.OrganizationPage);
+const OrganDetail = memo(views.OrganDetail);
+const ProgramPage = memo(views.ProgramPage);
+const ProgDetail = memo(views.ProgDetail);
+const NewsPage = memo(views.NewsPage);
+const NewsDetail = memo(views.NewsDetail);
+const Manage = memo(views.Manage);
+const UserInforPage = memo(views.UserInforPage);
+
+const PrivateRouter = () => (
     <Routes>
         <Route path="/" element={<MainLayout />}>
             <Route index element={<HomePage />} />
@@ -26,10 +28,9 @@ const PrivateRouter = ({
             <Route path="userInfor" element={<UserInforPage />} />
         </Route>
 
-        <Route path="waiting/:state" element={<WaitingPage />} />
         {/* Error path v6 */}
         <Route path="*" element={<h1>Error 404</h1>} />
     </Routes>
 );
 
-export default PrivateRouter;
+export default memo(PrivateRouter);

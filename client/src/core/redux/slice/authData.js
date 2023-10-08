@@ -11,12 +11,6 @@ const initialState = {
 };
 
 const reducers = {
-    ShowMyPass: (state, action) => {
-        const { password } = action.payload;
-        const index = state.data.findIndex((u) => u._id === state.user_id);
-        state.data[index].password = password;
-        return state;
-    },
     CreateUser: (state, action) => {
         // Xử lý payload
         const newUser = action.payload;

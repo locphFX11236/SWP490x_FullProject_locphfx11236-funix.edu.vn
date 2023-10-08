@@ -1,9 +1,11 @@
 import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 
+import { helper } from "../../shared";
 import { ProgramPage } from "./programs";
 import { NewsPage } from "./news";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
+
+const { EXTEND_URL } = helper;
 
 export const NewsDetail = () => {
     const location = useLocation();

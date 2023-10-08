@@ -2,13 +2,13 @@ import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 import moment from "moment";
 
-import FormatTime from "../../shared/helper/convertISOtoShowTime";
-import { SelectDataState } from "../../core/slice/showData";
+import { SelectDataState } from "../../core";
+import { components, helper } from "../../shared";
 
 import { NewsPage } from "./news";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
 
-import { DonationModal } from "../../shared/components/modal";
+const { DonationModal } = components;
+const { FormatTime, EXTEND_URL } = helper;
 
 const Render = ({ datas }) => (
     <>

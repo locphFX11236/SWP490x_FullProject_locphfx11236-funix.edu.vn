@@ -2,8 +2,7 @@ import { Form, Input, Row } from "antd";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { SelectAuthState } from "../../../core/slice/authData";
-import { UserCollections } from "../../../core/thunkAction";
+import { SelectAuthState, UserCollections } from "../../../core";
 
 export const UserInforForm = () => {
     const [hidden, setHidden] = useState(true);
@@ -25,10 +24,12 @@ export const UserInforForm = () => {
                         },
                     })
                 );
-                setHidden(true);
                 return;
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
+            .finally(() => {
+                setHidden(true);
+            });
     };
 
     return (
@@ -48,7 +49,7 @@ export const UserInforForm = () => {
             </Form.Item>
 
             <Form.Item label="Email" name="email">
-                <Input readOnly/>
+                <Input readOnly />
             </Form.Item>
 
             <Form.Item label="Mật khẩu" name="password">

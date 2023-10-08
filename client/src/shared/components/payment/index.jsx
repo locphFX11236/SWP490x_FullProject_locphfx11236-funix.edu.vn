@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { message } from "antd";
 
-import * as Thunk from "../../../core/thunkAction";
+import { CreatePaypalOrder, CapturePaypalOrder } from "../../../core";
 
 const initialOptions = {
     "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
@@ -12,24 +12,29 @@ const initialOptions = {
     // "data-client-token": "abc123xyz==",
 };
 
-export const PayPalPayment = ({ setOpen, ...rest }) => {
+const PayPalPayment = ({ setOpen, ...rest }) => {
     const dispatch = useDispatch();
     const donat = useRef(rest);
     const CreateOrder = async (...paypalDefalt) => {
-        setOpen(false);
         const orderPromise = () =>
             dispatch(
-                Thunk.CreatePaypalOrder({
+                CreatePaypalOrder({
                     donation: donat.current,
                     paypalDefalt,
                 })
             );
         const orderId = await orderPromise();
+        setOpen(false);
+        console.log("\nsb-g4343fb26134850@business.example.com\n00000000\n---");
         return orderId.payload; // Trả lại OrderId -> OnApprove sẽ dùng id ngay sau đó
     };
     const OnApprove = (data, actions) =>
         dispatch(
-            Thunk.CapturePaypalOrder({ data, donation: donat.current, actions })
+            CapturePaypalOrder({
+                data,
+                donation: donat.current,
+                actions,
+            })
         );
     const OnError = () => message.error("Quyên góp thất bại!");
 
@@ -51,3 +56,5 @@ export const PayPalPayment = ({ setOpen, ...rest }) => {
         </PayPalScriptProvider>
     );
 };
+
+export default PayPalPayment;

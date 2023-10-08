@@ -1,34 +1,32 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 
+import { SelectAuthState, RestAPIShow, RestAPIAuth } from "../core";
 import PrivateRouter from "./private";
 import PublicRouter from "./public";
-import { RestAPIAuth, RestAPIShow } from "../core/thunkAction";
-import { SelectAuthState } from "../core/slice/authData";
 
-const MainRouter = (views) => {
+const MainRouter = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { isLogin } = SelectAuthState();
-
-    useEffect(() => {
-        const hasSessionID = sessionStorage.getItem("SessionID");
-        if (hasSessionID) dispatch(RestAPIAuth());
-        dispatch(RestAPIShow());
-    }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         const time = 1000 * 60 * 15; // ms
         const Show = () => dispatch(RestAPIShow());
         const rest = setInterval(Show, time);
         const Cleanup = () => clearInterval(rest);
-
-        navigate("/");
         return Cleanup;
-    }, [dispatch, isLogin]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    return isLogin ? <PrivateRouter {...views} /> : <PublicRouter {...views} />;
+    useEffect(() => {
+        const hasSessionID = sessionStorage.getItem("SessionID");
+        if (hasSessionID) dispatch(RestAPIAuth());
+        const Show = () => dispatch(RestAPIShow());
+        const first = setTimeout(Show);
+        const Cleanup = () => clearTimeout(first);
+        return Cleanup;
+    }, [dispatch]);
+
+    return isLogin ? <PrivateRouter /> : <PublicRouter />;
 };
 
-export default MainRouter;
+export default memo(MainRouter);

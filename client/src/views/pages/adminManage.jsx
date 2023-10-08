@@ -1,5 +1,7 @@
 import { Card } from "antd";
-import TabComponent from "../../shared/components/tab";
+import { components } from "../../shared";
+
+const { TabComponent } = components;
 
 export const Manage = () => (
     <Card>

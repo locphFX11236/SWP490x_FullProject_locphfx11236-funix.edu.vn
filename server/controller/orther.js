@@ -1,6 +1,6 @@
-const NodeFetch = require("../config/api");
 const { History } = require("./authData");
 const { Donation } = require("./showData");
+const { NodeFetch } = require("../config");
 
 exports.CreateOrder = async (req, res) => {
     try {

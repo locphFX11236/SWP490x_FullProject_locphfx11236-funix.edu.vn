@@ -61,20 +61,22 @@ Task
 - All Hook
     - useState
     - useEffect
-    useMemo / React.memo
-    useCallback
+    useMemo -> Cache lại return của func
+    React.memo
+    useCallback -> Cache lại định nghĩa func
     - useRef
     useContext
     useReducer
     ## From F8
-    x useLayoutEffect
+    x useLayoutEffect -> tương tự useEffect nhưng thực hiện call back trước return
     X useImperativeHandle + forwardRef -> tránh đem ra toàn bộ obj ra ngoài -> mất tính toàn vẹn dữ liệu, tính đóng gói, mất tính bảo mật
     ## From Holetex. In React 18
-    useId
+    - useId -> Tạo id tự động
     useTransition
     X useDeferredValue
     x useDebugValue + React DevTool -> Chỉ sử dụng cho việc debug cho custom Hook
     ## Custom Hook
 - Module
+- Handle Error
 - CSS / SCSS
 - file .doc

@@ -1,5 +1,7 @@
 import { Card } from "antd";
-import { AuthForm } from "../../shared/components/form";
+import { components } from "../../shared";
+
+const { AuthForm } = components;
 
 export const AuthPage = () => (
     <Card>

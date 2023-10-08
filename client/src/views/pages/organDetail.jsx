@@ -1,11 +1,12 @@
 import { useLocation } from "react-router-dom";
 import { Card, CardImg } from "reactstrap";
 
-import { SelectDataState } from "../../core/slice/showData";
-
+import { SelectDataState } from "../../core";
+import { helper } from "../../shared";
 import { ProgramPage } from "./programs";
 import { NewsPage } from "./news";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
+
+const { EXTEND_URL } = helper;
 
 export const OrganDetail = () => {
     const location = useLocation();

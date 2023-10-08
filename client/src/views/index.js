@@ -1,2 +1,2 @@
-export * from "./layout";
-export * from './pages';
+export { default as MainLayout } from "./layout";
+export * from "./pages";

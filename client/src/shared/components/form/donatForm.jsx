@@ -1,7 +1,7 @@
 import { Form, Input } from "antd";
 import moment from "moment";
 
-import { PayPalPayment } from "../payment";
+import PayPalPayment from "../payment";
 
 export const DonationForm = ({ name, programId, ...rest }) => {
     const [form] = Form.useForm();

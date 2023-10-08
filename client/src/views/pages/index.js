@@ -14,5 +14,3 @@ export * from "./adminManage";
 export * from "./auth";
 
 export * from "./userInfor";
-
-export * from "./waiting";

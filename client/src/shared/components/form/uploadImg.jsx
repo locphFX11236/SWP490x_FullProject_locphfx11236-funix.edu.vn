@@ -2,9 +2,8 @@ import { message, Upload } from "antd";
 import { CameraTwoTone } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 
-import { SelectAuthState } from "../../../core/slice/authData";
-import { UploadImg } from "../../../core/thunkAction";
-import { EXTEND_URL } from "../../helper/publicPath";
+import { SelectAuthState, UploadImg } from "../../../core";
+import { EXTEND_URL } from "../../helper";
 
 export const checkFile = (file) => {
     const isMatchType = file.type === "image/jpeg" || file.type === "image/png";

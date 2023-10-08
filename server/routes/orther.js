@@ -1,6 +1,6 @@
 const express = require("express");
 
-const isAuth = require("../config/helper/isAuth");
+const { isAuth } = require("../config");
 const { OtherController } = require("../controller");
 
 const router = express.Router();

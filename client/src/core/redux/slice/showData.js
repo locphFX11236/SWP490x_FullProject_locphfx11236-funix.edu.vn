@@ -34,11 +34,6 @@ const reducers = {
         // Tạo kết quả
         return { ...state, programs: progs }; // Thay đổi state
     },
-    Donation: (state, action) => {
-        // Xử lý payload
-        // const donat = action.payload;
-        // console.log(donat);
-    },
 };
 
 const extraReducers = (builder) => {

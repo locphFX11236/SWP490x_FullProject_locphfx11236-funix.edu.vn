@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Modal, Button, message } from "antd";
 
-import { SelectAuthState } from "../../../core/slice/authData";
-import { DonationForm } from "../form/donatForm";
+import { SelectAuthState } from "../../../core";
+import { DonationForm } from "../form";
 
 export const DonationModal = ({ program }) => {
     const [open, setOpen] = useState(false);

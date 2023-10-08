@@ -1,8 +1,7 @@
 import { Form, Input, message, Row } from "antd";
 import { useDispatch } from "react-redux";
 
-import { SelectAuthState } from "../../../core/slice/authData";
-import { UserCollections } from "../../../core/thunkAction";
+import { SelectAuthState, UserCollections } from "../../../core";
 import { userSample } from "./sample";
 import { checkFile, DraggerImg } from "./uploadImg";
 
@@ -49,10 +48,12 @@ export const UserForm = ({ data, setOpen }) => {
                         })
                     );
                 else console.log("Cancel!");
-                setOpen(false);
                 return;
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
+            .finally(() => {
+                setOpen(false);
+            });
     };
     const normFile = (e) => {
         const result = [];

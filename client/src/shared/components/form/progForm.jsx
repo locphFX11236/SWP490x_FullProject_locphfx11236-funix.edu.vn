@@ -5,9 +5,11 @@ import moment from "moment";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
-import { ProgramCollections } from "../../../core/thunkAction";
-import { SelectDataState } from "../../../core/slice/showData";
-import { SelectAuthState } from "../../../core/slice/authData";
+import {
+    ProgramCollections,
+    SelectDataState,
+    SelectAuthState,
+} from "../../../core";
 import { programSample } from "./sample";
 import { checkFile, DraggerImg } from "./uploadImg";
 

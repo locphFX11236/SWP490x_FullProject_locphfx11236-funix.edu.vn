@@ -1,8 +1,10 @@
 import { Card, CardBody, CardTitle, CardImg } from "reactstrap";
 import { Link } from "react-router-dom";
 
-import { SelectDataState } from "../../core/slice/showData";
-import { EXTEND_URL } from "../../shared/helper/publicPath";
+import { SelectDataState } from "../../core";
+import { helper } from "../../shared";
+
+const { EXTEND_URL } = helper;
 
 const RenderItems = ({ data }) => (
     <Card className="col col-12 col-md-5 m-2">
