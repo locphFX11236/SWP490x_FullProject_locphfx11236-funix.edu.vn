@@ -24,7 +24,7 @@ const PrivateRouter = () => (
             <Route path="programs/:id" element={<ProgDetail />} />
             <Route path="news" element={<NewsPage />} />
             <Route path="news/:id" element={<NewsDetail />} />
-            <Route path="admin" element={<Manage />} />
+            <Route path="managa" element={<Manage />} />
             <Route path="userInfor" element={<UserInforPage />} />
         </Route>
 

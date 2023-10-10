@@ -39,14 +39,14 @@ const Items = (string, location, i) => {
                     Tin tức
                 </Link>
             );
-        case "admin":
+        case "managa":
             return (
                 <Link
-                    to="/admin"
+                    to="/managa"
                     className="border border-dark rounded m-2 p-2 mark"
                     key={i}
                 >
-                    Admin
+                    Quản lý
                 </Link>
             );
         case "LogIn":

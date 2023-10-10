@@ -71,10 +71,10 @@ export const DonasActionsData = ({ donas, users }) =>
         message: d.message,
     }));
 
-export const DonasHistoryData = ({ history, programs }) =>
-    history.map((h, i) => {
-        const findProg = (id) => programs.find((p) => p._id === id);
-        const findDonas = (pro, id) => pro.donations.find((d) => d._id === id);
+const RenderHistory = (history, programs) => {
+    const findProg = (id) => programs.find((p) => p._id === id);
+    const findDonas = (pro, id) => pro.donations.find((d) => d._id === id);
+    return history.map((h, i) => {
         const idArr = h.split(" ");
         const program = findProg(idArr[1]);
         const donation = findDonas(program, idArr[4]);
@@ -86,3 +86,16 @@ export const DonasHistoryData = ({ history, programs }) =>
             donationTime: FormatTime(donation.donationTime),
         };
     });
+};
+
+export const DonasHistoryData = ({ history }) => {
+    const { programs } = SelectDataState();
+    const { user_id, data } = SelectAuthState();
+    let hist;
+    if (history) hist = history;
+    else {
+        const user = data.find((d) => d._id === user_id);
+        hist = user.history;
+    }
+    return RenderHistory(hist, programs);
+};

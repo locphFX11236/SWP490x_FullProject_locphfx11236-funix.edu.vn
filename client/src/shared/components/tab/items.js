@@ -1,4 +1,4 @@
-import { ProgramsTable, UsersTable } from "../table";
+import { DonasHistoryTable, ProgramsTable, UsersTable } from "../table";
 
 const getItem = (label, key, children) => ({
     label: label,
@@ -6,9 +6,12 @@ const getItem = (label, key, children) => ({
     children: children,
 }); // Kết quả: { label: '', key: '', children: <Component />}
 
-const Items = [
-    getItem('Programs', 'program-tab', <ProgramsTable />),
-    getItem('Users', 'user-tab', <UsersTable />),
+export const Items1 = [
+    getItem("Programs", "program-tab", <ProgramsTable />),
+    getItem("Users", "user-tab", <UsersTable />),
+    getItem("My History", "history-tab", <DonasHistoryTable data={{}} />),
 ];
 
-export default Items;
+export const Items2 = [
+    getItem("History", "history-tab", <DonasHistoryTable data={{}} />),
+];

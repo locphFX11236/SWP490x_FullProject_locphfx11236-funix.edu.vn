@@ -90,14 +90,24 @@ const Navigation = () => {
                                 cộng đồng
                             </Link>
                         </li>
-                        <li className="nav-item rounded m-1" hidden={!isAdmin}>
+                        <li className="nav-item rounded m-1" hidden={!isLogin}>
                             <Link
-                                className={`nav-link ${HasActive("/admin")}`}
-                                to="/admin"
+                                className={`nav-link ${HasActive("/managa")}`}
+                                to="/managa"
                             >
-                                Admin's
-                                <br />
-                                manage
+                                {isAdmin ? (
+                                    <>
+                                        Admin's
+                                        <br />
+                                        manage
+                                    </>
+                                ) : (
+                                    <>
+                                        Lịch sử
+                                        <br />
+                                        quyên góp
+                                    </>
+                                )}
                             </Link>
                         </li>
                     </ul>

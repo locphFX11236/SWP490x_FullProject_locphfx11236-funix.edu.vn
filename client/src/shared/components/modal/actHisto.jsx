@@ -2,13 +2,11 @@ import { useState } from "react";
 import { Modal, Button } from "antd";
 import { FileTextOutlined } from "@ant-design/icons";
 
-import { SelectDataState } from "../../../core";
 import { DonasHistoryTable } from "../table";
 
 export const ShowActionHistory = ({ value, record }) => {
     const [open, setOpen] = useState(false);
     const handleCancel = () => setOpen(false);
-    const { programs } = SelectDataState();
 
     return (
         <>
@@ -25,9 +23,7 @@ export const ShowActionHistory = ({ value, record }) => {
                 onCancel={handleCancel}
                 okButtonProps={{ hidden: true }}
             >
-                <DonasHistoryTable
-                    data={{ history: value, programs: programs }}
-                />
+                <DonasHistoryTable data={{ history: value }} />
             </Modal>
         </>
     );
